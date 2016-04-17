@@ -1,0 +1,5 @@
+overpy
+requests
+requests-cache
+bs4
+bottle
