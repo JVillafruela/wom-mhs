@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bottle import Bottle,run,view,SimpleTemplate
+from bottle import Bottle,run,view,SimpleTemplate,static_file
 import wikipedia,overpass,merimee
 import requests_cache
 
 app = Bottle()
 
-requests_cache.install_cache('wikipedia_cache', backend='memory', expire_after=180)
+requests_cache.install_cache('wikipedia_cache', backend='memory', expire_after=3600)
 
 def get_data(dep):
     '''
@@ -28,6 +28,10 @@ def intro():
     context = {'titre' : titre,'texte' : texte}
     return context
 
+@app.route('/status/css/<filename>')
+def server_static(filename):
+    return static_file(filename, root='/home/jean/osm/monuments_historiques/Mhs/css/')
+
 @app.route('/status/<dep>')
 @view('status.tpl')
 def status(dep):
@@ -35,6 +39,7 @@ def status(dep):
     dep_text,d_me,d_wp,d_osm = get_data(dep)
     context = {'text_departement' : dep_text, 'merimee': d_me,'wikipedia':d_wp, 'osm':d_osm }
     return context
+
 
 # @app.route('/osm/<dep>')
 # @view('osm1.tpl')

@@ -140,6 +140,9 @@ def get_osm(dep):
         Obtenir les objets OSM contenant le tag 'ref:mhs'
         pour un département
     '''
+    
+    if dep=='69':
+        dep= '69M'
     dic_elements = {}
     if dep in code :
         query =(
