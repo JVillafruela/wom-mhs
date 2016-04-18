@@ -77,14 +77,14 @@ def analyseData(data,url,dic_mhs):
                 code = ''
                 #n=0 => nom du monument et lien vers la page Wp du monument
                 if n == 0:
-                    print("typedeval = ",type(val.find('a')))
+                    #print("typedeval = ",type(val.find('a')))
                     if isinstance(val.find('a'),bs4.element.Tag):
                         nom = val.find('a').text
                     elif val.find('a') == None:
                         nom = val.text
                     else :
                         nom =''
-                    print('name =',nom)
+                    #print('name =',nom)
                     # #name_href = val.find('a').attrs['href']
                     # #print('href =', name_href)
                     # page_url = '/wiki/'+nom.replace(' ','_')
@@ -101,14 +101,14 @@ def analyseData(data,url,dic_mhs):
                 if n == 1:
                     # recherche la commune et l'url_commune
                     commune = val.find('a').string.lstrip().rstrip()
-                    print ('commune =', commune)
+                    #print ('commune =', commune)
                     # print('commune url = ', "/wiki/"+commune)
 
                 if n == 2 and nom == '' :
                     # le nom est vide s'il y a une grosse ville (sauf métropole de lyon)
                     url_gc = val.find('a')['href']
                     url_gc = url_base+url_gc
-                    print ('url_grosse_commune = ',url_gc)
+                    #print ('url_grosse_commune = ',url_gc)
                     grande_commune=True
                     dat = getData(url_gc)
                     analyseSecondData(dat,url_gc,dic_mhs)
@@ -168,14 +168,14 @@ def analyseSecondData(data,url,dic_mhs):
                 code = ''
                 #n=0 => nom du monument et lien vers la page Wp du monument
                 if n == 0:
-                    print("typedeval = ",type(val.find('a')))
+                    #print("typedeval = ",type(val.find('a')))
                     if isinstance(val.find('a'),bs4.element.Tag):
                         nom = val.find('a').text
                     elif val.find('a') == None:
                         nom = val.text
                     else :
                         nom =''
-                    print('name =',nom)
+                    #print('name =',nom)
                     # #name_href = val.find('a').attrs['href']
                     # #print('href =', name_href)
                     # page_url = '/wiki/'+nom.replace(' ','_')
