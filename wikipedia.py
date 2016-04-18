@@ -15,7 +15,7 @@ from collections import OrderedDict
 
 #mhs_wp est un dico suivant les codes : mhs il contient pour chaque clé/code
 #la liste :  nom, commune, url_dep_wp , identifiant (ancre dans la page)
-requests_cache.install_cache('wikipedia_cache', backend='memory', expire_after=3600)
+#requests_cache.install_cache('wikipedia_cache', backend='memory', expire_after=3600)
 dic_mhs_wp = {}
 url_base ="https://fr.wikipedia.org"
 #urls =["https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_l'Ain",\

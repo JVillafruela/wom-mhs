@@ -20,7 +20,9 @@
 
 '''
 from __future__ import unicode_literals
-import overpy, percache
+import overpy
+from beaker.cache import CacheManager
+from beaker.util import parse_cache_config_options
 from collections import OrderedDict
 
 code = {'01':'3600007387',
@@ -29,9 +31,15 @@ code = {'01':'3600007387',
         '69M':'3604850450',
         }
 
-cache = percache.Cache("/tmp/overpass-cache")
+cache_opts = {
+    'cache.type': 'file',
+    'cache.data_dir': '/tmp/cache/data',
+    'cache.lock_dir': '/tmp/cache/lock'
+}
 
-@cache
+cache = CacheManager(**parse_cache_config_options(cache_opts))
+
+@cache.cache('query-cache', expire=3600)
 def get_data(query):
     '''
         Obtenir la selection géographique sur overpass.api
@@ -163,6 +171,6 @@ if __name__ == "__main__":
     dic_osm = get_osm(dep)
 
     for key in dic_osm:
-        print (key,':',dic_osm[key][0] )
+        print (key,':',dic_osm[key] )
     #print(dic_osm)
     print ("Monuments historiques du {} présents dans OSM : {}".format(dep,len(dic_osm)))
