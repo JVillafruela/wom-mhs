@@ -40,7 +40,7 @@ def get_merimee(dep):
 
 if __name__ == "__main__":
     dic_merimee = {}
-    dep = '01'
+    dep = '42'
     dic_merimee = get_merimee(dep)
     for key,value in dic_merimee.items():
         print (key,':',value)

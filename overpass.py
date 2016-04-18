@@ -29,6 +29,7 @@ code = {'01':'3600007387',
         '38':'3600007437',
         '69':'3600660056',
         '69M':'3604850450',
+        '42' : '3600007420',
         }
 
 cache_opts = {
@@ -140,7 +141,7 @@ def get_osm(dep):
         Obtenir les objets OSM contenant le tag 'ref:mhs'
         pour un département
     '''
-    
+
     if dep=='69':
         dep= '69M'
     dic_elements = {}

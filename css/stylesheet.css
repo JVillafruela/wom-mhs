@@ -13,7 +13,7 @@
 		}
 		.TableCell, .TableHead {
 		    	display: table-cell;
-		    	border: 1px solid #999999;
+		    /*	border: 1px solid #999999; */
 			  	float: left;
 			  	height: 17px;
 
@@ -22,7 +22,7 @@
 		}
 		.TableCell1, .TableHead1 {
 		    	display: table-cell;
-		    	border: 1px solid #999999;
+		    /*	border: 1px solid #999999;*/
 			  	float: left;
 			  	height: 17px;
 			  	padding: 2px 0.5%;
@@ -31,7 +31,7 @@
 		}
 		.TableCell1-err {
 		    	display: table-cell;
-		    	border: 1px solid #999999;
+		    /*	border: 1px solid #999999;*/
 			  	float: left;
 			  	height: 17px;
 			  	padding: 2px 0.5%;
@@ -44,7 +44,7 @@
 		}
 		.TableCell2, .TableHead2 {
 		    	display: table-cell;
-		    	border: 1px solid #999999;
+		    /*	border: 1px solid #999999;*/
 			  	float: left;
 			  	height: 17px;
 			  	padding: 2px 0.5%;
@@ -54,7 +54,7 @@
 		}
 		.TableCell2-err{
 		    	display: table-cell;
-		    	border: 1px solid #999999;
+		/*    	border: 1px solid #999999; */
 			  	float: left;
 			  	height: 17px;
 			  	padding: 2px 0.5%;

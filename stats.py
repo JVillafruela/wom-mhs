@@ -35,21 +35,10 @@ def server_static(filename):
 @app.route('/status/<dep>')
 @view('status.tpl')
 def status(dep):
-    print(type(dep),dep)
+    #print(type(dep),dep)
     dep_text,d_me,d_wp,d_osm = get_data(dep)
     context = {'text_departement' : dep_text, 'merimee': d_me,'wikipedia':d_wp, 'osm':d_osm }
     return context
-
-
-# @app.route('/osm/<dep>')
-# @view('osm1.tpl')
-# def osm(dep):
-#     dic_elem =overpass_v5.get_osm(dep)
-#     ctr, liste_monuments = overpass_v5.mise_en_forme(dic_elem)
-#
-#     context ={'resultat' : "Monuments historiques du {} présents dans OSM : {}".format(dep,ctr), 'monuments': liste_monuments}
-#     return context
-
 
 if __name__ == "__main__":
     run(app, host='0.0.0.0', port=8080,reloader=True)

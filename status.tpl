@@ -10,7 +10,7 @@
 <br>
 Pour le département  {{ text_departement }}, la base Mérimée décrit {{nb_m}} monuments. Ils sont {{nb_wp}} dans wikipédia, et OSM en connait {{nb_osm}}.
 <br>
-<caption><h4> Tableau des Monuments </h4></caption>
+
 <div class="Table" >
     <div class="TableHeading">
         <div class="TableHead1">Mérimée</div>
@@ -24,7 +24,7 @@ Pour le département  {{ text_departement }}, la base Mérimée décrit {{nb_m}}
     % for m, value in merimee.items() :
         <div class="TableRow">
             <div class="TableCell1"><a href="{{l0}}{{m}}" target="blank">{{ m }}</a></div>
-            <div class="TableCell2">{{value[2]}}</div>
+            <div class="TableCell2">{{value[1]}} -- {{value[2]}}</div>
             % if m in osm :
                 <div class="TableCell1"><a href="http://www.openstreetmap.org/browse/{{osm[m][0]}}" target="blank"> OSM </a></div>
                 % if osm[m][-1] :
