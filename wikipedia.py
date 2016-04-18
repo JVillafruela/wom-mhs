@@ -8,13 +8,14 @@
 
 '''
 from __future__ import unicode_literals
-import requests
+import requests,requests_cache
 from bs4 import BeautifulSoup
 import bs4
+from collections import OrderedDict
 
 #mhs_wp est un dico suivant les codes : mhs il contient pour chaque clé/code
 #la liste :  nom, commune, url_dep_wp , identifiant (ancre dans la page)
-
+requests_cache.install_cache('wikipedia_cache', backend='memory', expire_after=3600)
 dic_mhs_wp = {}
 url_base ="https://fr.wikipedia.org"
 #urls =["https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_l'Ain",\
@@ -244,17 +245,19 @@ def get_wikipedia(D):
     if url_dep_2 :
         main_page = getData(url_base+url_dep_2)
         dic_mhs_wp = analyseData(main_page,url_base+url_dep_2,dic_mhs_wp)
+    dic_mhs_wp = OrderedDict(sorted(dic_mhs_wp.items(), key=lambda t: t[0]))
     return dep_text, dic_mhs_wp
 
 if __name__ == "__main__":
-    dic_mhs_wp = {}
-    departement, dic_mhs_wp = get_wikipedia('01')
-
-    if 'erreur' in dic_mhs_wp:
-        print ("Monuments {} dans Wikipédia = {}".format(departement,len(dic_mhs_wp)-1))
-        print ('Erreurs = ', dic_mhs_wp['erreur'])
+    dic_wp = {}
+    departement, dic_wp = get_wikipedia('01')
+    for key in dic_wp:
+        print (key,':',dic_wp[key][0] )
+    if 'erreur' in dic_wp:
+        print ("Monuments {} dans Wikipédia = {}".format(departement,len(dic_wp)-1))
+        print ('Erreurs = ', dic_wp['erreur'])
     else :
-        print ("Monuments {} dans Wikipédia = {}".format(departement,len(dic_mhs_wp)))
+        print ("Monuments {} dans Wikipédia = {}".format(departement,len(dic_wp)))
     #print("Descriptions incompletes = {}".format(len(liste_incomplet)))
     # for erreur in liste_incomplet:
     #     #print (erreur)

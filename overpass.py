@@ -14,11 +14,14 @@
             à voir : https://pypi.python.org/pypi/fastcache
     FIXME : Attention, il pourrait y avoir des codes ref:mhs en double (....Ok fait....)
     FIXME : Ajouter un tri des codes ref:mhs (clés du dico)
+    FIXME : il peut y avoir des objets OSM avec un code ref:mhs contenant
+            deux refs : ref:mhs=PA01000012;PA01000013                (....Ok fait....)
 
 
 '''
 from __future__ import unicode_literals
 import overpy, percache
+from collections import OrderedDict
 
 code = {'01':'3600007387',
         '38':'3600007437',
@@ -73,13 +76,20 @@ def get_elements(data,tt,dico):
     for d in data:
         tags_mhs,tags_manquants = get_tags(d.tags)
         if 'ref:mhs' in tags_mhs:
+            #tag mhs déjà présent dans le dico
             if tags_mhs["ref:mhs"] in dico :
                 # code ref:mhs identique sur deux objets OSM
                 # ajouter le texte 'Bis' au code
                  tags_mhs["ref:mhs"] += '-Bis'
-                 print(tags_mhs["ref:mhs"])
+                 #print(tags_mhs["ref:mhs"])
+            #tag-ter présence Trois fois ??
 
-            dico[tags_mhs["ref:mhs"]] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
+            # Si le tag mhs contient deux refs ref:mhs=PA01000012;PA01000013
+            if ';' in tags_mhs["ref:mhs"]:
+                dico[tags_mhs["ref:mhs"].split(';')[0]] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
+                dico[tags_mhs["ref:mhs"].split(';')[1]] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
+            else :
+                dico[tags_mhs["ref:mhs"]] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
     return dico
 
 # def mise_en_forme(dic_elements):
@@ -143,6 +153,7 @@ def get_osm(dep):
             dic_elements = get_elements(ensemble[key],dic_typ[key],dic_elements)
             #print (len(liste_elements[key]),' ',text[key]) #,liste_elements[key][0][0]
             #ctr += len(liste_elements[key])
+        dic_elements = OrderedDict(sorted(dic_elements.items(), key=lambda t: t[0]))
         return dic_elements
 
 
@@ -150,5 +161,8 @@ if __name__ == "__main__":
 
     dep ='01'
     dic_osm = get_osm(dep)
-    print(dic_osm)
+
+    for key in dic_osm:
+        print (key,':',dic_osm[key][0] )
+    #print(dic_osm)
     print ("Monuments historiques du {} présents dans OSM : {}".format(dep,len(dic_osm)))
