@@ -11,9 +11,11 @@
         FIXME : il faudrait ajouter un test sur l'âge de la source Mérimée :
         https://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
         la version actuelle est datée du : 12 avril 2016
+        FIXME : Ajouter un 0rderedDict (- OK fait -)
 '''
 from __future__ import unicode_literals
 import csv
+from collections import OrderedDict
 
 class Merimee(csv.excel):
     # Séparateur de champ
@@ -32,12 +34,15 @@ def get_merimee(dep):
                 dic_m[row[0]]=[row[5],row[4],row[6]]
     finally:
         file.close()
+    dic_m = OrderedDict(sorted(dic_m.items(), key=lambda t: t[0]))
     return dic_m
 
 
 if __name__ == "__main__":
     dic_merimee = {}
-    dep = '42'
+    dep = '01'
     dic_merimee = get_merimee(dep)
-    print("Pour le dépatement {}, il y a {} monuments dans la base Mérimée.".format(dep,len(dic_merimee)))
+    for key,value in dic_merimee.items():
+        print (key,':',value)
+    print("Pour le département {}, il y a {} monuments dans la base Mérimée.".format(dep,len(dic_merimee)))
     #print(dic_merimee['PA01000038'])
