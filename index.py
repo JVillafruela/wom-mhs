@@ -5,8 +5,9 @@
     Génération de pages statiques directement en html
 '''
 import os
+from collections import OrderedDict
 
-def write_entete(file,title):
+def write_entete(file,title,cssFile):
     '''
         Ecrire l'entête du ficheir html
     '''
@@ -16,8 +17,8 @@ def write_entete(file,title):
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>'''
     head1 ='''</title>
-    <link rel="stylesheet" type="text/css" href="static/style.css">
-</head>'''
+    <link rel="stylesheet" type="text/css" href="{}">
+</head>'''.format(cssFile)
     file.write(head0+title+head1)
 
 def write_bandeau(file,t,dic):
@@ -38,10 +39,10 @@ def write_bandeau(file,t,dic):
 <div id="menu">
     <ul>'''
     for d in dic:
-        link = d+"_pages.html"
+        link = d+"_pages/"+d+"_merosmwip.html"
         title = dic[d]
         texte = dic[d]
-        menu += '<li><a href="'+link+'" title="'+title+'" target="blank">'+texte+'</a></li>\n'
+        menu += '<li><a href="'+link+'" title="'+title+'">'+texte+'</a></li>\n'
     close= '''</ul>
     </div>
 </div>'''
@@ -76,12 +77,14 @@ def gen_index(dico):
     racine="web"
     titre="Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
     oF = creer_fichier(index_name,racine)
-    write_entete(oF,titre)
+    write_entete(oF,titre,"static/style.css")
     write_bandeau(oF,titre,dico)
-    #write_footer(oF)
+    write_footer(oF)
+    oF.close()
 
 if __name__ == "__main__":
-    d_dep ={'01':'Ain', '69':'Rhône','42':'Loire'}
+    d_dep= {'01':'Ain', '69':'Rhône','42':'Loire'}
+    d_dep = OrderedDict(sorted(d_dep.items(), key=lambda t: t[0]))
     ''' tester la présence d'une génération précédente et faire une sauvegarde'''
     ''' tester l'espace disque minimum requis pour la génération... qq Mo ?'''
     ''' générer la page index'''
