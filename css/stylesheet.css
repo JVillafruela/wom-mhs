@@ -1,7 +1,7 @@
-.Table {
+.TableComplet {
 
 		    	display: table;
-		    	width: 100%;
+		    	width: 80%;
 		}
 		.TableRow {
 		    	display: table-row;

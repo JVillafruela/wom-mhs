@@ -21,7 +21,7 @@ class Merimee(csv.excel):
     # Séparateur de champ
     delimiter = "|"
 
-def get_merimee(dep):
+def get_merimee(dep,inseeCom=None):
     csv.register_dialect('merimee', Merimee())
     fname = "merimee-MH-valid.csv"
     file = open(fname, "r")
@@ -29,9 +29,12 @@ def get_merimee(dep):
     try:
         reader = csv.reader(file,'merimee')
         for row in reader:
-            if row[3] == dep:
-                #print (row[0],row[4],row[6])
-                dic_m[row[0]]=[row[5],row[4],row[6]]
+            if inseeCom :
+                if row[3] == dep and row[5] == inseeCom:
+                    dic_m[row[0]]=[row[5],row[4],row[6],row[-3]]
+            elif row[3] == dep:
+                # ref:mhs = N°insee commune, Nom commune, Nom monument,
+                dic_m[row[0]]=[row[5],row[4],row[6],row[-3]]
     finally:
         file.close()
     dic_m = OrderedDict(sorted(dic_m.items(), key=lambda t: t[0]))
@@ -40,9 +43,10 @@ def get_merimee(dep):
 
 if __name__ == "__main__":
     dic_merimee = {}
-    dep = '42'
-    dic_merimee = get_merimee(dep)
+    dep = '01'
+    insee ='01053'  #Bourg-en-Bresse
+    dic_merimee = get_merimee(dep,insee)
     for key,value in dic_merimee.items():
         print (key,':',value)
-    print("Pour le département {}, il y a {} monuments dans la base Mérimée.".format(dep,len(dic_merimee)))
+    # print("Pour le département {}, il y a {} monuments dans la base Mérimée.".format(dep,len(dic_merimee)))
     #print(dic_merimee['PA01000038'])
