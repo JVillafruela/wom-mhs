@@ -18,7 +18,7 @@ exemple=>   PA00116550 : ['way/391391471', {'mhs:inscription_date': '1981', 'nam
 '''
 
 from __future__ import unicode_literals
-import overpy
+import overpy,ini
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 from collections import OrderedDict
@@ -133,45 +133,44 @@ def get_elements(data,tt,dico):
 #         ctr += len(dic_elem[key])
 #     return ctr,liste_monuments
 
-def get_osm(dep):
+def get_osm(zone,dic=None):
     '''
         Obtenir les objets OSM contenant le tag 'ref:mhs'
         pour un département
     '''
+    if dic:
+        dic_elements=dic
+    else:
+        dic_elements = {}
 
-    if dep=='69':
-        dep= '69M'
-    dic_elements = {}
-    if dep in code :
-        query =(
-        '''
-        [out:json];area('''+code[dep]+''')->.searchArea;
-        (
-          node["ref:mhs"](area.searchArea);
-          way["ref:mhs"](area.searchArea);
-          relation["ref:mhs"](area.searchArea);
-        );
-        out meta;>;out meta;
-        ''')
-        result = get_data(query)
-        #print (result.relations)
-        ensemble ={'r':result.relations,'w':result.ways,'n':result.nodes}
-        dic_typ = {'r':'relation','w':'way','n':'node'}
-        for key in ensemble:
-            #print(ensemble[key])
-            dic_elements = get_elements(ensemble[key],dic_typ[key],dic_elements)
-            #print (len(liste_elements[key]),' ',text[key]) #,liste_elements[key][0][0]
-            #ctr += len(liste_elements[key])
-        dic_elements = OrderedDict(sorted(dic_elements.items(), key=lambda t: t[0]))
-        return dic_elements
+    query ='''
+    [out:json];area( {} )->.searchArea;
+    (
+      node["ref:mhs"](area.searchArea);
+      way["ref:mhs"](area.searchArea);
+      relation["ref:mhs"](area.searchArea);
+    );
+    out meta;>;out meta;'''
+    result = get_data(query.format(zone))
+    #print (result.relations)
+    ensemble ={'r':result.relations,'w':result.ways,'n':result.nodes}
+    dic_typ = {'r':'relation','w':'way','n':'node'}
+    for key in ensemble:
+        #print(ensemble[key])
+        dic_elements = get_elements(ensemble[key],dic_typ[key],dic_elements)
+        #print (len(liste_elements[key]),' ',text[key]) #,liste_elements[key][0][0]
+        #ctr += len(liste_elements[key])
+    dic_elements = OrderedDict(sorted(dic_elements.items(), key=lambda t: t[0]))
+    return dic_elements
 
 
 if __name__ == "__main__":
-
-    dep ='01'
-    dic_osm = get_osm(dep)
-
+    dp = ini.dep['01']
+    print(dp.keys())
+    dic_osm = get_osm(dp['zone_osm'])
+    if dp['zone_osm_alt']:
+        dic_osm=get_osm(dp['zone_osm_alt'],dic_osm)
     for key in dic_osm:
         print (key,':',dic_osm[key])
     #print(dic_osm)
-    print ("Monuments historiques du {} présents dans OSM : {}".format(dep,len(dic_osm)))
+    print ("il y a {} Monuments du département {} dans OpenStreetMap.".format(len(dic_osm),dp['text']))

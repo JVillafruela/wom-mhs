@@ -3,10 +3,11 @@
 
 '''
     Faire une requette sur les pages wikipédia "Liste_des_monuments_historiques_de_l'Ain". chaque département semble avoir une page de ce type.
-    en entrée : un code département = '01'
-
-
-
+    en entrée : un code département = '01' pris dans la table des départements (ini.py)
+    en sortie : un dictionnaire dic_wp avce une clé par code mhs et une clé erreur pour les monuments qui n'ont pas de code mhs
+            PA01000033' : ['Le Café français', 'Bourg-en-Bresse', 'https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Bourg-en-Bresse', 'Cafe_francais']
+            'erreur' :[[nom,commune,url_ville,identifiant,"code MHS absent"],[....]]
+            (l'identifiant est l'id, ancre de la page web)
     FIXME => il y a un dico pour convertir le Numéro du département en lien wikipédia. Avec dans certains cas, deux liens (voir le rhône)
     FIXME => supprimer le code dep_text du dico d'entrée... et reporter cela à l'affichage des pages html
 '''
@@ -14,31 +15,15 @@ from __future__ import unicode_literals
 import requests,requests_cache
 from bs4 import BeautifulSoup
 import bs4
+import ini
 from collections import OrderedDict
 
 #mhs_wp est un dico suivant les codes : mhs il contient pour chaque clé/code
 #la liste :  nom, commune, url_dep_wp , identifiant (ancre dans la page)
 #requests_cache.install_cache('wikipedia_cache', backend='memory', expire_after=3600)
-dic_mhs_wp = {}
+
 url_base ="https://fr.wikipedia.org"
-#urls =["https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_l'Ain",\
-        # "https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Belley",\
-        # "https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Bourg-en-Bresse",\
-        # "https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Pérouges",\
-        # "https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Trévoux"]
-dep = {'01' : {
-            "url_d" : "/wiki/Liste_des_monuments_historiques_de_l'Ain",
-            "url_d_2" : "",
-                },
-        '42' : {
-            "url_d" : "/wiki/Liste_des_monuments_historiques_de_la_Loire",
-            "url_d_2" : "",
-            },
-        '69': {
-            "url_d" : "/wiki/Liste_des_monuments_historiques_du_Rhône",
-            'url_d_2' : "/wiki/Liste_des_monuments_historiques_de_la_métropole_de_Lyon",
-            }
-        }
+
 
 def getData(url):
     r = requests.get(url)
@@ -225,13 +210,8 @@ def analyseSecondData(data,url,dic_mhs):
                     #grande_commune = False
     return dic_mhs
 
-def get_wikipedia(D):
+def get_wikipedia(url_departement,url_dep_2=None):
     dic_mhs_wp = {}
-    if D in dep:
-        url_departement = dep[D]['url_d']
-        url_dep_2 = dep[D]['url_d_2']
-    else:
-        exit()
     main_page = getData(url_base+url_departement)
     dic_mhs_wp = analyseData(main_page,url_base+url_departement,dic_mhs_wp)
     if url_dep_2 :
@@ -241,16 +221,16 @@ def get_wikipedia(D):
     return dic_mhs_wp
 
 if __name__ == "__main__":
+    dp = ini.dep['01']
     dic_wp = {}
-    dp="01"
-    dic_wp = get_wikipedia(dp)
+    dic_wp = get_wikipedia(dp['url_d'],dp['url_d_2'])
     for key in dic_wp:
-        print (key,':',dic_wp[key][0])
+        print (key,':',dic_wp[key])
     if 'erreur' in dic_wp:
         print ("Monuments {} dans Wikipédia = {}".format(dp,len(dic_wp)-1))
         print ('Erreurs = ', dic_wp['erreur'])
     else :
-        print ("Monuments département {} dans Wikipédia = {}.".format(dp,len(dic_wp)))
+        print ("il y a {} Monuments du département {} dans Wikipédia.".format(len(dic_wp),dp['text']))
     #print("Descriptions incompletes = {}".format(len(liste_incomplet)))
     # for erreur in liste_incomplet:
     #     #print (erreur)
