@@ -3,6 +3,7 @@
 
 '''
     Génération de pages statiques directement en html
+
 '''
 import os
 from collections import OrderedDict
@@ -26,11 +27,12 @@ def write_bandeau(file,t,dic):
     intro='''</h4> <p>Les pages de ce site présentent des tableaux comparatifs des monuments historiques dans les bases de données suivantes :
         <ul>
         <li>Le ministère de la culture propose en "open-data" une base des immeubles de France,</li>
-        <li>L'encyclopédie "Wikipédia" a des pages dédiées aux monuments historiques,</li>
-        <li>Le site de cartographie participative "OpenStreetMap" répertorie aussi des monuments historiques</li>
+        https://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
+        <li>L'encyclopédie "Wikipédia" a des pages dédiées aux monuments historiques par département et/ou par ville ,</li>
+        <li>Le site de cartographie participative "OpenStreetMap" répertorie aussi des monuments historiques ... voir le wiki des tags</li>
         </ul>
         <p>
-    Ces tableaux comparatifs devraient permettrent d'améliorer le qualité et le suivi des descriptions des MH sur OSM et Wikpédia.
+    Ces tableaux comparatifs devraient permettrent d'améliorer la qualité et le suivi des descriptions des MH sur OSM et Wikpédia.
     <p>Pour le moment, et pour tester la faisabilité, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts
     '''
     bandeau1='''</body>

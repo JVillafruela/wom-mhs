@@ -28,12 +28,11 @@ def write_contenu(file,t,d,dep_text,page,comptes,data):
             <div class="TableCell1"><a href="{}{}" target="blank">{}</a></div>
             <div class="TableCell2">{} -- {}</div>
             <div class="TableCell1"><a href="http://www.openstreetmap.org/browse/{}" target="blank"> OSM </a></div>
-
         '''.format(l0,row[0],row[0],row[1],row[2],row[3])
         if page=='merosmwip':
             table+='''<div class="TableCell1"> <a href="{}" target="blank">  WP </a> </div>'''.format(row[8])
         elif page=='merosm':
-            table+='''<div class="TableCell1">  {}  </div>'''.format("Absent WP")
+            table+='''<div class="TableCell1">  {}  </div>'''.format("----")
         if row[5]:
             table += '''<div class="TableCell2"><a href="http://www.openstreetmap.org/browse/{}"
              target="blank">Dans OSM en double</a>  ; {} {}</div>'''.format(row[6],",".join(row[4]),",".join(row[7]))

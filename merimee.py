@@ -5,13 +5,14 @@
     Lire le fichier csv de la base mérimée et extraire
     les codes mhs des monuments d'un département
     entrée : le code d'un département  = '01'
-    sortie : un dictionnaire avec une clé par code MHS qui fournit une liste [le code insee commune,
-            le nom de la commune, le nom du monument]
+             le code insee d'une commune = '01053' pour Bourg-en-Bresse (paramètre facultatif)
+    sortie : un dictionnaire avec une clé par code MHS qui fournit une liste
+        dic= { 'ref:mhs1':[le code insee commune,le nom de la commune, le nom du monument, infos classement avec dates],
+               'ref:mhs2':[le code insee commune,le nom de la commune, le nom du monument, infos classement avec dates]}
 
         FIXME : il faudrait ajouter un test sur l'âge de la source Mérimée :
         https://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
         la version actuelle est datée du : 12 avril 2016
-        FIXME : Ajouter un 0rderedDict (- OK fait -)
 '''
 from __future__ import unicode_literals
 import csv
@@ -33,7 +34,7 @@ def get_merimee(dep,inseeCom=None):
                 if row[3] == dep and row[5] == inseeCom:
                     dic_m[row[0]]=[row[5],row[4],row[6],row[-3]]
             elif row[3] == dep:
-                # ref:mhs = N°insee commune, Nom commune, Nom monument,
+                # ref:mhs = N°insee commune, Nom commune, Nom monument,infos classement avec dates
                 dic_m[row[0]]=[row[5],row[4],row[6],row[-3]]
     finally:
         file.close()
@@ -44,9 +45,10 @@ def get_merimee(dep,inseeCom=None):
 if __name__ == "__main__":
     dic_merimee = {}
     dep = '01'
-    insee ='01053'  #Bourg-en-Bresse
-    dic_merimee = get_merimee(dep,insee)
+    # insee ='01053'  #Bourg-en-Bresse
+    # dic_merimee = get_merimee(dep,insee)
+    dic_merimee = get_merimee(dep)
     for key,value in dic_merimee.items():
         print (key,':',value)
-    # print("Pour le département {}, il y a {} monuments dans la base Mérimée.".format(dep,len(dic_merimee)))
+    print("Pour le département {}, il y a {} monuments dans la base Mérimée.".format(dep,len(dic_merimee)))
     #print(dic_merimee['PA01000038'])
