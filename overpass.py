@@ -8,17 +8,15 @@
             // Rhône -> 3600660056
     en entrée : un code département = '01'
     en sortie : un dico avec les clés ref:mhs renvoyant les infos de chaque monument.
+                dic= { 'ref:mhs1':[lien type/id,le dico des tags, la liste des tags manquants],...}
+exemple=>   PA00116550 : ['way/391391471', {'mhs:inscription_date': '1981', 'name': 'Ferme de Pérignat', 'heritage': '2', 'ref:mhs': 'PA00116550',
+                        'wikipedia': 'fr:Ferme de Pérignat', 'heritage:operator': 'mhs'}, ['source']]
 
-    FIXME : Faire un cache sur disque pour accélérer le traitement... ?
-            https://pypi.python.org/pypi/percache : Danger => cache permanent (ok pour le dev)
-            à voir : https://pypi.python.org/pypi/fastcache
-    FIXME : Attention, il pourrait y avoir des codes ref:mhs en double (....Ok fait....)
-    FIXME : Ajouter un tri des codes ref:mhs (clés du dico)
-    FIXME : il peut y avoir des objets OSM avec un code ref:mhs contenant
-            deux refs : ref:mhs=PA01000012;PA01000013                (....Ok fait....)
-
-
+        FIXME => Nécéssité de trouver le code_area du département par une requete manuelle sur overpass.eu quand on veut ajouter un département
+        FIXME => la Bbox de l'objet OSM n'est pas sauvé... geo:46.02403,4.99101?z=19 ? URl géo ?
+        FIXME => Pb avec le département du Rhône qui ne renvoie rein alors que la métropole_de_Lyon contient des monuments. Pb de frontières dans OSM ?
 '''
+
 from __future__ import unicode_literals
 import overpy
 from beaker.cache import CacheManager
@@ -29,7 +27,7 @@ code = {'01':'3600007387',
         '38':'3600007437',
         '69':'3600660056',
         '69M':'3604850450',
-        '42' : '3600007420',
+        '42':'3600007420',
         }
 
 cache_opts = {
@@ -40,7 +38,7 @@ cache_opts = {
 
 cache = CacheManager(**parse_cache_config_options(cache_opts))
 
-@cache.cache('query-cache', expire=3600)
+@cache.cache('query-cache', expire=7200)
 def get_data(query):
     '''
         Obtenir la selection géographique sur overpass.api
@@ -76,7 +74,7 @@ def get_elements(data,tt,dico):
         Récupérer les éléments contenus dans 'data'
         'data' ne contient qu'un seul type : relation,way ou node (tex_typ) qui
         permettra de reconstruire le lien de l'objet sur une carte OSM
-        la sortie : le dictionnaire de résultats
+        la sortie : le dictionnaire des résultats
 
     '''
     tags_mhs = {}
@@ -91,7 +89,6 @@ def get_elements(data,tt,dico):
                 # ajouter le texte 'Bis' au code
                  tags_mhs["ref:mhs"] += '-Bis'
                  #print(tags_mhs["ref:mhs"])
-            #tag-ter présence Trois fois ??
 
             # Si le tag mhs contient deux refs ref:mhs=PA01000012;PA01000013
             if ';' in tags_mhs["ref:mhs"]:
@@ -175,6 +172,6 @@ if __name__ == "__main__":
     dic_osm = get_osm(dep)
 
     for key in dic_osm:
-        print (key,':',dic_osm[key] )
+        print (key,':',dic_osm[key])
     #print(dic_osm)
     print ("Monuments historiques du {} présents dans OSM : {}".format(dep,len(dic_osm)))

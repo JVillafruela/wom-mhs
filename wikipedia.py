@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 
 '''
-    faire une requette sur https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_l'Ain
-    faire une analyse des résultats:
-    nombre de MH obtenus,
+    Faire une requette sur les pages wikipédia "Liste_des_monuments_historiques_de_l'Ain". chaque département semble avoir une page de ce type.
+    en entrée : un code département = '01'
 
+
+
+    FIXME => il y a un dico pour convertir le Numéro du département en lien wikipédia. Avec dans certains cas, deux liens (voir le rhône)
+    FIXME => supprimer le code dep_text du dico d'entrée... et reporter cela à l'affichage des pages html
 '''
 from __future__ import unicode_literals
 import requests,requests_cache
@@ -24,28 +27,18 @@ url_base ="https://fr.wikipedia.org"
         # "https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Pérouges",\
         # "https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Trévoux"]
 dep = {'01' : {
-            "d" : "de l'Ain",
             "url_d" : "/wiki/Liste_des_monuments_historiques_de_l'Ain",
             "url_d_2" : "",
                 },
         '42' : {
-            "d" : ' de la Loire',
             "url_d" : "/wiki/Liste_des_monuments_historiques_de_la_Loire",
             "url_d_2" : "",
             },
         '69': {
-            "d" : 'du Rhône',
             "url_d" : "/wiki/Liste_des_monuments_historiques_du_Rhône",
             'url_d_2' : "/wiki/Liste_des_monuments_historiques_de_la_métropole_de_Lyon",
             }
         }
-# departement = "de l'Ain"
-# url_departement = "/wiki/Liste_des_monuments_historiques_de_l'Ain"
-# url_dep_2 =""
-# departement = 'du Rhône'
-# url_departement = "/wiki/Liste_des_monuments_historiques_du_Rhône"
-# url_dep_2 = "/wiki/Liste_des_monuments_historiques_de_la_métropole_de_Lyon"
-
 
 def getData(url):
     r = requests.get(url)
@@ -236,7 +229,6 @@ def get_wikipedia(D):
     dic_mhs_wp = {}
     if D in dep:
         url_departement = dep[D]['url_d']
-        dep_text = dep[D]['d']
         url_dep_2 = dep[D]['url_d_2']
     else:
         exit()
@@ -246,18 +238,19 @@ def get_wikipedia(D):
         main_page = getData(url_base+url_dep_2)
         dic_mhs_wp = analyseData(main_page,url_base+url_dep_2,dic_mhs_wp)
     dic_mhs_wp = OrderedDict(sorted(dic_mhs_wp.items(), key=lambda t: t[0]))
-    return dep_text, dic_mhs_wp
+    return dic_mhs_wp
 
 if __name__ == "__main__":
     dic_wp = {}
-    departement, dic_wp = get_wikipedia('01')
+    dp="01"
+    dic_wp = get_wikipedia(dp)
     for key in dic_wp:
-        print (key,':',dic_wp[key][0] )
+        print (key,':',dic_wp[key][0])
     if 'erreur' in dic_wp:
-        print ("Monuments {} dans Wikipédia = {}".format(departement,len(dic_wp)-1))
+        print ("Monuments {} dans Wikipédia = {}".format(dp,len(dic_wp)-1))
         print ('Erreurs = ', dic_wp['erreur'])
     else :
-        print ("Monuments {} dans Wikipédia = {}".format(departement,len(dic_wp)))
+        print ("Monuments département {} dans Wikipédia = {}.".format(dp,len(dic_wp)))
     #print("Descriptions incompletes = {}".format(len(liste_incomplet)))
     # for erreur in liste_incomplet:
     #     #print (erreur)
