@@ -4,7 +4,7 @@
 '''
     Génération de pages statiques directement en html
 '''
-import os,index,data,merimee,overpass,wikipedia
+import os,index,data,merimee,overpass,wikipedia,ini
 #from timer import LoggerTimer
 from collections import OrderedDict
 

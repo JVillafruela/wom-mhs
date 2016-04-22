@@ -22,12 +22,12 @@ dep = {'01' : {
                 "zone_osm" : "3600660056",
                 "zone_osm_alt" :"3604850450",
                 },
-            '38': {
-                "38":'Isère',
-                "text": "de l'Isère",
-                "url_d" : "/wiki/Liste_des_monuments_historiques_de_l'Isère",
-                'url_d_2' : "",
-                "zone_osm" : "3600007437",
-                "zone_osm_alt" :"",
-                },
+            # '38': {
+            #     "38":'Isère',
+            #     "text": "de l'Isère",
+            #     "url_d" : "/wiki/Liste_des_monuments_historiques_de_l'Isère",
+            #     'url_d_2' : "",
+            #     "zone_osm" : "3600007437",
+            #     "zone_osm_alt" :"",
+            #     },
             }

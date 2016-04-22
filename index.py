@@ -5,52 +5,61 @@
     Génération de pages statiques directement en html
 
 '''
-import os
+import os,ini
 from collections import OrderedDict
 
 def write_entete(file,title,cssFile):
     '''
         Ecrire l'entête du ficheir html
     '''
-    head0 = '''<!DOCTYPE html>
+    header=""
+    header += '''<!DOCTYPE html>
 <html>
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>'''
-    head1 ='''</title>
+    header+=title
+    header+='''</title>
     <link rel="stylesheet" type="text/css" href="{}">
 </head>'''.format(cssFile)
-    file.write(head0+title+head1)
+    file.write(header)
 
 def write_bandeau(file,t,dic):
     menu=""
-    intro='''</h4> <p>Les pages de ce site présentent des tableaux comparatifs des monuments historiques dans les bases de données suivantes :
+    contenu=""
+    contenu+='''</body>
+    <div id="bandeau"> <h4>'''
+    contenu += t
+    contenu += '''</h4>\n <p>Les pages de ce site présentent des tableaux comparatifs des monuments historiques dans les bases de données suivantes :
         <ul>
-        <li>Le ministère de la culture propose en "open-data" une base des immeubles de France,</li>
-        https://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
-        <li>L'encyclopédie "Wikipédia" a des pages dédiées aux monuments historiques par département et/ou par ville ,</li>
-        <li>Le site de cartographie participative "OpenStreetMap" répertorie aussi des monuments historiques ... voir le wiki des tags</li>
+        <li>Le ministère de la culture propose en "Open-Data" une
+        <a href="https://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/" title="Base Mérimée" target="blank">
+        Base des immeubles de France</a>, la base Mérimée.</li>
+
+        <li>L'encyclopédie "Wikipédia" a des pages dédiées aux monuments historiques par département
+        et/ou par ville, par exemple pour <a href="https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_l'Ain" title="L'Ain" target="blank">l'Ain</a>,</li>
+        <li>Le site de cartographie participative "OpenStreetMap" répertorie aussi des monuments historiques ... voir
+        <a href="http://wiki.openstreetmap.org/wiki/FR:Key:ref:mhs" title ="sur le Wiki OSM" target="blank">le wiki des tags 'mhs'</a>.</li>
         </ul>
         <p>
-    Ces tableaux comparatifs devraient permettrent d'améliorer la qualité et le suivi des descriptions des MH sur OSM et Wikpédia.
-    <p>Pour le moment, et pour tester la faisabilité, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts
+    Ces tableaux comparatifs devraient aider à améliorer la qualité et le suivi des descriptions des MH sur OSM et Wikpédia.
+    <p>Pour le moment, et pour tester la faisabilité, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts.
+    <p>Ces pages sont complètement statiques. Elles sont générées automatiquement chaque nuit, par un script Python, puis transférer sur le serveur.
     '''
-    bandeau1='''</body>
-<div id="bandeau"> <h4>'''
-    bandeau2='''
+
+
+    contenu+='''
 <div id="menu">
-    <ul>'''
+    <ul>\n'''
     for d in dic:
         link = d+"_pages/"+d+"_merosmwip.html"
-        title = dic[d]
-        texte = dic[d]
-        menu += '<li><a href="'+link+'" title="'+title+'">'+texte+'</a></li>\n'
-    close= '''</ul>
+        title = dic[d][d]
+        contenu += '       <li><a href="{}" title="{}">{}</a></li>\n'.format(link,title,title)
+    contenu+= '''   </ul>
     </div>
 </div>'''
-    contenu=[bandeau1,t,intro,bandeau2,menu,close]
-    for c in contenu:
-        file.write(c)
+    file.write(contenu)
+
 
 def write_footer(file):
     footer='''<div id="footer"> Page proposée par <a href="http://wiki.openstreetmap.org/wiki/User:JeaRRo">JeaRRO</a>, contributeur OSM </div>
@@ -81,12 +90,16 @@ def gen_index(dico):
     oF = creer_fichier(index_name,racine)
     write_entete(oF,titre,"static/style.css")
     write_bandeau(oF,titre,dico)
-    write_footer(oF)
+#    write_footer(oF)
     oF.close()
 
 if __name__ == "__main__":
-    d_dep= {'01':'Ain', '69':'Rhône','42':'Loire'}
+
+    d_dep = ini.dep   #{'01':'Ain', '69':'Rhône','42':'Loire'}
+    #print(d_dep)
     d_dep = OrderedDict(sorted(d_dep.items(), key=lambda t: t[0]))
+    #print(d_dep)
+
     ''' tester la présence d'une génération précédente et faire une sauvegarde'''
     ''' tester l'espace disque minimum requis pour la génération... qq Mo ?'''
     ''' générer la page index'''
