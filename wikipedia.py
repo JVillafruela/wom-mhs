@@ -12,18 +12,12 @@
     FIXME => supprimer le code dep_text du dico d'entrée... et reporter cela à l'affichage des pages html
 '''
 from __future__ import unicode_literals
-import requests,requests_cache
+import requests
 from bs4 import BeautifulSoup
-import bs4
-import ini
+import bs4,ini
 from collections import OrderedDict
 
-#mhs_wp est un dico suivant les codes : mhs il contient pour chaque clé/code
-#la liste :  nom, commune, url_dep_wp , identifiant (ancre dans la page)
-#requests_cache.install_cache('wikipedia_cache', backend='memory', expire_after=3600)
-
 url_base ="https://fr.wikipedia.org"
-
 
 def getData(url):
     r = requests.get(url)

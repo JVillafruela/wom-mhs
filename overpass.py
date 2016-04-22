@@ -23,13 +23,6 @@ from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 from collections import OrderedDict
 
-code = {'01':'3600007387',
-        '38':'3600007437',
-        '69':'3600660056',
-        '69M':'3604850450',
-        '42':'3600007420',
-        }
-
 cache_opts = {
     'cache.type': 'file',
     'cache.data_dir': '/tmp/cache/data',
@@ -38,7 +31,7 @@ cache_opts = {
 
 cache = CacheManager(**parse_cache_config_options(cache_opts))
 
-@cache.cache('query-cache', expire=7200)
+@cache.cache('query-osm-cache', expire=7200)
 def get_data(query):
     '''
         Obtenir la selection géographique sur overpass.api
