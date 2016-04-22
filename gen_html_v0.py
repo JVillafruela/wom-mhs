@@ -28,8 +28,12 @@ def write_contenu(file,t,d,dep_text,page,comptes,data):
             <div class="TableCell1"><a href="{}{}" target="blank">{}</a></div>
             <div class="TableCell2">{} -- {}</div>
             <div class="TableCell1"><a href="http://www.openstreetmap.org/browse/{}" target="blank"> OSM </a></div>
-            <div class="TableCell1"> <a href="{}" target="blank">  WP </a> </div>
-        '''.format(l0,row[0],row[0],row[1],row[2],row[3],row[8])
+
+        '''.format(l0,row[0],row[0],row[1],row[2],row[3])
+        if page=='merosmwip':
+            table+='''<div class="TableCell1"> <a href="{}" target="blank">  WP </a> </div>'''.format(row[8])
+        elif page=='merosm':
+            table+='''<div class="TableCell1">  {}  </div>'''.format("Absent WP")
         if row[5]:
             table += '''<div class="TableCell2"><a href="http://www.openstreetmap.org/browse/{}"
              target="blank">Dans OSM en double</a>  ; {} {}</div>'''.format(row[6],",".join(row[4]),",".join(row[7]))
@@ -86,12 +90,14 @@ def gen_page(dep_text,dep,comptes,page,data):
     '''écrire le contenu'''
     write_contenu(oF,titre,dep,dep_text,page,comptes,data)
     '''écrire le pied de page'''
+    index.write_footer(oF)
     '''fermer le fichier'''
     oF.close()
 
 if __name__ == "__main__":
     #d_dep ={'01':'Ain', '69':'Rhône','42':'Loire'}
     d_dep ={'01':'Ain'}
+    d_dep = OrderedDict(sorted(d_dep.items(), key=lambda t: t[0]))
     d_fonct= {'merosmwip': data.table_complet,
                 'merosm' : data.table_wp_absent,
             }
@@ -108,7 +114,7 @@ if __name__ == "__main__":
         dep_text,d_me,d_wp,d_osm=data.get_data(d)
         comptes = [len(d_me),len(d_wp),len(d_osm)]
         #pages=['merosmwip','merosm','merwip','oemwip','osm','wip']
-        pages=['merosmwip']
+        pages=['merosmwip','merosm']
         ''' pour chaque page in pages:'''
         for p in pages:
 
