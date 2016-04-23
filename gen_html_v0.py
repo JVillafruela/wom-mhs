@@ -95,7 +95,7 @@ def gen_page(dep_text,dep,comptes,page,data):
 
 if __name__ == "__main__":
     #d_dep ={'01':'Ain', '69':'Rhône','42':'Loire'}
-    d_dep ={'01':'Ain'}
+    d_dep = ini.dep
     d_dep = OrderedDict(sorted(d_dep.items(), key=lambda t: t[0]))
     d_fonct= {'merosmwip': data.table_complet,
                 'merosm' : data.table_wp_absent,
@@ -104,24 +104,24 @@ if __name__ == "__main__":
     ''' tester la présence d'une génération précédente et faire une sauvegarde'''
     ''' tester l'espace disque minimum requis pour la génération... qq Mo ?'''
     ''' Générer la page index'''
-    #index.gen_index(d_dep)
+    index.gen_index(d_dep)
     '''générer les six pages de chaque département'''
     for d in d_dep:
         print('------'+d+'------')
         ''' '''
         ''' Acquérir les datas'''
         dep_text,d_me,d_wp,d_osm=data.get_data(d)
-        comptes = [len(d_me),len(d_wp),len(d_osm)]
+        #comptes = [len(d_me),len(d_wp),len(d_osm)]
         #pages=['merosmwip','merosm','merwip','oemwip','osm','wip']
         pages=['merosmwip','merosm']
         ''' pour chaque page in pages:'''
         for p in pages:
 
-            result =  d_fonct[p](d_me,d_wp,d_osm)
+        #    result =  d_fonct[p](d_me,d_wp,d_osm)
             #print (p,result)
             ''' ouvrir le fichier(pname) et Créer/vérifier les répertoires ./d
                 s'il n'existe pas
             '''
             pname=d+'_'+p+'.html'
             print("Construction de la page {}.".format(pname))
-            gen_page(dep_text,d,comptes,p,result)
+        #    gen_page(dep_text,d,comptes,p,result)
