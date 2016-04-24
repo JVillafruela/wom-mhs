@@ -14,14 +14,14 @@ dep = {'01' : {
             #     "zone_osm" : "3600007420",
             #     "zone_osm_alt" :"",
             #     },
-            # '69': {
-            #     "69":'Rhône',
-            #     "text": "du Rhône",
-            #     "url_d" : "/wiki/Liste_des_monuments_historiques_du_Rhône",
-            #     'url_d_2' : "/wiki/Liste_des_monuments_historiques_de_la_métropole_de_Lyon",
-            #     "zone_osm" : "3600660056",
-            #     "zone_osm_alt" :"3604850450",
-            #     },
+            '69': {
+                "69":'Rhône',
+                "text": "du Rhône",
+                "url_d" : "/wiki/Liste_des_monuments_historiques_du_Rhône",
+                'url_d_2' : "/wiki/Liste_des_monuments_historiques_de_la_métropole_de_Lyon",
+                "zone_osm" : "3600660056",
+                "zone_osm_alt" :"3604850450",
+                },
             # '38': {
             #     "38":'Isère',
             #     "text": "de l'Isère",

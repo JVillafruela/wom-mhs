@@ -4,16 +4,19 @@
 '''
     Organisation des infos MH une class Musee qui contient une collection de monuments (MoHist)
 '''
-import ini,merimee,overpass
+import ini,merimee,overpass,wikipedia
 from collections import OrderedDict
 
 class Musee:
     '''
         un musée contient des monuments historiques
     '''
-    def __init__(self,nom):
+    def __init__(self,nom=None):
         self.collection = {}
-        self.nom=nom
+        if nom:
+            self.nom=nom
+        else:
+            self.nom="Musée_général"
 
     def trier(self):
         '''Renvoie la collection triée'''
@@ -84,6 +87,7 @@ def charge_merimee(dep,musee):
         musee.collection[mhs].description[mhs]['mer']['commune']=dic_mer[mhs][1]
         musee.collection[mhs].description[mhs]['mer']['nom']=dic_mer[mhs][2]
         musee.collection[mhs].description[mhs]['mer']['classement']=dic_mer[mhs][3]
+    return musee
 
 def charge_osm(d,musee):
     ''' Créer les MH à partir de la requette overpass sur OSM
@@ -100,29 +104,38 @@ def charge_osm(d,musee):
         #récupérer le tag wikipédia
         if 'wikipedia' in dic_osm[mhs][1]:
             musee.collection[mhs].description[mhs]['osm']['wikipedia']=dic_osm[mhs][1]['wikipedia']
+    return musee
 
 def charge_wp(d,musee):
-    '''Créer les MH à partir du scapping des pages départementales et grandes villes sur Wikipédia
-    dic_wp => {code-mhs-1 : [name,commune, url_wp_MH_departement,identifiant],
-                code-mhs-2 : [name,commune, url_wp_MH_departement,identifiant],
-                E-N°_monument : [name,ville, url_wp_MH_ville,identifiant],
-                E-N°_monument : [name,ville, url_wp_MH_ville,identifiant]}
-
-
-    exemple de dic_wp => {PA01000033' : ['Le Café français', 'Bourg-en-Bresse', 'https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Bourg-en-Bresse', 'Cafe_francais']
-                            'E-26-code-insee' :[[nom,commune,url_ville,identifiant,"code MHS absent"],[....]]}'''
-
-    pass
+    '''Créer les MH à partir du scrapping des pages départementales et grandes villes sur Wikipédia
+    dic_wp => {code-mhs-1 : [nom MH,commune, code insee,url_wp_departement,identifiant],
+                code-mhs-2 : [nom MH,commune, code insee,url_wp_departement,identifiant],
+                E-N° d'ordre : [nnom MH,ville,code insee, url_wp_ville,identifiant],
+                E-N° d'ordre : [nom MH,ville,code insee, url_wp_ville,identifiant]}
+    exemple de dic_wp => {PA01000033' : ['Le Café français', 'Bourg-en-Bresse','01035', 'https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Bourg-en-Bresse', 'Cafe_francais']
+            '''
+    dic_wp = wikipedia.get_wikipedia(d['url_d'],d['url_d_2'])
+    for mhs in dic_wp:
+        if mhs not in musee.collection:
+            m=MoHist(mhs)
+            musee.collection[mhs]=m
+        musee.collection[mhs].description[mhs]["wip"]['nom_MH']=dic_wp[mhs][0]
+        musee.collection[mhs].description[mhs]['wip']['commune']=dic_wp[mhs][1]
+        musee.collection[mhs].description[mhs]['wip']['insee']=dic_wp[mhs][2]
+        musee.collection[mhs].description[mhs]['wip']['url']=dic_wp[mhs][3]
+        musee.collection[mhs].description[mhs]['wip']['id']=dic_wp[mhs][4]
+    return musee
 
 if __name__ == "__main__":
     salle_merosm=Musee('test')
     salle_osm=Musee('test1')
+    StPierre=Musee()
     for d in ini.dep:
         #print(d,ini.dep[d])
-        StPierre=Musee(ini.dep[d][d])
-        charge_merimee(d,StPierre)
-        charge_osm(ini.dep[d],StPierre)
 
+        StPierre = charge_merimee(d,StPierre)
+        StPierre = charge_osm(ini.dep[d],StPierre)
+        StPierre = charge_wp(ini.dep[d],StPierre)
 
         ''' Affichage  extrait base Mérimée '''
         #print(StPierre.collection['PA00116330'].description['PA00116330']['mer'])
@@ -136,13 +149,14 @@ if __name__ == "__main__":
         #         print(m)
             #print(value.description[m]['osm']['url_osm'])
         ''' qq stats'''
-        print("Nombre de MH dans le Musee {}".format(len(StPierre.collection)))
-        print ("Nombre de MH issues de la base Mérimée {}".format(StPierre.calcul_nbMH_merimee()))
-        print ("Nombre de MH issues de la base Osm {}".format(StPierre.calcul_nbMH_osm()))
-        salle_merosm = StPierre.chercher_MerOsm()
-        nb_salle_merosm = len(salle_merosm.collection)
-        print("Nombre de MH commun à Mérimée et OSM {}".format(nb_salle_merosm))
-        salle_osm = StPierre.chercher_Osm()
-        nb_salle_osm = len(salle_osm.collection)
-        print("Nombre de MH présents seulemnt dans OSM {}".format(nb_salle_osm))
-        print ()
+    print("Nombre de MH dans le Musee {}".format(len(StPierre.collection)))
+        # print ("Nombre de MH issues de la base Mérimée {}".format(StPierre.calcul_nbMH_merimee()))
+        # print ("Nombre de MH issues de la base Osm {}".format(StPierre.calcul_nbMH_osm()))
+        # salle_merosm = StPierre.chercher_MerOsm()
+        # nb_salle_merosm = len(salle_merosm.collection)
+        # print("Nombre de MH commun à Mérimée et OSM {}".format(nb_salle_merosm))
+        # salle_osm = StPierre.chercher_Osm()
+        # nb_salle_osm = len(salle_osm.collection)
+        # print("Nombre de MH présents seulemnt dans OSM {}".format(nb_salle_osm))
+        # print ()
+    print (MoHist.ctr_monument)

@@ -33,6 +33,7 @@ def getData(url):
     return main_page
 
 def analyseData(data,url,dic_mhs):
+    global ctr_no_mhs
     # encoding = data.find('meta').attrs['charset']
     # print (encoding)
     #url_ville=url.split('.org')[1]
@@ -118,7 +119,7 @@ def analyseData(data,url,dic_mhs):
                         # liste.append(new_monument)
                     else :
                         #print ("Erreur : Pas de code MHS pour "+nom+" à "+commune+'\n')
-                        code = "E-"+str(ctr_no_mhs)
+                        code = "E-"+str(ctr_no_mhs).zfill(4)
                         dic_mhs[code] = [nom,commune,c_insee,url,identifiant]
                         ctr_no_mhs+=1
                         # if 'erreur' in dic_mhs:
@@ -130,6 +131,7 @@ def analyseData(data,url,dic_mhs):
     return dic_mhs
 
 def analyseSecondData(data,url,dic_mhs):
+    global ctr_no_mhs
     commune = url.split('_')[-1]
     c_insee = insee.get_insee(commune)
     #url_ville = url.split('.org')[1]
@@ -210,7 +212,7 @@ def analyseSecondData(data,url,dic_mhs):
                         # liste.append(new_monument)
                     else :
                         #print ("Erreur : Pas de code MHS pour "+nom+" à "+commune+'\n')
-                        code = "E-"+str(ctr_no_mhs)
+                        code = "E-"+str(ctr_no_mhs).zfill(4)
                         dic_mhs[code] = [nom,commune,c_insee,url,identifiant]
                         ctr_no_mhs+=1
                         #dic_mhs['erreur'].append([nom,commune,url_ville,identifiant,"code MHS absent"])
@@ -231,14 +233,18 @@ def get_wikipedia(url_departement,url_dep_2=None):
 if __name__ == "__main__":
     dp = ini.dep['01']
     dic_wp = {}
+    Nb_noMHS=0
     dic_wp = get_wikipedia(dp['url_d'],dp['url_d_2'])
     for key in dic_wp:
         #print (key,':',dic_wp[key])
         if 'E-' in key:
-            print ("Monuments du département {} sans code MH => code {}, {}".format(dp,key,dic_wp[key]))
+            Nb_noMHS+=1
+            print(dic_wp[key])
+        #     print ("Monuments du département {} sans code MH => code {}, {}".format(dp,key,dic_wp[key]))
             #    print ('Erreurs = ', dic_wp['erreur'])
 
     print ("il y a {} Monuments du département {} dans Wikipédia.".format(len(dic_wp),dp['text']))
+    print ("Monuments du département {} sans code MH : {}".format(dp[('text')],Nb_noMHS))
     #print("Descriptions incompletes = {}".format(len(liste_incomplet)))
     # for erreur in liste_incomplet:
     #     #print (erreur)

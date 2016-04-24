@@ -44,6 +44,6 @@ def get_insee(commune):
 
 if __name__ == "__main__":
 
-    com = ('Saint-Denis en Bugey')
+    com = ('Lyon')
     insee = get_insee(com)
     print(com, " : ",insee)
