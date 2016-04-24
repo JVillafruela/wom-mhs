@@ -6,10 +6,6 @@
 '''
 import ini,merimee,overpass
 from collections import OrderedDict
-#
-# class Salle(Musee):
-#     ''' Un extrait, une partie d'un musée'''
-#     pass
 
 class Musee:
     '''
@@ -59,6 +55,7 @@ class Musee:
         #print(len(salle_osm.collection))
         return salle_osm
 
+
 class MoHist:
     '''
         un monument historique
@@ -71,7 +68,7 @@ class MoHist:
         else:
             self.mhs = "no_mhs_"+str(MoHist.ctr_monument)
         self.description={self.mhs:{"mer":{},"osm":{},"wip":{}}}
-        #la catégorie du monument => résultat des tests en fonciton de la source mer,osm,wip
+        #la catégorie du monument => résultat des tests en fonction de la source mer,osm,wip
         self.cat=""
         MoHist.ctr_monument+=1
 
@@ -103,6 +100,19 @@ def charge_osm(d,musee):
         #récupérer le tag wikipédia
         if 'wikipedia' in dic_osm[mhs][1]:
             musee.collection[mhs].description[mhs]['osm']['wikipedia']=dic_osm[mhs][1]['wikipedia']
+
+def charge_wp(d,musee):
+    '''Créer les MH à partir du scapping des pages départementales et grandes villes sur Wikipédia
+    dic_wp => {code-mhs-1 : [name,commune, url_wp_MH_departement,identifiant],
+                code-mhs-2 : [name,commune, url_wp_MH_departement,identifiant],
+                E-N°_monument : [name,ville, url_wp_MH_ville,identifiant],
+                E-N°_monument : [name,ville, url_wp_MH_ville,identifiant]}
+
+
+    exemple de dic_wp => {PA01000033' : ['Le Café français', 'Bourg-en-Bresse', 'https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Bourg-en-Bresse', 'Cafe_francais']
+                            'E-26-code-insee' :[[nom,commune,url_ville,identifiant,"code MHS absent"],[....]]}'''
+
+    pass
 
 if __name__ == "__main__":
     salle_merosm=Musee('test')

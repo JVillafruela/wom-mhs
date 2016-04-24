@@ -4,12 +4,13 @@
 '''
     Faire une requette sur les pages wikipédia "Liste_des_monuments_historiques_de_l'Ain". chaque département semble avoir une page de ce type.
     en entrée : un code département = '01' pris dans la table des départements (ini.py)
-    en sortie : un dictionnaire dic_wp avce une clé par code mhs et une clé erreur pour les monuments qui n'ont pas de code mhs
+    en sortie : un dictionnaire dic_wp avec une clé par code mhs et une clé erreur pour les monuments qui n'ont pas de code mhs
             PA01000033' : ['Le Café français', 'Bourg-en-Bresse', 'https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Bourg-en-Bresse', 'Cafe_francais']
             'erreur' :[[nom,commune,url_ville,identifiant,"code MHS absent"],[....]]
             (l'identifiant est l'id, ancre de la page web)
     FIXME => il y a un dico pour convertir le Numéro du département en lien wikipédia. Avec dans certains cas, deux liens (voir le rhône)
     FIXME => supprimer le code dep_text du dico d'entrée... et reporter cela à l'affichage des pages html
+    FIXME => pb avec les url et url_ville dans les analyses
 '''
 from __future__ import unicode_literals
 import requests
@@ -77,7 +78,7 @@ def analyseData(data,url,dic_mhs):
                     # print('commune url = ', "/wiki/"+commune)
 
                 if n == 2 and nom == '' :
-                    # le nom est vide s'il y a une grosse ville (sauf métropole de lyon)
+                    ''' le nom est vide s'il y a une grande ville (sauf métropole de lyon) '''
                     url_gc = val.find('a')['href']
                     url_gc = url_base+url_gc
                     #print ('url_grosse_commune = ',url_gc)
@@ -114,7 +115,7 @@ def analyseData(data,url,dic_mhs):
                         if 'erreur' in dic_mhs:
                             dic_mhs['erreur'].append([nom,commune,url,identifiant,"code MHS absent"])
                         else :
-                            dic_mhs['erreur']=[[nom,commune,url_ville,identifiant,"code MHS absent"]]
+                            dic_mhs['erreur']=[[nom,commune,url,identifiant,"code MHS absent"]]
                         #liste_mhs_absent.append([nom,commune,url,identifiant,"code MHS absent"])
                     grande_commune = False
     return dic_mhs
