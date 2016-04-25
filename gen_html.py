@@ -10,6 +10,7 @@ from collections import OrderedDict
 
 def write_contenu(file,stats,salle):
     table =""
+    note_osm=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     header='''
 <div class="TableComplet" >
@@ -25,26 +26,49 @@ def write_contenu(file,stats,salle):
     '''
     #parcourir la salle
     for mh,desc in salle.collection.items():
-        print( mh,desc)
-        # table += '''
-        # <div class="TableRow">
-        #     <div class="TableCell1"><a href="{}{}" target="blank">{}</a></div>
-        #     <div class="TableCell2">{} -- {}</div>
-        #     <div class="TableCell1"><a href="http://www.openstreetmap.org/browse/{}" target="blank"> OSM </a></div>
-        # '''.format(l0,row[0],row[0],row[1],row[2],row[3])
-    #     if page=='merosmwip':
-    #         table+='''<div class="TableCell1"> <a href="{}" target="blank">  WP </a> </div>'''.format(row[8])
-    #     elif page=='merosm':
-    #         table+='''<div class="TableCell1">  {}  </div>'''.format("----")
+        # print( mh,desc)
+        # print (desc['osm']['url_osm'])
+        # exit()
+        description = desc['mer']['nom'][:45]+'; '+desc['mer']['commune'][:20]
+        url_osm_org='href="http://www.openstreetmap.org/browse/'+desc['osm']['url_osm']
+        type_osm = desc['osm']['url_osm'].split('/')[0]
+        id_osm = desc['osm']['url_osm'].split('/')[1]
+        url_osm_id ='href="http://www.openstreetmap.org/edit?editor=id&'+type_osm+'='+id_osm
+        url_josm= 'href="http://localhost:8111/load_object?new_layer=true&objects='+type_osm[0]+id_osm
+        table += '''
+        <div class="TableRow">
+            <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
+            <div class="TableCell2">{}</div>'''.format(l0,mh,mh,description)
+        if 'osm' in salle.nom:
+            if len(desc['osm']['tags_manquants'])>0:
+                note_osm=", ".join(desc['osm']['tags_manquants'])
+            else :
+                note_osm =""
+            table += '''<div class="TableCell1"><a {}" target="blank" title="Voir sur openstreetmap.org"> ORG </a> -
+            <a {}" target="blank" title="Editer avec ID"> ID </a> - <a {}" target="blank" title="Editer avec Josm"> Josm </a> </div>
+        '''.format(url_osm_org, url_osm_id,url_josm)
+        if 'wip' in salle.nom:
+            url_wip = desc['wip']['url']+"#"+desc['wip']['id']
+            if 'wikipedia' in desc['osm']['tags_mh']:
+                url_osmwp = 'href="https://fr.wikipedia.org/wiki/'+desc['osm']['tags_mh']['wikipedia']
+                table+='''<div class="TableCell1"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> -
+                <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </div>'''.format(url_wip,url_osmwp)
+            else:
+                table+='''<div class="TableCell1"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> </div>'''.format(url_wip)
+        else:
+            table+='''<div class="TableCell1">  {}  </div>'''.format("----")
+        if note_osm !="":
+    #        table += '''<div class="TableCell2"><a href="http://www.openstreetmap.org/browse/{} target="blank">Deux descriptions dans OSM</a> '''.format(note_osm)
+            table += '''<div class="TableCell2"> {} </div>'''.format(note_osm)
     #     if row[5]:
     #         table += '''<div class="TableCell2"><a href="http://www.openstreetmap.org/browse/{}"
     #          target="blank">Dans OSM en double</a>  ; {} {}</div>'''.format(row[6],",".join(row[4]),",".join(row[7]))
     #     else:
     #         table +=''' <div class="TableCell2"> {} </div> '''.format(",".join(row[4]))
-    #     table+='''</div>'''
-    # tableau=[header, table]
-    # for r in tableau:
-    #     file.write(r)
+        table+='''</div>'''
+    tableau=[header, table]
+    for r in tableau:
+        file.write(r)
 
 
 # old - def write_bandeau(file,t,d,dep_text,page,comptes,nb_items):
@@ -101,7 +125,7 @@ def gen_page(d,d_dep,stats,salle):
     '''écrire le contenu'''
     write_contenu(oF,stats,salle)
     # '''écrire le pied de page'''
-    # index.write_footer(oF)
+    index.write_footer(oF)
     # '''fermer le fichier'''
     oF.close()
 

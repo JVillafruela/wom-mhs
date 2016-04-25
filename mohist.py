@@ -41,6 +41,7 @@ class Musee:
     def classer_MH(self,list_salle):
         # parcourir les clés des monuments du musée...
         # noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osmwip','s_osm','s_wip']
+        # FIXME !!! pas de traitement des doubles dans OSM
         for m,v in self.collection.items():
             '''Créer une salle avec les MH communs à Mérimée, OSM et WP '''
             if  v.description[m]['mer'] and v.description[m]['osm'] and v.description[m]['wip']:
@@ -60,10 +61,10 @@ class Musee:
             ''' Créer une salle avec les MH présents seulement dans WP '''
             if  not v.description[m]['mer'] and not v.description[m]['osm'] and v.description[m]['wip']:
                 list_salle[5].collection[m] = v.description[m]
-        # triée les salle par code mh croissants
+        # trier les salles par code mh croissants
         for s in list_salle :
             s.collection = OrderedDict(sorted(s.collection.items(), key=lambda t: t[0]))
-            
+
 class MoHist:
     '''
         un monument historique
@@ -114,7 +115,7 @@ def charge_wp(d,musee):
     '''Créer les MH à partir du scrapping des pages départementales et grandes villes sur Wikipédia
     dic_wp => {code-mhs-1 : [nom MH,commune, code insee,url_wp_departement,identifiant],
                 code-mhs-2 : [nom MH,commune, code insee,url_wp_departement,identifiant],
-                E-N° d'ordre : [nnom MH,ville,code insee, url_wp_ville,identifiant],
+                E-N° d'ordre : [nom MH,ville,code insee, url_wp_ville,identifiant],
                 E-N° d'ordre : [nom MH,ville,code insee, url_wp_ville,identifiant]}
     exemple de dic_wp => {PA01000033' : ['Le Café français', 'Bourg-en-Bresse','01035', 'https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Bourg-en-Bresse', 'Cafe_francais']
             '''
