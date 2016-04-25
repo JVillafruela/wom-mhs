@@ -40,27 +40,30 @@ class Musee:
 
     def classer_MH(self,list_salle):
         # parcourir les clés des monuments du musée...
-        # noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osmwip','s_osm','s_wip']
+        # noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osm','s_wip','s_osmwip','s_mer']
         # FIXME !!! pas de traitement des doubles dans OSM
         for m,v in self.collection.items():
             '''Créer une salle avec les MH communs à Mérimée, OSM et WP '''
-            if  v.description[m]['mer'] and v.description[m]['osm'] and v.description[m]['wip']:
+            if  v.description[m]['mer'] and v.description[m]['osm'] and (v.description[m]['wip'] or "wikipedia" in v.description[m]['osm']['tags_mh']):
                 list_salle[0].collection[m] = v.description[m]
             ''' Créer une salle avec les MH communs à Mérimée et OSM'''
-            if  v.description[m]['mer'] and v.description[m]['osm']:
+            if  v.description[m]['mer'] and v.description[m]['osm'] and ("wikipedia" not in v.description[m]['osm']['tags_mh']):
                 list_salle[1].collection[m] = v.description[m]
             ''' Créer une salle avec les MH communs à Mérimée et WP'''
-            if v.description[m]['mer'] and v.description[m]['wip']:
+            if v.description[m]['mer'] and v.description[m]['wip'] and not v.description[m]['osm'] :
                 list_salle[2].collection[m] = v.description[m]
-            ''' Créer une salle avec les MH communs à OSM et WP '''
-            if  v.description[m]['osm'] and v.description[m]['wip']:
-                list_salle[3].collection[m] = v.description[m]
             ''' Créer une salle avec les MH présents seulement dans Osm '''
             if  not v.description[m]['mer'] and v.description[m]['osm'] and not v.description[m]['wip'] and 'Bis' not in m:
-                list_salle[4].collection[m] = v.description[m]
+                list_salle[3].collection[m] = v.description[m]
             ''' Créer une salle avec les MH présents seulement dans WP '''
             if  not v.description[m]['mer'] and not v.description[m]['osm'] and v.description[m]['wip']:
+                list_salle[4].collection[m] = v.description[m]
+            ''' Créer une salle avec les MH communs à OSM et WP '''
+            if  v.description[m]['osm'] and v.description[m]['wip'] and not v.description[m]['mer']:
                 list_salle[5].collection[m] = v.description[m]
+            ''' Créer une salle avec les MH présents seulement dans Mérimée '''
+            if  not v.description[m]['osm'] and not v.description[m]['wip'] and v.description[m]['mer']:
+                list_salle[6].collection[m] = v.description[m]
         # trier les salles par code mh croissants
         for s in list_salle :
             s.collection = OrderedDict(sorted(s.collection.items(), key=lambda t: t[0]))

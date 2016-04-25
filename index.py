@@ -10,7 +10,7 @@ from collections import OrderedDict
 
 def write_entete(file,title,cssFile):
     '''
-        Ecrire l'entête du ficheir html
+        Ecrire l'entête du fichier html
     '''
     header=""
     header += '''<!DOCTYPE html>
@@ -28,7 +28,7 @@ def write_bandeau(file,t,dic):
     menu=""
     contenu=""
     contenu+='''</body>
-    <div id="bandeau"> <h4>'''
+    <div id="bandeau"> <h4 class="Titre">'''
     contenu += t
     contenu += '''</h4>\n <p>Les pages de ce site présentent des tableaux comparatifs des monuments historiques dans les bases de données suivantes :
         <ul>
@@ -92,6 +92,8 @@ def gen_index(dico):
     write_bandeau(oF,titre,dico)
 #    write_footer(oF)
     oF.close()
+
+if __name__ == "__main__":
     d_dep = ini.dep   #{'01':'Ain', '69':'Rhône','42':'Loire'}
     #print(d_dep)
     d_dep = OrderedDict(sorted(d_dep.items(), key=lambda t: t[0]))
