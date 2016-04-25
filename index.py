@@ -47,7 +47,6 @@ def write_bandeau(file,t,dic):
     <p>Ces pages sont complètement statiques. Elles sont générées automatiquement chaque nuit, par un script Python, puis transférer sur le serveur.
     '''
 
-
     contenu+='''
 <div id="menu">
     <ul>\n'''
@@ -73,10 +72,11 @@ def creer_fichier(name,repertoire):
         Vérifier si le repertoire existe sinon le créer.
         puis ouvrir le fichier et renvoyer un writer
     '''
+    # FIXME !! Le répertoire racine n'est pas créer et ne doit pas être effacer
     if not os.path.exists(repertoire):
         os.mkdir(repertoire)
     if os.path.isdir(repertoire):
-        return open(repertoire+'/'+name+".html","w")
+        return open(repertoire+'/'+name,"w")
 
 def gen_index(dico):
     '''
@@ -84,17 +84,14 @@ def gen_index(dico):
         et une petite présentation du projet
         le fichier index.html est créer à la racine d'un répertoire /web
     '''
-    index_name="index"
+    page_name="index.html"
     racine="web"
     titre="Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
-    oF = creer_fichier(index_name,racine)
+    oF = creer_fichier(page_name,racine)
     write_entete(oF,titre,"static/style.css")
     write_bandeau(oF,titre,dico)
 #    write_footer(oF)
     oF.close()
-
-if __name__ == "__main__":
-
     d_dep = ini.dep   #{'01':'Ain', '69':'Rhône','42':'Loire'}
     #print(d_dep)
     d_dep = OrderedDict(sorted(d_dep.items(), key=lambda t: t[0]))
