@@ -9,6 +9,9 @@ div li {
 div p {
 	text-align:left;
 }
+h4.Titre{
+	text-align:center;
+}
 #bandeau {
 	width:80%;
 	height:100px;
@@ -80,6 +83,14 @@ div p {
 		width: 100%;
 		background-color: #ddd;
 }
+.TableTitre {
+		display: table-caption;
+		font-weight: bold;
+		width: 100%;
+		background-color: #fff;
+		text-align:center;
+		padding-bottom: 5px;
+}
 .TableCell, .TableHead {
     	display: table-cell;
     /*	border: 1px solid #999999; */
@@ -87,7 +98,7 @@ div p {
 	  	height: 16px;
 
 	  	padding: 3px 0.8%;
-		width:  10%;
+		width:  30%;
 }
 .TableCell1, .TableHead1 {
     	display: table-cell;
@@ -108,12 +119,15 @@ div p {
 		overflow: hidden;
 
 }
+.TableCell3, .TableHead3 {
+    	display: table-cell;
+    /*	border: 1px solid #999999;*/
 	  	float: left;
-	  	height: 20px;
+	  	height: 16px;
 	  	padding: 2px 0.5%;
-		width:  30%;
-		overflow: hidden;
-		background-color: #efdecd;
+		width:  15%;
+//		overflow: hidden;
+
 }
 .TableHeading {
     	display: table-header-group;
