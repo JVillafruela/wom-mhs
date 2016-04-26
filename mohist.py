@@ -102,16 +102,26 @@ def charge_osm(d,musee):
     dic_osm => {'ref:mhs':[type/id,le dico des tags, la liste des tags manquants],ref_suivante : [,,,], etc...}
     '''
     dic_osm = overpass.get_osm(d['zone_osm'])
+    #ajouter un tri por être sur que le code mhs-bis arrive après le code mhs-bis donc déja créé dans la collection
+    dic_osm = OrderedDict(sorted(dic_osm.items(), key=lambda t: t[0]))
     for mhs in dic_osm:
-        if mhs not in musee.collection:
-            m=MoHist(mhs)
-            musee.collection[mhs]=m
-        musee.collection[mhs].description[mhs]["osm"]['url_osm']=dic_osm[mhs][0]
-        musee.collection[mhs].description[mhs]['osm']['tags_mh']=dic_osm[mhs][1]
-        musee.collection[mhs].description[mhs]['osm']['tags_manquants']=dic_osm[mhs][2]
-        #récupérer le tag wikipédia
-        if 'wikipedia' in dic_osm[mhs][1]:
-            musee.collection[mhs].description[mhs]['osm']['wikipedia']=dic_osm[mhs][1]['wikipedia']
+        #traitement des doubles
+        if '-Bis' in mhs:
+            mhs_bis = mhs.split('-')[0]
+            #print (mhs_bis)
+            #print(dic_osm[mhs])
+            # sauvegarde de la description bis dnas un champ particulier
+            musee.collection[mhs_bis].description[mhs_bis]['osm']['mhs_bis']=dic_osm[mhs]
+        else:
+            if mhs not in musee.collection:
+                m=MoHist(mhs)
+                musee.collection[mhs]=m
+            musee.collection[mhs].description[mhs]["osm"]['url_osm']=dic_osm[mhs][0]
+            musee.collection[mhs].description[mhs]['osm']['tags_mh']=dic_osm[mhs][1]
+            musee.collection[mhs].description[mhs]['osm']['tags_manquants']=dic_osm[mhs][2]
+            #récupérer le tag wikipédia
+            if 'wikipedia' in dic_osm[mhs][1]:
+                musee.collection[mhs].description[mhs]['osm']['wikipedia']=dic_osm[mhs][1]['wikipedia']
     return musee
 
 def charge_wp(d,musee):
@@ -168,28 +178,27 @@ if __name__ == "__main__":
         # museum_trier=museum.trier()
         # for m,value in museum_trier.items():
         #     print(value.description[m]['mer']['commune'])
-        ''' Affichage  extrait base OSM'''
-        # museum_trier=museum.trier()
-        # for m,value in museum_trier.items():
-        #     if "Bis" in m :
-        #         print(m)
-            #print(value.description[m]['osm']['url_osm'])
+
+
+        museum_trier=museum.trier()
+        for m,value in museum_trier.items():
+            #Affichage  double extrait base OSM
+            if "mhs_bis" in value.description[m]['osm'] :
+                print(" Premier Mh =", value.description[m]['osm']['url_osm']," => ","Mh en double : ", value.description[m]['osm']['mhs_bis'][0])
+                # Affichage No code mHS base wikipédia
+            if "ERR" in m :
+                print(m)
+                print(value.description[m]['wip']['nom_MH'],', ',value.description[m]['wip']['commune'])
+
         ''' qq stats'''
         print("Nombre de MH dans le Musee {}".format(len(museum.collection)))
         for bs in bases:
             print ("Nombre de MH issues de la base {} : {}".format(bs,museum.calcul_nbMH(bs)))
-        # salle_wip = museum.chercher_Wip()
-        # print("Nombre de MH seulement dans WP {}".format(len(salle_wip.collection)))
-        # salle_osmwip = museum.chercher_OsmWip()
-        # print("Nombre de MH commun à OSM et WP {}".format(len(salle_osmwip.collection)))
+
 
         for n in range(len(liste_salle)):
             print("Nombre de MH dans la salle : {} = {}".format(liste_salle[n].nom, len(liste_salle[n].collection)))
-        # salle_merosm = museum.chercher_MerOsm()
-        # print("Nombre de MH commun à Mérimée et OSM {}".format(len(salle_merosm.collection)))
-        # salle_osm = museum.chercher_Osm()
-        # print("Nombre de MH présents seulemnt dans OSM {}".format(len(salle_osm.collection)))
-        # print ()
+
         print (MoHist.ctr_monument)
         # for mh in museum.collection:
         #     #print(museum.collection[mh].description[mh])

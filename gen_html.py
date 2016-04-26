@@ -9,11 +9,12 @@ import os,index,merimee,overpass,wikipedia,ini,mohist
 from collections import OrderedDict
 
 def get_table_merosmwip(salle):
-    note_osm=""
-    note_wp=""
+
     table=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
+        note_osm=""
+        note_wp=""
     #      print( mh,desc)
     #      print (desc['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
@@ -28,6 +29,8 @@ def get_table_merosmwip(salle):
         #les tags manquants dans OSM
         if len(desc['osm']['tags_manquants'])>0:
             note_osm=", ".join(desc['osm']['tags_manquants'])
+        elif 'mhs_bis' in desc['osm']:
+            note_osm+=' <a href="http://www.openstreetmap.org/browse/'+desc['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
         else :
             note_osm =""
         #les infos manquantes dans wikipédia
@@ -82,10 +85,11 @@ def get_table_merosmwip(salle):
     return table
 
 def get_table_merosm(salle):
-    note_osm=""
+
     table=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
+        note_osm=""
     #      print( mh,desc)
     #      print (desc['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
@@ -100,6 +104,8 @@ def get_table_merosm(salle):
         #les tags manquants dans OSM
         if len(desc['osm']['tags_manquants'])>0:
             note_osm=", ".join(desc['osm']['tags_manquants'])
+        elif 'mhs_bis' in desc['osm']:
+            note_osm+=' <a href="http://www.openstreetmap.org/browse/'+desc['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
         else :
             note_osm =""
         #debut de la table col mérimée et description
@@ -125,9 +131,10 @@ def get_table_merosm(salle):
 
 def get_table_merwip(salle):
     table=""
-    note_wp=""
+
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
+        note_wp=""
     #      print( mh,desc)
     #      print (desc['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
@@ -167,10 +174,11 @@ def get_table_osmwip(salle):
     pass
 
 def get_table_osm(salle):
-    note_osm=""
+
     table=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
+        note_osm=""
     #      print( mh,desc)
     #      print (desc['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
@@ -189,6 +197,8 @@ def get_table_osm(salle):
         #les tags manquants dans OSM
         if len(desc['osm']['tags_manquants'])>0:
             note_osm=", ".join(desc['osm']['tags_manquants'])
+        elif 'mhs_bis' in desc['osm']:
+            note_osm+=' <a href="http://www.openstreetmap.org/browse/'+desc['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
         else :
             note_osm =""
         #debut de la table col mérimée et description
@@ -225,18 +235,15 @@ def get_table_osm(salle):
 def get_table_wip(salle):
 
     table=""
-    note_wp=""
+
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
-        print( mh,desc)
+        note_wp=""
+        #print( mh,desc)
     #   print (desc['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
         #description = desc['mer']['nom'][:45]+'; '+desc['mer']['commune'][:20]
-
         description =""
-
-
-
         #debut de la table col mérimée et description
         table += '''<div class="TableRow">
                         <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
