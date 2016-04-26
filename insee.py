@@ -14,8 +14,8 @@
 
 '''
 from __future__ import unicode_literals
-import csv, os, chardet
-from unidecode import unidecode
+import csv, os
+#from unidecode import unidecode
 
 class Insee(csv.excel):
     # Séparateur de champ = tabulation
@@ -23,7 +23,8 @@ class Insee(csv.excel):
 
 def get_insee(commune):
     ''' Renvoie le code insee d'une commune'''
-
+    if commune[:2] in ["La",'Le',"L'"]:
+        commune = commune[3:]
     commune=commune.replace(" ","-")
     csv.register_dialect('insee', Insee())
     fname = "comsimp2015_utf8.txt"

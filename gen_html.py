@@ -4,12 +4,13 @@
 '''
     Génération de pages statiques directement en html
 '''
-import os,index,data,merimee,overpass,wikipedia,ini,mohist
+import os,index,merimee,overpass,wikipedia,ini,mohist
 #from timer import LoggerTimer
 from collections import OrderedDict
 
 def get_table_merosmwip(salle):
     note_osm=""
+    note_wp=""
     table=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
@@ -29,6 +30,13 @@ def get_table_merosmwip(salle):
             note_osm=", ".join(desc['osm']['tags_manquants'])
         else :
             note_osm =""
+        #les infos manquantes dans wikipédia
+        if 'infos_manquantes' in desc['wip']:
+            #print(desc['wip'])
+            if len(desc['wip']['infos_manquantes'])>0:
+                note_wp=", ".join(desc['wip']['infos_manquantes'])
+            else:
+                note_wp=""
         #debut de la table col mérimée et description
         table += '''<div class="TableRow">
                         <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
@@ -65,7 +73,10 @@ def get_table_merosmwip(salle):
         else:
             table += '''<div class="TableCell3">  </div>'''
         #table note WP
-
+        if note_wp !="":
+            table += '''<div class="TableCell3"> {} </div> '''.format(note_wp)
+        else:
+            table += '''<div class="TableCell3">  </div>'''
         #table fin
         table+='''</div>'''
     return table
@@ -114,6 +125,7 @@ def get_table_merosm(salle):
 
 def get_table_merwip(salle):
     table=""
+    note_wp=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
     #      print( mh,desc)
@@ -132,11 +144,21 @@ def get_table_merwip(salle):
             url_wip = desc['wip']['url']+"#"+desc['wip']['id']
         else :
             url_wip=""
+        #les infos manquantes dans wikipédia
+        if 'infos_manquantes' in desc['wip']:
+            #print(desc['wip'])
+            if len(desc['wip']['infos_manquantes'])>0:
+                note_wp=", ".join(desc['wip']['infos_manquantes'])
+            else:
+                note_wp=""
         table+='''<div class="TableCell1"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> </div>'''.format(url_wip)
         #table note OSM
         table += '''<div class="TableCell3">  </div>'''
         #table note WP
-        table += '''<div class="TableCell3">  </div>'''
+        if note_wp !="":
+            table += '''<div class="TableCell3"> {} </div> '''.format(note_wp)
+        else:
+            table += '''<div class="TableCell3">  </div>'''
         #table fin
         table+='''</div>'''
     return table
@@ -203,6 +225,7 @@ def get_table_osm(salle):
 def get_table_wip(salle):
 
     table=""
+    note_wp=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
         print( mh,desc)
@@ -225,11 +248,21 @@ def get_table_wip(salle):
             url_wip = desc['wip']['url']+"#"+desc['wip']['id']
         else :
             url_wip=""
+        #les infos manquantes dans wikipédia
+        if 'infos_manquantes' in desc['wip']:
+            #print(desc['wip'])
+            if len(desc['wip']['infos_manquantes'])>0:
+                note_wp=", ".join(desc['wip']['infos_manquantes'])
+            else:
+                note_wp=""
         table+='''<div class="TableCell1"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> </div>'''.format(url_wip)
         #table note OSM
         table += '''<div class="TableCell3">  </div>'''
         #table note WP
-        table += '''<div class="TableCell3">  </div>'''
+        if note_wp !="":
+            table += '''<div class="TableCell3"> {} </div> '''.format(note_wp)
+        else:
+            table += '''<div class="TableCell3">  </div>'''
 
         #table fin
         table+='''</div>'''

@@ -70,8 +70,8 @@ h4.Titre{
 }
 .TableComplet {
 		display: table;
-		 width: 80%;
-		 font-size: 0.8em;
+		width: 80%;
+		font-size: 0.8em;
 }
 .TableRow {
     	display: table-row;
@@ -125,7 +125,7 @@ h4.Titre{
 	  	float: left;
 	  	height: 16px;
 	  	padding: 2px 0.5%;
-		width:  15%;
+		width:  20%;
 //		overflow: hidden;
 
 }

@@ -116,11 +116,12 @@ def charge_osm(d,musee):
 
 def charge_wp(d,musee):
     '''Créer les MH à partir du scrapping des pages départementales et grandes villes sur Wikipédia
-    dic_wp => {code-mhs-1 : [nom MH,commune, code insee,url_wp_departement,identifiant],
-                code-mhs-2 : [nom MH,commune, code insee,url_wp_departement,identifiant],
-                E-N° d'ordre : [nom MH,ville,code insee, url_wp_ville,identifiant],
-                E-N° d'ordre : [nom MH,ville,code insee, url_wp_ville,identifiant]}
-    exemple de dic_wp => {PA01000033' : ['Le Café français', 'Bourg-en-Bresse','01035', 'https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Bourg-en-Bresse', 'Cafe_francais']
+    dic_wp => {code-mhs-1 : [nom MH,commune, code insee,url_wp_departement,identifiant,infos_manquantes],
+                code-mhs-2 : [nom MH,commune, code insee,url_wp_departement,identifiant,infos_manquantes],
+                E-N° d'ordre : [nom MH,ville,code insee, url_wp_ville,identifiant,infos_manquantes],
+                E-N° d'ordre : [nom MH,ville,code insee, url_wp_ville,identifiant,infos_manquantes]}
+    exemple de dic_wp => {PA01000033' : ['Le Café français', 'Bourg-en-Bresse','01035',
+    'https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Bourg-en-Bresse', 'Cafe_francais',[]]
             '''
     dic_wp = wikipedia.get_wikipedia(d['url_d'],d['url_d_2'])
     for mhs in dic_wp:
@@ -132,12 +133,13 @@ def charge_wp(d,musee):
         musee.collection[mhs].description[mhs]['wip']['insee']=dic_wp[mhs][2]
         musee.collection[mhs].description[mhs]['wip']['url']=dic_wp[mhs][3]
         musee.collection[mhs].description[mhs]['wip']['id']=dic_wp[mhs][4]
+        musee.collection[mhs].description[mhs]['wip']['infos_manquantes']=dic_wp[mhs][5]
     return musee
 
 if __name__ == "__main__":
     bases =['mer','osm','wip']
     # Une salle va correspondre à une page_web : une sélection de MH d'une certaine catégorie
-    noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osmwip','s_osm','s_wip']
+    noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osmwip','s_osm','s_wip','s_mer']
     liste_salle=[]
     for nom_salle in noms_salle :
         # créer l'objet Musee correspondant -> faire les recherches suivants les caractéritiques
