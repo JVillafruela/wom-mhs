@@ -31,9 +31,9 @@ def get_merimee(dep,inseeCom=None):
         reader = csv.reader(file,'merimee')
         for row in reader:
             if inseeCom :
-                if row[3] == dep and row[5] == inseeCom:
+                if dep in row[3] and inseeCom in row[5] :
                     dic_m[row[0]]=[row[5],row[4],row[6],row[-3]]
-            elif row[3] == dep:
+            elif dep in row[3]:
                 # ref:mhs = N°insee commune, Nom commune, Nom monument,infos classement avec dates
                 dic_m[row[0]]=[row[5],row[4],row[6],row[-3]]
     finally:
