@@ -243,7 +243,7 @@ def get_table_wip(salle):
     #   print (desc['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
         #description = desc['mer']['nom'][:45]+'; '+desc['mer']['commune'][:20]
-        description =""
+        description =desc['wip']['nom_MH']+": "+desc['wip']['commune']
         #debut de la table col mérimée et description
         table += '''<div class="TableRow">
                         <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
