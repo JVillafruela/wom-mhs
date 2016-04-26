@@ -34,7 +34,7 @@ def write_bandeau(file,t,dic):
         <ul>
         <li>Le ministère de la culture propose en "Open-Data" une
         <a href="https://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/" title="Base Mérimée" target="blank">
-        Base des immeubles de France</a>, la base Mérimée.</li>
+        Base des immeubles de France</a>, une partie de la base Mérimée.</li>
 
         <li>L'encyclopédie "Wikipédia" a des pages dédiées aux monuments historiques par département
         et/ou par ville, par exemple pour <a href="https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_l'Ain" title="L'Ain" target="blank">l'Ain</a>,</li>

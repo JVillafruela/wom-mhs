@@ -13,8 +13,8 @@ def get_table_merosmwip(salle):
     table=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
-        note_osm=""
-        note_wp=""
+        note_osm="-Osm: "
+        note_wp="-Wp: "
     #      print( mh,desc)
     #      print (desc['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
@@ -28,7 +28,7 @@ def get_table_merosmwip(salle):
             url_josm= 'href="http://localhost:8111/load_object?new_layer=true&objects='+type_osm[0]+id_osm
         #les tags manquants dans OSM
         if len(desc['osm']['tags_manquants'])>0:
-            note_osm=", ".join(desc['osm']['tags_manquants'])
+            note_osm+=", ".join(desc['osm']['tags_manquants'])
         elif 'mhs_bis' in desc['osm']:
             note_osm+=' <a href="http://www.openstreetmap.org/browse/'+desc['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
         else :
@@ -37,7 +37,7 @@ def get_table_merosmwip(salle):
         if 'infos_manquantes' in desc['wip']:
             #print(desc['wip'])
             if len(desc['wip']['infos_manquantes'])>0:
-                note_wp=", ".join(desc['wip']['infos_manquantes'])
+                note_wp+=", ".join(desc['wip']['infos_manquantes'])
             else:
                 note_wp=""
         #debut de la table col mérimée et description
@@ -76,7 +76,7 @@ def get_table_merosmwip(salle):
         else:
             table += '''<div class="TableCell3">  </div>'''
         #table note WP
-        if note_wp !="":
+        if note_wp !="" and not note_wp=="-Wp: ":
             table += '''<div class="TableCell3"> {} </div> '''.format(note_wp)
         else:
             table += '''<div class="TableCell3">  </div>'''
@@ -89,7 +89,7 @@ def get_table_merosm(salle):
     table=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
-        note_osm=""
+        note_osm="-Osm: "
     #      print( mh,desc)
     #      print (desc['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
@@ -103,7 +103,7 @@ def get_table_merosm(salle):
             url_josm= 'href="http://localhost:8111/load_object?new_layer=true&objects='+type_osm[0]+id_osm
         #les tags manquants dans OSM
         if len(desc['osm']['tags_manquants'])>0:
-            note_osm=", ".join(desc['osm']['tags_manquants'])
+            note_osm+=", ".join(desc['osm']['tags_manquants'])
         elif 'mhs_bis' in desc['osm']:
             note_osm+=' <a href="http://www.openstreetmap.org/browse/'+desc['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
         else :
@@ -134,7 +134,7 @@ def get_table_merwip(salle):
 
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
-        note_wp=""
+        note_wp="-Wp: "
     #      print( mh,desc)
     #      print (desc['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
@@ -155,14 +155,14 @@ def get_table_merwip(salle):
         if 'infos_manquantes' in desc['wip']:
             #print(desc['wip'])
             if len(desc['wip']['infos_manquantes'])>0:
-                note_wp=", ".join(desc['wip']['infos_manquantes'])
+                note_wp+=", ".join(desc['wip']['infos_manquantes'])
             else:
                 note_wp=""
         table+='''<div class="TableCell1"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> </div>'''.format(url_wip)
         #table note OSM
         table += '''<div class="TableCell3">  </div>'''
         #table note WP
-        if note_wp !="":
+        if note_wp !="" and not note_wp=="-Wp: ":
             table += '''<div class="TableCell3"> {} </div> '''.format(note_wp)
         else:
             table += '''<div class="TableCell3">  </div>'''
@@ -178,7 +178,7 @@ def get_table_osm(salle):
     table=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
-        note_osm=""
+        note_osm="-Osm: "
     #      print( mh,desc)
     #      print (desc['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
@@ -196,7 +196,7 @@ def get_table_osm(salle):
             url_josm= 'href="http://localhost:8111/load_object?new_layer=true&objects='+type_osm[0]+id_osm
         #les tags manquants dans OSM
         if len(desc['osm']['tags_manquants'])>0:
-            note_osm=", ".join(desc['osm']['tags_manquants'])
+            note_osm+=", ".join(desc['osm']['tags_manquants'])
         elif 'mhs_bis' in desc['osm']:
             note_osm+=' <a href="http://www.openstreetmap.org/browse/'+desc['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
         else :
@@ -238,7 +238,7 @@ def get_table_wip(salle):
 
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,desc in salle.collection.items():
-        note_wp=""
+        note_wp="-Wp: "
         #print( mh,desc)
     #   print (desc['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
@@ -259,14 +259,14 @@ def get_table_wip(salle):
         if 'infos_manquantes' in desc['wip']:
             #print(desc['wip'])
             if len(desc['wip']['infos_manquantes'])>0:
-                note_wp=", ".join(desc['wip']['infos_manquantes'])
+                note_wp+=", ".join(desc['wip']['infos_manquantes'])
             else:
                 note_wp=""
         table+='''<div class="TableCell1"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> </div>'''.format(url_wip)
         #table note OSM
         table += '''<div class="TableCell3">  </div>'''
         #table note WP
-        if note_wp !="":
+        if note_wp !="" and not note_wp=="-Wp: ":
             table += '''<div class="TableCell3"> {} </div> '''.format(note_wp)
         else:
             table += '''<div class="TableCell3">  </div>'''
@@ -331,8 +331,7 @@ def write_contenu(file,stats,salle):
         <div class="TableHead2">Description</div>
         <div class="TableHead1">OSM</div>
         <div class="TableHead1">WP</div>
-        <div class="TableHead3">Note OSM</div>
-        <div class="TableHead3">Note WP</div>
+        <div class="TableHead3">Remarques : erreurs ou manques </div>
     </div>
     <div class="TableBody">
     '''.format(d_titre_table[salle.nom])
@@ -375,6 +374,7 @@ def write_bandeau(file,t,d,d_dep,stats,salle):
         if nb_MH > 0:
             texte = '<span class="emphase">{} </span>'.format(nb_MH)+d_pages[p][0]
             menu += '<li><a href="'+link+'" title="'+title+'" >'+texte+'</a></li>'
+    menu+='<li class="retour"><a href="../index.html" title="Autres départements" > Menu général </a></li>'
     close= '''</ul>
     </div>
 </div>'''
@@ -411,6 +411,9 @@ if __name__ == "__main__":
     d_dep = OrderedDict(sorted(d_dep.items(), key=lambda t: t[0]))
     bases =['mer','osm','wip']
     stats={}
+
+    ''' Générer la page index'''
+    index.gen_index(d_dep)
     # Une salle va correspondre à une page_web : une sélection de MH d'une certaine catégorie
     noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osm','s_wip','s_osmwip','s_mer']
     liste_salle=[]
@@ -422,6 +425,7 @@ if __name__ == "__main__":
     ''' tester l'espace disque minimum requis pour la génération... qq Mo ?'''
 
     '''générer les six pages de chaque département'''
+    # d= 01, 69   ...
     for d in d_dep:
         print('------'+d+'------')
         ''' '''
@@ -434,8 +438,6 @@ if __name__ == "__main__":
         museum = mohist.charge_osm(ini.dep[d],museum)
         museum = mohist.charge_wp(ini.dep[d],museum)
         # Obtenir les stats du Musée
-
-
         stats['musee']=len(museum.collection)
         for bs in bases:
             # ajouter le nombre total de monuments, mettre le nom complet de la base Mérimée, OSM, WP
@@ -454,8 +456,4 @@ if __name__ == "__main__":
                 # s est un objet musee
                 #print(s.nom)
                 gen_page(d,d_dep,stats,s)
-
-
-
-    ''' Générer la page index'''
-    #index.gen_index(d_dep)
+        #sauvegarder les stats d'un museum

@@ -41,7 +41,7 @@ class Musee:
     def classer_MH(self,list_salle):
         # parcourir les clés des monuments du musée...
         # noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osm','s_wip','s_osmwip','s_mer']
-        # FIXME !!! pas de traitement des doubles dans OSM
+        # FIXME !! ajouter le traitement des "pas code MHS"
         for m,v in self.collection.items():
             '''Créer une salle avec les MH communs à Mérimée, OSM et WP '''
             if  v.description[m]['mer'] and v.description[m]['osm'] and (v.description[m]['wip'] or "wikipedia" in v.description[m]['osm']['tags_mh']):
@@ -56,7 +56,7 @@ class Musee:
             if  not v.description[m]['mer'] and v.description[m]['osm'] and not v.description[m]['wip'] and 'Bis' not in m:
                 list_salle[3].collection[m] = v.description[m]
             ''' Créer une salle avec les MH présents seulement dans WP '''
-            if  not v.description[m]['mer'] and not v.description[m]['osm'] and v.description[m]['wip']:
+            if  not v.description[m]['mer'] and not v.description[m]['osm'] and (v.description[m]['wip'] or 'ERR' in m ):
                 list_salle[4].collection[m] = v.description[m]
             ''' Créer une salle avec les MH communs à OSM et WP '''
             if  v.description[m]['osm'] and v.description[m]['wip'] and not v.description[m]['mer']:
@@ -102,7 +102,10 @@ def charge_osm(d,musee):
     dic_osm => {'ref:mhs':[type/id,le dico des tags, la liste des tags manquants],ref_suivante : [,,,], etc...}
     '''
     dic_osm = overpass.get_osm(d['zone_osm'])
-    #ajouter un tri por être sur que le code mhs-bis arrive après le code mhs-bis donc déja créé dans la collection
+    # si une deuxième zone, augmenter le dic_osm
+    if d['zone_osm_alt']:
+        dic_osm=overpass.get_osm(d['zone_osm_alt'],dic_osm)
+    #ajouter un tri pour être sur que le code mhs-bis arrive après le code mhs-bis donc déja créé dans la collection
     dic_osm = OrderedDict(sorted(dic_osm.items(), key=lambda t: t[0]))
     for mhs in dic_osm:
         #traitement des doubles

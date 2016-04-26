@@ -158,7 +158,7 @@ def get_osm(zone,dic=None):
 
 
 if __name__ == "__main__":
-    dp = ini.dep['01']
+    dp = ini.dep['69']
     print(dp.keys())
     dic_osm = get_osm(dp['zone_osm'])
     if dp['zone_osm_alt']:
