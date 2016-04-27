@@ -4,7 +4,7 @@
 '''
     Génération de pages statiques directement en html
 '''
-import os,index,merimee,overpass,wikipedia,ini,mohist
+import os,shutil,index,merimee,overpass,wikipedia,ini,mohist
 #from timer import LoggerTimer
 from collections import OrderedDict
 
@@ -85,7 +85,6 @@ def get_table_merosmwip(salle):
     return table
 
 def get_table_merosm(salle):
-
     table=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,MH in salle.collection.items():
@@ -302,7 +301,7 @@ def get_table_mer(salle):
         table+='''</div>'''
     return table
 
-def write_contenu(file,stats,salle):
+def write_contenu(outF,stats,salle):
     table =""
     d_titre_table= {'s_merosmwip': 'Monuments historiques présents dans Mérimée, OpenStreetMap et Wikipédia',
             's_merosm': 'Monuments historiques présents dans Mérimée et OpenStreetMap',
@@ -328,20 +327,20 @@ def write_contenu(file,stats,salle):
         <div class="TableHead1">Mérimée</div>
         <div class="TableHead2">    Description</div>
         <div class="TableHead12">OSM</div>
-        <div class="TableHead12">WP</div>
+        <div class="TableHead1">WP</div>
         <div class="TableHead3">    Remarques : erreurs ou manques </div>
     </div>
     <div class="TableBody">
     '''.format(d_titre_table[salle.nom])
 
-    #construire la table des données
+    # préparer la table des données
     table = d_get_table[salle.nom](salle)
     tableau=[header, table]
     for r in tableau:
-        file.write(r)
+        outF.write(r)
 
 
-def write_bandeau(file,t,d,d_dep,stats,salle):
+def write_bandeau(outF,t,d,d_dep,stats,salle):
     # page est le nom de la salle, salle est l'objet
     menu=""
     pages=['merosmwip','merosm','merwip','osmwip','osm','wip','mer']
@@ -378,7 +377,7 @@ def write_bandeau(file,t,d,d_dep,stats,salle):
 </div>'''
     contenu=[bandeau1,t,intro,bandeau2,menu,close]
     for c in contenu:
-        file.write(c)
+        outF.write(c)
 
 #def gen_page(dep_text,dep,comptes,page,data):
 def gen_page(d,d_dep,stats,salle):
@@ -388,11 +387,11 @@ def gen_page(d,d_dep,stats,salle):
     print("----------- {} monuments".format(stats[salle.nom]))
     '''créer le fichier'''
     # FIXME  !!! ouvrir le fichier(page_name) et Créer/vérifier les répertoires s'il n'existe pas
-    rep="web/"+d+"_pages"
+    rep=ini.root_html+"/"+d+"_pages"
     oF=index.creer_fichier(page_name,rep)
     '''écrire l'entête'''
     titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
-    index.write_entete(oF,titre,"../static/style.css")
+    index.write_entete(oF,titre,"../"+ini.cssFile)
     '''écrire le bandeau et écrire le menu'''
     write_bandeau(oF,titre,d,d_dep,stats,salle)
     '''écrire le contenu'''
@@ -402,6 +401,9 @@ def gen_page(d,d_dep,stats,salle):
     # '''fermer le fichier'''
     oF.close()
 
+def copier_css(racine):
+    shutil.copy('./style.css',racine+"/style.css")
+
 if __name__ == "__main__":
     ''' Définir les variables d'entrée'''
     #d_dep ={'01':'Ain', '69':'Rhône','42':'Loire','38':'Isère'}
@@ -410,16 +412,11 @@ if __name__ == "__main__":
     bases =['mer','osm','wip']
     ''' Générer la page index'''
     index.gen_index(d_dep)
+    copier_css(ini.root_html)
 
-    # Une salle va correspondre à une page_web : une sélection de MH d'une certaine catégorie
-
-
-    # for nom_salle in noms_salle :
-    #     # créer l'objet Musee correspondant
-    #     nom_salle = mohist.Musee(nom_salle)
-    #     liste_salle.append(nom_salle)
     ''' tester la présence d'une génération précédente et faire une sauvegarde'''
     ''' tester l'espace disque minimum requis pour la génération... qq Mo ?'''
+    ''' Déplacer le fichier style.css vers la racine du site web'''
 
     '''générer les six pages de chaque département'''
     # d= 01, 69   ...

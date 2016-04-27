@@ -1,3 +1,4 @@
+# dictionnaire des départements à analyser
 dep = {
            '01' : {
                 "01": "Ain",
@@ -7,14 +8,14 @@ dep = {
                 "zone_osm" : "3600007387",
                 "zone_osm_alt" :"",
                     },
-            # '42' : {
-            #     "42":"Loire",
-            #     "text" : "de la Loire",
-            #     "url_d" : "/wiki/Liste_des_monuments_historiques_de_la_Loire",
-            #     "url_d_2" : "",
-            #     "zone_osm" : "3600007420",
-            #     "zone_osm_alt" :"",
-            #     },
+            '42' : {
+                "42":"Loire",
+                "text" : "de la Loire",
+                "url_d" : "/wiki/Liste_des_monuments_historiques_de_la_Loire",
+                "url_d_2" : "",
+                "zone_osm" : "3600007420",
+                "zone_osm_alt" :"",
+                },
             '69': {
                 "69":'Rhône',
                 "text": "du Rhône",
@@ -32,3 +33,10 @@ dep = {
             #     "zone_osm_alt" :"",
             #     },
             }
+
+# Attention ce répertoire doit être créer avant les lancement du programme
+# racine des pages web
+root_html="/home/jean/osm/monuments_historiques/web"
+
+# fichier statique : style.css
+cssFile ="style.css"
