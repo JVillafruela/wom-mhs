@@ -44,7 +44,7 @@ def write_bandeau(file,t,dic):
         <p>
     Ces tableaux comparatifs devraient aider à améliorer la qualité et le suivi des descriptions des MH sur OSM et Wikipédia.
     <p>Pour le moment, et pour tester la faisabilité, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts.
-    <p>Ces pages sont complètement statiques. Elles sont générées automatiquement chaque nuit, par un script Python, puis transférer sur le serveur.
+    <p>Ces pages sont complètement statiques. Elles sont générées automatiquement chaque nuit, par un script Python, puis transférées sur le serveur.
     '''
 
     contenu+='''

@@ -13,7 +13,7 @@ h4.Titre{
 	text-align:center;
 }
 #bandeau {
-	width:80%;
+	width:100%;
 	height:100px;
 	//background-color:#00CCFF;
 	font-size: 0.9em;
@@ -30,11 +30,13 @@ h4.Titre{
 //	background-color:#FFCC00;
 	}
 #footer {
-    clear:both;
-    margin:10px;
+   clear:both;
+   margin:10px;
 	width:100%;
 	height:50px;
 //	background-color:#33FF99;
+	border-top : 1px solid #000; 
+	text-align: rigth;
 	}
 #menu ul {
  padding:0;
@@ -42,7 +44,7 @@ h4.Titre{
  list-style-type:none;
  //overflow: hidden;
  background-color: #333;
- 	font-size: 0.9em;
+ font-size: 0.9em;
  }
 #menu li {
  margin-left:4px;
@@ -74,7 +76,7 @@ h4.Titre{
 }
 .TableComplet {
 		display: table;
-		width: 80%;
+		width: 100%;
 		font-size: 0.8em;
 }
 .TableRow {
@@ -111,6 +113,15 @@ h4.Titre{
 	  	height: 16px;
 	  	padding: 2px 0.5%;
 		width:  7%;
+		text-align: center
+}
+.TableCell12, .TableHead12 {
+    	display: table-cell;
+    /*	border: 1px solid #999999;*/
+	  	float: left;
+	  	height: 16px;
+	  	padding: 2px 0.5%;
+		width: 12%;
 		text-align: center
 }
 .TableCell2, .TableHead2 {

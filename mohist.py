@@ -9,8 +9,11 @@ from collections import OrderedDict
 
 class Musee:
     '''
-        un musée contient des monuments historiques
-        {ref_mh: objet Mohist}
+        un musée/salle est une collection de monuments historiques
+        un musée/salle est décrit par :
+                un nom de musée ou de salle
+                une collection : un dico d'objets MoHist : {'code mhs': 'objet monument','code mhs': 'objet monument'}
+
     '''
     def __init__(self,nom=None):
         self.collection = {}
@@ -19,7 +22,6 @@ class Musee:
         else:
             self.nom="Musée_général"
         #self.salle_merosmwip = Musee("merosmwip")
-
 
     def trier(self):
         '''Renvoie la collection triée'''
@@ -38,49 +40,65 @@ class Musee:
                     x+=1
         return x
 
-    def classer_MH(self,list_salle):
-        # parcourir les clés des monuments du musée...
-        # noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osm','s_wip','s_osmwip','s_mer']
-        # FIXME !! ajouter le traitement des "pas code MHS"
+    def classer_MH(self):
+        # créer les salle du musée
+        noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osm','s_wip','s_osmwip','s_mer']
+        list_salle=[]
+        for nom_salle in noms_salle :
+            # créer la salle puis faire les recherches suivants les caractéritiques voulues
+            nom_salle = Musee(nom_salle)
+            list_salle.append(nom_salle)
+        # parcourir les monuments du musée et les ranger dans les salles
         for m,v in self.collection.items():
+            #print (m, v.description[m])
+            #print(liste_salle[0].collection)
             '''Créer une salle avec les MH communs à Mérimée, OSM et WP '''
             if  v.description[m]['mer'] and v.description[m]['osm'] and (v.description[m]['wip'] or "wikipedia" in v.description[m]['osm']['tags_mh']):
-                list_salle[0].collection[m] = v.description[m]
+                list_salle[0].collection[m] = v
             ''' Créer une salle avec les MH communs à Mérimée et OSM'''
             if  v.description[m]['mer'] and v.description[m]['osm'] and ("wikipedia" not in v.description[m]['osm']['tags_mh']):
-                list_salle[1].collection[m] = v.description[m]
+                #print ("code=", m, v.description[m])
+                list_salle[1].collection[m] = v
             ''' Créer une salle avec les MH communs à Mérimée et WP'''
             if v.description[m]['mer'] and v.description[m]['wip'] and not v.description[m]['osm'] :
-                list_salle[2].collection[m] = v.description[m]
+                list_salle[2].collection[m] = v
             ''' Créer une salle avec les MH présents seulement dans Osm '''
             if  not v.description[m]['mer'] and v.description[m]['osm'] and not v.description[m]['wip'] and 'Bis' not in m:
-                list_salle[3].collection[m] = v.description[m]
+                list_salle[3].collection[m] = v
             ''' Créer une salle avec les MH présents seulement dans WP '''
             if  not v.description[m]['mer'] and not v.description[m]['osm'] and (v.description[m]['wip'] or 'ERR' in m ):
-                list_salle[4].collection[m] = v.description[m]
+                list_salle[4].collection[m] = v
             ''' Créer une salle avec les MH communs à OSM et WP '''
             if  v.description[m]['osm'] and v.description[m]['wip'] and not v.description[m]['mer']:
-                list_salle[5].collection[m] = v.description[m]
+                list_salle[5].collection[m] = v
             ''' Créer une salle avec les MH présents seulement dans Mérimée '''
             if  not v.description[m]['osm'] and not v.description[m]['wip'] and v.description[m]['mer']:
-                list_salle[6].collection[m] = v.description[m]
+                list_salle[6].collection[m] = v
         # trier les salles par code mh croissants
         for s in list_salle :
             s.collection = OrderedDict(sorted(s.collection.items(), key=lambda t: t[0]))
+        return list_salle
 
 class MoHist:
     '''
-        un monument historique
+        Un monument historique est décrit par :
+            un code MHS : code donné officiel extrait sur le site du ministère de la culture (base Mérimée)
+                            ou un code d'erreur si le code précédent n'existe pas
+            une description : Un dico contenant le dico obtenu par analyse de chaque base.
+                            C'est regroupement des informations fournies par chaque base pour un même code mhs.
     '''
     ctr_monument=0
 
-    def __init__(self, ref_mhs=None,cat=None):
+    def __init__(self,ref_mhs):
         if ref_mhs:
             self.mhs=ref_mhs
-        else:
-            self.mhs = "no_mhs_"+str(MoHist.ctr_monument)
+        # else:
+        #     # self.mhs = "no_mhs_"+str(MoHist.ctr_monument)
+        #     # le code d'erreur est donné dans la fonction d'analyse de la base wikipédia
+        #     self.mhs = ""
 
         self.description={self.mhs:{"mer":{},"osm":{},"wip":{}}}
+        #self.description = {"mer":{},"osm":{},"wip":{}}
         MoHist.ctr_monument+=1
 
 def charge_merimee(dep,musee):
@@ -152,27 +170,24 @@ def charge_wp(d,musee):
 if __name__ == "__main__":
     bases =['mer','osm','wip']
     # Une salle va correspondre à une page_web : une sélection de MH d'une certaine catégorie
-    noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osmwip','s_osm','s_wip','s_mer']
-    liste_salle=[]
-    for nom_salle in noms_salle :
-        # créer l'objet Musee correspondant -> faire les recherches suivants les caractéritiques
-        nom_salle = Musee(nom_salle)
-        liste_salle.append(nom_salle)
+    #noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osmwip','s_osm','s_wip','s_mer']
+
     # print(liste_salle[0])
 
     # par département
     for d in ini.dep:
+        liste_salle=[]
         #print(d,ini.dep[d])
         # Un musée museum par département !!
         museum = Musee(ini.dep[d][d])
+        print("Nombre de MH init dans le Musee {} : {}".format(ini.dep[d]['text'],len(museum.collection)))
         # Créer les monuments du museum
         # FIXME !!! supprimer le passage par le dictionnaire dans la génération...
         museum = charge_merimee(d,museum)
         museum = charge_osm(ini.dep[d],museum)
         museum = charge_wp(ini.dep[d],museum)
         # créer les classements
-        museum.classer_MH(liste_salle)
-
+        liste_salle = museum.classer_MH()
 
 #################################################################################
         # des affichages pour tests intermédiaires
@@ -184,17 +199,17 @@ if __name__ == "__main__":
 
 
         museum_trier=museum.trier()
-        for m,value in museum_trier.items():
-            #Affichage  double extrait base OSM
-            if "mhs_bis" in value.description[m]['osm'] :
-                print(" Premier Mh =", value.description[m]['osm']['url_osm']," => ","Mh en double : ", value.description[m]['osm']['mhs_bis'][0])
-                # Affichage No code mHS base wikipédia
-            if "ERR" in m :
-                print(m)
-                print(value.description[m]['wip']['nom_MH'],', ',value.description[m]['wip']['commune'])
+        # for m,value in museum_trier.items():
+        #     #Affichage  double extrait base OSM
+        #     if "mhs_bis" in value.description[m]['osm'] :
+        #         print(" Premier Mh =", value.description[m]['osm']['url_osm']," => ","Mh en double : ", value.description[m]['osm']['mhs_bis'][0])
+        #         # Affichage No code mHS base wikipédia
+        #     if "ERR" in m :
+        #         print(m)
+        #         print(value.description[m]['wip']['nom_MH'],', ',value.description[m]['wip']['commune'])
 
         ''' qq stats'''
-        print("Nombre de MH dans le Musee {}".format(len(museum.collection)))
+        print("Nombre de MH dans le Musee {} : {}".format(ini.dep[d]['text'],len(museum.collection)))
         for bs in bases:
             print ("Nombre de MH issues de la base {} : {}".format(bs,museum.calcul_nbMH(bs)))
 
@@ -202,7 +217,7 @@ if __name__ == "__main__":
         for n in range(len(liste_salle)):
             print("Nombre de MH dans la salle : {} = {}".format(liste_salle[n].nom, len(liste_salle[n].collection)))
 
-        print (MoHist.ctr_monument)
+        print (MoHist.ctr_monument, " Références traitées !")
         # for mh in museum.collection:
         #     #print(museum.collection[mh].description[mh])
         #     if mh in salle_merosmwip.collection :
