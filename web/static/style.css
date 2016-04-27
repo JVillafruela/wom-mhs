@@ -86,13 +86,13 @@ h4.Titre{
 .TableHeading {
     	display: table-header-group;
 		font-weight: bold;
-		width: 100%;
+		//width: 100%;
 		background-color: #ddd;
 }
 .TableTitre {
 		display: table-caption;
 		font-weight: bold;
-		width: 100%;
+		//width: 100%;
 		background-color: #fff;
 		text-align:center;
 		padding-bottom: 5px;
@@ -124,7 +124,7 @@ h4.Titre{
 		width: 12%;
 		text-align: center
 }
-.TableCell2, .TableHead2 {
+.TableCell2,.TableHead2 {
     	display: table-cell;
     /*	border: 1px solid #999999;*/
 	  	float: left;
@@ -132,8 +132,8 @@ h4.Titre{
 	  	padding: 2px 0.5%;
 		width:  30%;
 		overflow: hidden;
-
 }
+
 .TableCell3, .TableHead3 {
     	display: table-cell;
     /*	border: 1px solid #999999;*/

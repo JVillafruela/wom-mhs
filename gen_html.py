@@ -327,8 +327,8 @@ def write_contenu(file,stats,salle):
     <div class="TableHeading">
         <div class="TableHead1">Mérimée</div>
         <div class="TableHead2">    Description</div>
-        <div class="TableHead1">OSM</div>
-        <div class="TableHead1">WP</div>
+        <div class="TableHead12">OSM</div>
+        <div class="TableHead12">WP</div>
         <div class="TableHead3">    Remarques : erreurs ou manques </div>
     </div>
     <div class="TableBody">
