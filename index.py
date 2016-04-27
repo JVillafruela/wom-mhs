@@ -5,7 +5,7 @@
     Génération de pages statiques directement en html
 
 '''
-import os,ini
+import os,ini,time
 from collections import OrderedDict
 
 def write_entete(file,title,cssFile):
@@ -45,7 +45,8 @@ def write_bandeau(file,t,dic):
     Ces tableaux comparatifs devraient aider à améliorer la qualité et le suivi des descriptions des MH sur OSM et Wikipédia.
     <p>Pour le moment, et pour tester la faisabilité, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts.
     <p>Ces pages sont complètement statiques. Elles sont générées automatiquement chaque nuit, par un script Python, puis transférées sur le serveur.
-    '''
+    <p> Dernière construction des pages, le :<b> {}</b></p>
+    '''.format(time.strftime('%d-%m-%Y %H:%M',time.localtime()))
 
     contenu+='''
 <div id="menu">
