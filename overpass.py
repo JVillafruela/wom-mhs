@@ -39,9 +39,9 @@ def get_data(query):
     api = overpy.Overpass()
     try :
         result = api.query(query)
-    except api.exception.OverpassGatewayTimeout:
+    except api.OverpassGatewayTimeout:
         print ('TimeOut : Le serveur Overpass.eu ne réponds pas. Ré-essayer plus tard.')
-    except api.exception.OverpassTooManyRequests:
+    except api.OverpassTooManyRequests:
         print ('TooManyRequests : Trop de requêtes pour le serveur Overpass.eu. Patienter et ré-essayer plus tard.')
     else :
         #print (type(result))

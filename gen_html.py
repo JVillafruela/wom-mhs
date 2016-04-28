@@ -144,7 +144,7 @@ def get_table_merwip(salle):
                         <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
                         <div class="TableCell2">{}</div>'''.format(l0,mh,mh,description)
         #suite de la table : col OSM
-        table += '''<div class="TableCell1">  ---- </div>'''
+        table += '''<div class="TableCell12">  ---- </div>'''
         #suite de la tabele : col WP = adresse WP1
         if 'url' in MH.description[mh]['wip']:
             url_wip = MH.description[mh]['wip']['url']+"#"+MH.description[mh]['wip']['id']
@@ -246,7 +246,7 @@ def get_table_wip(salle):
                         <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
                         <div class="TableCell2">{}</div>'''.format(l0,mh,mh,description)
         #suite de la table : col OSM
-        table += '''<div class="TableCell1">  ---- </div>'''
+        table += '''<div class="TableCell12">  ---- </div>'''
         #suite de la tabele : col WP
         if 'url' in MH.description[mh]['wip']:
             url_wip = MH.description[mh]['wip']['url']+"#"+MH.description[mh]['wip']['id']
