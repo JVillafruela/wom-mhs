@@ -36,7 +36,10 @@ dep = {
 
 # Attention ce répertoire doit être créer avant les lancement du programme
 # racine des pages web
-root_html="/home/jean/osm/monuments_historiques/Wom"
-
+prod=False
+# en local
+url_dev="/home/jean/osm/monuments_historiques"
+# sur Syno
+url_prod="/var/services/homes/jean/web_wom"
 # fichier statique : style.css
 cssFile ="style.css"

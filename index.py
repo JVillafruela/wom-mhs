@@ -89,7 +89,11 @@ def gen_index(dico):
     page_name="index.html"
 
     titre="Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
-    oF = creer_fichier(page_name,ini.root_html)
+    #changer le répertoire de génération des pages : prod=True or not
+    if ini.prod :
+        oF = creer_fichier(page_name,ini.url_prod+"/Wom")
+    else :
+        oF = creer_fichier(page_name,ini.url_dev+"/Wom")
     write_entete(oF,titre,ini.cssFile)
     write_bandeau(oF,titre,dico)
 #    write_footer(oF)

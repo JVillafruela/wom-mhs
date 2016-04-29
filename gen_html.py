@@ -387,7 +387,11 @@ def gen_page(d,d_dep,stats,salle):
     print("----------- {} monuments".format(stats[salle.nom]))
     '''créer le fichier'''
     # FIXME  !!! ouvrir le fichier(page_name) et Créer/vérifier les répertoires s'il n'existe pas
-    rep=ini.root_html+"/"+d+"_pages"
+    #changer le répertoire de génération des pages : prod=True or not
+    if ini.prod :
+        rep=ini.url_prod+"/Wom/"+d+"_pages"
+    else :
+        rep=ini.url_dev+"/Wom/"+d+"_pages"
     oF=index.creer_fichier(page_name,rep)
     '''écrire l'entête'''
     titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
@@ -405,6 +409,11 @@ def copier_css(racine):
     shutil.copy('./style.css',racine+"/style.css")
 
 if __name__ == "__main__":
+    if ini.prod :
+        base_url=ini.url_prod+"/Wom"
+    else:
+        base_url=ini.url_dev+"/Wom"
+
     ''' Définir les variables d'entrée'''
     #d_dep ={'01':'Ain', '69':'Rhône','42':'Loire','38':'Isère'}
     d_dep = ini.dep
@@ -412,7 +421,7 @@ if __name__ == "__main__":
     bases =['mer','osm','wip']
     ''' Générer la page index'''
     index.gen_index(d_dep)
-    copier_css(ini.root_html)
+    copier_css(base_url)
 
     ''' tester la présence d'une génération précédente et faire une sauvegarde'''
     ''' tester l'espace disque minimum requis pour la génération... qq Mo ?'''
