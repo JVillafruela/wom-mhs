@@ -36,7 +36,7 @@ dep = {
 
 # Attention ce répertoire doit être créer avant les lancement du programme
 # racine des pages web
-root_html="/home/jean/osm/monuments_historiques/web"
+root_html="/home/jean/osm/monuments_historiques/Wom"
 
 # fichier statique : style.css
 cssFile ="style.css"
