@@ -354,7 +354,7 @@ def write_bandeau(outF,t,d,d_dep,stats,page):
             }
 
     intro='''</h4> <p>Pour le département {}, la base Mérimée décrit {} monuments historiques.<p>\
-        Ils sont {} dans wikipédia, et OSM en connait {}.<p><p>'''.format(d_dep[d]['text'],stats['mer'],stats['wip'],stats['osm'])
+        Ils sont {} dans wikipédia (pages départementales), et OSM en connait {}.<p><p>'''.format(d_dep[d]['text'],stats['mer'],stats['wip'],stats['osm'])
     bandeau1 = '''</body>
 <div id="bandeau"> <h4 class='Titre'>'''
     bandeau2='''

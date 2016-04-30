@@ -56,7 +56,7 @@ class Musee:
             if  v.description[m]['mer'] and v.description[m]['osm'] and (v.description[m]['wip'] or "wikipedia" in v.description[m]['osm']['tags_mh']):
                 list_salle[0].collection[m] = v
             ''' Créer une salle avec les MH communs à Mérimée et OSM'''
-            if  v.description[m]['mer'] and v.description[m]['osm'] and ("wikipedia" not in v.description[m]['osm']['tags_mh']):
+            if  v.description[m]['mer'] and v.description[m]['osm'] and not v.description[m]['wip'] and ("wikipedia" not in v.description[m]['osm']['tags_mh']):
                 #print ("code=", m, v.description[m])
                 list_salle[1].collection[m] = v
             ''' Créer une salle avec les MH communs à Mérimée et WP'''
