@@ -8,7 +8,7 @@
 import os,ini,time
 from collections import OrderedDict
 
-def write_entete(file,title,cssFile):
+def write_entete(file, title, cssFile) :
     '''
         Ecrire l'entête du fichier html
     '''

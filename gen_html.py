@@ -340,7 +340,7 @@ def write_contenu(outF,stats,salle):
         outF.write(r)
 
 
-def write_bandeau(outF,t,d,d_dep,stats,salle):
+def write_bandeau(outF,t,d,d_dep,stats,page):
     # page est le nom de la salle, salle est l'objet
     menu=""
     pages=['merosmwip','merosm','merwip','osmwip','osm','wip','mer']
@@ -370,7 +370,11 @@ def write_bandeau(outF,t,d,d_dep,stats,salle):
         #page non vide
         if nb_MH > 0:
             texte = '<span class="emphase">{} </span>'.format(nb_MH)+d_pages[p][0]
-            menu += '<li><a href="'+link+'" title="'+title+'" >'+texte+'</a></li>'
+            #c'est la page appelé
+            if p == page :
+                menu += '<li><a class="active" href="'+link+'" title="'+title+'" >'+texte+'</a></li>'
+            else :
+                menu += '<li><a href="'+link+'" title="'+title+'" >'+texte+'</a></li>'
     menu+='<li class="retour"><a href="../index.html" title="Autres départements" > Menu général </a></li>'
     close= '''</ul>
     </div>
@@ -395,9 +399,9 @@ def gen_page(d,d_dep,stats,salle):
     oF=index.creer_fichier(page_name,rep)
     '''écrire l'entête'''
     titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
-    index.write_entete(oF,titre,"../"+ini.cssFile)
+    index.write_entete(oF, titre,"../"+ini.cssFile)
     '''écrire le bandeau et écrire le menu'''
-    write_bandeau(oF,titre,d,d_dep,stats,salle)
+    write_bandeau(oF, titre, d, d_dep, stats, page)
     '''écrire le contenu'''
     write_contenu(oF,stats,salle)
     # '''écrire le pied de page'''
