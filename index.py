@@ -22,6 +22,18 @@ def write_entete(file, title, cssFile) :
     header+='''</title>
     <link rel="stylesheet" type="text/css" href="{}">
     </head>'''.format(cssFile)
+    header+='''<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"> </script>'''
+    header+='''
+    <script>
+    $(document).ready(function(){
+     $(".TableRow").click(function(){
+     $(".TableRow").each(function(){
+     $(this).removeClass("active");
+     });
+     $(this).addClass("active");
+     });
+    });
+    </script> '''
     file.write(header)
 
 def write_bandeau(file,t,dic):

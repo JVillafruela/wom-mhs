@@ -87,8 +87,11 @@ h4.Titre{
 }
 .TableRow {
     	display: table-row;
-
 }
+.TableRow.active {
+	background-color: #111;
+}
+
 .TableHeading {
     	display: table-header-group;
 		font-weight: bold;
