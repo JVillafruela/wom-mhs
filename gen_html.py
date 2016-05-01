@@ -399,7 +399,7 @@ def gen_page(d,d_dep,stats,salle):
     oF=index.creer_fichier(page_name,rep)
     '''écrire l'entête'''
     titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
-    index.write_entete(oF, titre,ini.cssFile)
+    index.write_entete(oF, titre,"../"+ini.cssFile)
     '''écrire le bandeau et écrire le menu'''
     write_bandeau(oF, titre, d, d_dep, stats, page)
     '''écrire le contenu'''

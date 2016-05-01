@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # dictionnaire des départements à analyser
 dep = {
            '01' : {

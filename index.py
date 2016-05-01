@@ -42,7 +42,7 @@ def write_bandeau(file,t,dic):
         <a href="http://wiki.openstreetmap.org/wiki/FR:Key:ref:mhs" title ="sur le Wiki OSM" target="blank">le wiki des tags 'mhs'</a>.</li>
         </ul>
         <p>
-    Ces tableaux comparatifs devraient aider à améliorer la qualité et le suivi des descriptions des MH sur OSM et Wikipédia.
+    <p>
     <p>Pour le moment, et pour tester la faisabilité, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts.
     <p>Ces pages sont complètement statiques. Elles sont générées automatiquement chaque nuit, par un script Python, puis transférées sur le serveur.
     <p> Dernière construction des pages, le :<b> {}</b></p>
