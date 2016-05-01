@@ -360,7 +360,7 @@ def write_bandeau(outF,t,d,d_dep,stats,page):
             'mer': ['Seulement Mérimée', 'Monuments à créer dans Wikipédia et dans OpenstreetMap'],
             }
 
-    intro='''</h4> <p>Pour le département {}, la base Mérimée décrit {} monuments historiques.<p>\
+    intro='''</h4> <p><b>Pour le département {}</b>, la base Mérimée décrit {} monuments historiques.<p>\
         Ils sont {} dans wikipédia (pages départementales), et OSM en connait {}.<p><p>'''.format(d_dep[d]['text'],stats['mer'],stats['wip'],stats['osm'])
     bandeau1 = '''</body>
 <div id="bandeau"> <h4 class='Titre'>'''
@@ -405,9 +405,10 @@ def gen_page(d,d_dep,stats,salle):
         rep=ini.url_dev+"/Wom/"+d+"_pages"
     oF=index.creer_fichier(page_name,rep)
     '''écrire l'entête'''
-    titre="Wom : Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
+    titre=" Wom "
     index.write_entete(oF, titre, "../"+ini.cssFile)
     '''écrire le bandeau et écrire le menu'''
+    titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
     write_bandeau(oF, titre, d, d_dep, stats, page)
     '''écrire le contenu'''
     write_contenu(oF,stats,salle)

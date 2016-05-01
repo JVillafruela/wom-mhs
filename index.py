@@ -99,13 +99,14 @@ def gen_page_index(dico):
     dico = OrderedDict(sorted(dico.items(), key=lambda t: t[0]))
     page_name="index.html"
 
-    titre="Wom : Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
+    titre=" Wom "
     #changer le répertoire de génération des pages : prod=True or not
     if ini.prod :
         oF = creer_fichier(page_name,ini.url_prod+"/Wom")
     else :
         oF = creer_fichier(page_name,ini.url_dev+"/Wom")
     write_entete(oF,titre,ini.cssFile)
+    titre="Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
     write_bandeau(oF,titre,dico)
     #    write_footer(oF)
     oF.close()
