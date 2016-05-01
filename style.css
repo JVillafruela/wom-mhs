@@ -88,9 +88,7 @@ h4.Titre{
 .TableRow {
     	display: table-row;
 }
-.TableRow.active {
-	background-color: #111;
-}
+
 
 .TableHeading {
     	display: table-header-group;
@@ -163,3 +161,6 @@ h4.Titre{
 .TableBody .TableRow:nth-child(even){
 		background-color: #f7f7f7;
 		}
+.TableBody .TableRow.active {
+	background-color: #DDD;
+}
