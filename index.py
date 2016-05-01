@@ -73,7 +73,7 @@ def write_bandeau(file,t,dic):
     file.write(contenu)
 
 def write_footer(file):
-    footer='''<div id="footer"> Page proposée par <a href="http://wiki.openstreetmap.org/wiki/User:JeaRRo">JeaRRO</a>, contributeur OSM </div>
+    footer='''<div id="footer"> Page proposée par <a href="http://wiki.openstreetmap.org/wiki/User:JeaRRo">JeaRRo</a>, contributeur OSM </div>
         </body
     </html>
     '''
