@@ -405,13 +405,8 @@ def gen_page(d,d_dep,stats,salle):
         rep=ini.url_dev+"/Wom/"+d+"_pages"
     oF=index.creer_fichier(page_name,rep)
     '''écrire l'entête'''
-<<<<<<< HEAD
-    titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
-    index.write_entete(oF, titre,"../"+ini.cssFile)
-=======
     titre="Wom : Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
     index.write_entete(oF, titre, "../"+ini.cssFile)
->>>>>>> dev-tables
     '''écrire le bandeau et écrire le menu'''
     write_bandeau(oF, titre, d, d_dep, stats, page)
     '''écrire le contenu'''
