@@ -16,7 +16,7 @@ def get_table_merosmwip(salle):
         note_osm="-Osm: "
         note_wp="-Wp: "
         #print( mh,MH.description[mh])
-    #      print (MH.description[mh][mh]['osm']['url_osm'])
+        # print (MH.description[mh][mh]['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
         description = MH.description[mh]['mer']['nom'][:45]+'; '+MH.description[mh]['mer']['commune'][:20]
         # les urls OSM
@@ -40,11 +40,13 @@ def get_table_merosmwip(salle):
                 note_wp+=", ".join(MH.description[mh]['wip']['infos_manquantes'])
             else:
                 note_wp=""
-        #debut de la table col mérimée et description
-        table += '''<div class="TableRow">
-                        <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
-                        <div class="TableCell2">{}</div>'''.format(l0,mh,mh,description)
-        #suite de la table : col OSM
+        #debut de la table
+        table += '''<div class="TableRow">'''
+        #colonne description
+        table+= '''           <div class="TableCell2">{}</div>'''.format(description)
+        #colonne mérimée
+        table+= ''' <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>'''.format(l0,mh,mh)
+        #colonne OSM
         table += '''<div class="TableCell12"><a {}" target="blank" title="Voir sur openstreetmap.org"> ORG </a> -
         <a {}" target="blank" title="Editer avec ID"> ID </a> - <a {}" target="blank" title="Editer avec Josm"> Josm </a> </div>
     '''.format(url_osm_org, url_osm_id,url_josm)
@@ -58,7 +60,7 @@ def get_table_merosmwip(salle):
             url_wip = MH.description[mh]['wip']['url']+"#"+MH.description[mh]['wip']['id']
         else :
             url_wip=""
-        # table colonne WP
+        # colonne WP
         if url_wip and url_osmwp :
             table+='''<div class="TableCell1"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> -
           <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </div>'''.format(url_wip,url_osmwp)
@@ -107,15 +109,17 @@ def get_table_merosm(salle):
             note_osm+=' <a href="http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
         else :
             note_osm =""
-        #debut de la table col mérimée et description
-        table += '''<div class="TableRow">
-                        <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
-                        <div class="TableCell2">{}</div>'''.format(l0,mh,mh,description)
-        #suite de la table : col OSM
+        #debut de la table
+        table += '''<div class="TableRow">'''
+        #colonne description
+        table+= '''           <div class="TableCell2">{}</div>'''.format(description)
+        #colonne mérimée
+        table+= ''' <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>'''.format(l0,mh,mh)
+        #colonne OSM
         table += '''<div class="TableCell12"><a {}" target="blank" title="Voir sur openstreetmap.org"> ORG </a> -
         <a {}" target="blank" title="Editer avec ID"> ID </a> - <a {}" target="blank" title="Editer avec Josm"> Josm </a> </div>
     '''.format(url_osm_org, url_osm_id,url_josm)
-        #suite de la tabele : col WP
+        # colonne WP
         table+='''<div class="TableCell1">  ---- </div>'''
         #table note OSM
         if note_osm !="":
@@ -138,14 +142,15 @@ def get_table_merwip(salle):
     #      print (MH.description[mh]['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
         description = MH.description[mh]['mer']['nom'][:45]+'; '+MH.description[mh]['mer']['commune'][:20]
-
-        #debut de la table col mérimée et description
-        table += '''<div class="TableRow">
-                        <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
-                        <div class="TableCell2">{}</div>'''.format(l0,mh,mh,description)
-        #suite de la table : col OSM
+        #debut de la table
+        table += '''<div class="TableRow">'''
+        #colonne description
+        table+= '''           <div class="TableCell2">{}</div>'''.format(description)
+        #colonne mérimée
+        table+= ''' <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>'''.format(l0,mh,mh)
+        # colonne OSM
         table += '''<div class="TableCell12">  ---- </div>'''
-        #suite de la tabele : col WP = adresse WP1
+        # colonne  WP = adresse WP1
         if 'url' in MH.description[mh]['wip']:
             url_wip = MH.description[mh]['wip']['url']+"#"+MH.description[mh]['wip']['id']
         else :
@@ -200,22 +205,22 @@ def get_table_osm(salle):
             note_osm+=' <a href="http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
         else :
             note_osm =""
-        #debut de la table col mérimée et description
-        table += '''<div class="TableRow">
-                        <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
-                        <div class="TableCell2">{}</div>'''.format(l0,mh,mh,description)
-        #suite de la table : col OSM
+        #debut de la table
+        table += '''<div class="TableRow">'''
+        #colonne description
+        table+= '''           <div class="TableCell2">{}</div>'''.format(description)
+        #colonne mérimée
+        table+= ''' <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>'''.format(l0,mh,mh)
+        # colonne OSM
         table += '''<div class="TableCell12"><a {}" target="blank" title="Voir sur openstreetmap.org"> ORG </a> -
         <a {}" target="blank" title="Editer avec ID"> ID </a> - <a {}" target="blank" title="Editer avec Josm"> Josm </a> </div>
     '''.format(url_osm_org, url_osm_id,url_josm)
-        #suite de la tabele : col WP
+        # colonne WP
         # recherche des urls WP
         if 'wikipedia' in MH.description[mh]['osm']['tags_mh']:
             url_osmwp = 'href="https://fr.wikipedia.org/wiki/'+MH.description[mh]['osm']['tags_mh']['wikipedia']
         else :
             url_osmwp =""
-
-        # table colonne WP
         if  url_osmwp :
             table+='''<div class="TableCell1">  <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </div>'''.format(url_osmwp)
         else:
@@ -232,7 +237,6 @@ def get_table_osm(salle):
     return table
 
 def get_table_wip(salle):
-
     table=""
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,MH in salle.collection.items():
@@ -241,13 +245,15 @@ def get_table_wip(salle):
         # les infos sur le monuments dans mérimée
         #description = MH.description[mh][mh]['mer']['nom'][:45]+'; '+MH.description[mh][mh]['mer']['commune'][:20]
         description =MH.description[mh]['wip']['nom_MH']+": "+MH.description[mh]['wip']['commune']
-        #debut de la table col mérimée et description
-        table += '''<div class="TableRow">
-                        <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
-                        <div class="TableCell2">{}</div>'''.format(l0,mh,mh,description)
-        #suite de la table : col OSM
+        #debut de la table
+        table += '''<div class="TableRow">'''
+        #colonne description
+        table+= '''           <div class="TableCell2">{}</div>'''.format(description)
+        #colonne mérimée
+        table+= ''' <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>'''.format(l0,mh,mh)
+        #colonne OSM
         table += '''<div class="TableCell12">  ---- </div>'''
-        #suite de la tabele : col WP
+        # colonne WP
         if 'url' in MH.description[mh]['wip']:
             url_wip = MH.description[mh]['wip']['url']+"#"+MH.description[mh]['wip']['id']
         else :
@@ -281,14 +287,15 @@ def get_table_mer(salle):
         # les infos sur le monuments dans mérimée
         description = MH.description[mh]['mer']['nom'][:45]+'; '+MH.description[mh]['mer']['commune'][:20]
 
-
-        #debut de la table col mérimée et description
-        table += '''<div class="TableRow">
-                        <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>
-                        <div class="TableCell2">{}</div>'''.format(l0,mh,mh,description)
-        #suite de la table : col OSM
+        #debut de la table
+        table += '''<div class="TableRow">'''
+        #colonne description
+        table+= '''           <div class="TableCell2">{}</div>'''.format(description)
+        #colonne mérimée
+        table+= ''' <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>'''.format(l0,mh,mh)
+        # colonne OSM
         table += '''<div class="TableCell1"> ---- </div>'''
-        #suite de la tabele : col WP
+        # colonne WP
         # recherche des urls WP
 
         table+='''<div class="TableCell1">  ---- </div>'''
@@ -324,8 +331,8 @@ def write_contenu(outF,stats,salle):
 <div class="TableComplet" >
     <div class="TableTitre"> {}</div>
     <div class="TableHeading">
-        <div class="TableHead1">Mérimée</div>
         <div class="TableHead2">    Description</div>
+        <div class="TableHead1">Mérimée</div>
         <div class="TableHead12">OSM</div>
         <div class="TableHead1">WP</div>
         <div class="TableHead3">    Remarques : erreurs ou manques </div>
@@ -398,8 +405,13 @@ def gen_page(d,d_dep,stats,salle):
         rep=ini.url_dev+"/Wom/"+d+"_pages"
     oF=index.creer_fichier(page_name,rep)
     '''écrire l'entête'''
+<<<<<<< HEAD
     titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
     index.write_entete(oF, titre,"../"+ini.cssFile)
+=======
+    titre="Wom : Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
+    index.write_entete(oF, titre, "../"+ini.cssFile)
+>>>>>>> dev-tables
     '''écrire le bandeau et écrire le menu'''
     write_bandeau(oF, titre, d, d_dep, stats, page)
     '''écrire le contenu'''
@@ -424,13 +436,9 @@ if __name__ == "__main__":
     d_dep = OrderedDict(sorted(d_dep.items(), key=lambda t: t[0]))
     bases =['mer','osm','wip']
     ''' Générer la page index'''
-    index.gen_index(d_dep)
-    copier_css(base_url)
-
-    ''' tester la présence d'une génération précédente et faire une sauvegarde'''
-    ''' tester l'espace disque minimum requis pour la génération... qq Mo ?'''
+    index.gen_page_index(d_dep)
     ''' Déplacer le fichier style.css vers la racine du site web'''
-
+    copier_css(base_url)
     '''générer les six pages de chaque département'''
     # d= 01, 69   ...
     for d in d_dep:

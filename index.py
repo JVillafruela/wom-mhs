@@ -14,14 +14,14 @@ def write_entete(file, title, cssFile) :
     '''
     header=""
     header += '''<!DOCTYPE html>
-<html>
-<head>
+        <html>
+    <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>'''
     header+=title
     header+='''</title>
     <link rel="stylesheet" type="text/css" href="{}">
-</head>'''.format(cssFile)
+    </head>'''.format(cssFile)
     file.write(header)
 
 def write_bandeau(file,t,dic):
@@ -49,22 +49,21 @@ def write_bandeau(file,t,dic):
     '''.format(time.strftime('%d-%m-%Y %H:%M',time.localtime()))
 
     contenu+='''
-<div id="menu">
-    <ul>\n'''
+    <div id="menu">
+        <ul>\n'''
     for d in dic:
         link = d+"_pages/"+d+"_merosmwip.html"
         title = dic[d][d]
         contenu += '       <li><a href="{}" title="{}">{}</a></li>\n'.format(link,title,title)
     contenu+= '''   </ul>
-    </div>
-</div>'''
+        </div>
+        </div>'''
     file.write(contenu)
-
 
 def write_footer(file):
     footer='''<div id="footer"> Page proposée par <a href="http://wiki.openstreetmap.org/wiki/User:JeaRRo">JeaRRO</a>, contributeur OSM </div>
-</body
-</html>
+        </body
+    </html>
     '''
     file.write(footer)
 
@@ -79,16 +78,16 @@ def creer_fichier(name,repertoire):
     if os.path.isdir(repertoire):
         return open(repertoire+'/'+name,"w")
 
-def gen_index(dico):
+def gen_page_index(dico):
     '''
-        l'index ne contient que des liens vers les trois départements disponibles
-        et une petite présentation du projet
-        le fichier index.html est créer à la racine d'un répertoire /web
+        l'index ne contient que des liens vers les départements disponibles
+        et une petite présentation du projet.
+        le fichier index.html est créer à la racine d'un répertoire /Wom
     '''
     dico = OrderedDict(sorted(dico.items(), key=lambda t: t[0]))
     page_name="index.html"
 
-    titre="Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
+    titre="Wom : Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
     #changer le répertoire de génération des pages : prod=True or not
     if ini.prod :
         oF = creer_fichier(page_name,ini.url_prod+"/Wom")
@@ -96,39 +95,11 @@ def gen_index(dico):
         oF = creer_fichier(page_name,ini.url_dev+"/Wom")
     write_entete(oF,titre,ini.cssFile)
     write_bandeau(oF,titre,dico)
-#    write_footer(oF)
+    #    write_footer(oF)
     oF.close()
 
 if __name__ == "__main__":
     d_dep = ini.dep   #{'01':'Ain', '69':'Rhône','42':'Loire'}
     #print(d_dep)
-    ''' tester la présence d'une génération précédente et faire une sauvegarde'''
-    ''' tester l'espace disque minimum requis pour la génération... qq Mo ?'''
     ''' générer la page index'''
-    gen_index(d_dep)
-    '''générer les six pages de chaque département'''
-    for d in d_dep:
-        print('------'+d+'------')
-        ''' '''
-        ''' Acquérir les datas'''
-        ''' Générer les résultats pour affichage (tests présences)'''
-        pages=['merosmwip','merosm','merwip','oemwip','osm','wip']
-        ''' pour chaque page in pages:'''
-        for p in pages:
-            pname=d+'_'+p+'.html'
-            print (pname)
-            ''' ouvrir le fichier(pname) et Créer/vérifier les répertoires ./d
-                s'il n'existe pas
-            '''
-            '''écrire l'entête'''
-            '''écrire le bandeau'''
-            '''écrire le menu'''
-            '''écrire le contenu'''
-            '''écrire le pied de page'''
-            '''fermer le fichier'''
-
-
-    # htmlFile = "./web/index.html"
-    # hF =open(htmlFile,'w')
-    # gen_htm(hF)
-    # hF.close()
+    gen_page_index(d_dep)

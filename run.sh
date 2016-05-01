@@ -43,7 +43,7 @@ if [ $? -eq 0 ]; then
     git push
 
     ################# à modifier pour la prod !!
-    lftp ftp://user:password@ftp.server -e "mirror -e -R -x /var/services/homes/jean/web_wom/Wom/.git /var/services/homes/jean/web_wom/Wom/ /www/wom/ ; quit"
+    lftp ftp://user:password@ftp.server -e "mirror -e -R -x .git /var/services/homes/jean/web_wom/Wom/ /www/wom/ ; quit"
     #
     #
     # finir
