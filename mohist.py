@@ -119,10 +119,7 @@ def charge_osm(d,musee):
     ''' Créer les MH à partir de la requette overpass sur OSM
     dic_osm => {'ref:mhs':[type/id,le dico des tags, la liste des tags manquants],ref_suivante : [,,,], etc...}
     '''
-    dic_osm = overpass.get_osm(d['zone_osm'])
-    # si une deuxième zone, augmenter le dic_osm
-    if d['zone_osm_alt']:
-        dic_osm=overpass.get_osm(d['zone_osm_alt'],dic_osm)
+    dic_osm = overpass.get_osm(d)
     #ajouter un tri pour être sur que le code mhs-bis arrive après le code mhs-bis donc déja créé dans la collection
     dic_osm = OrderedDict(sorted(dic_osm.items(), key=lambda t: t[0]))
     for mhs in dic_osm:
@@ -141,8 +138,8 @@ def charge_osm(d,musee):
             musee.collection[mhs].description[mhs]['osm']['tags_mh']=dic_osm[mhs][1]
             musee.collection[mhs].description[mhs]['osm']['tags_manquants']=dic_osm[mhs][2]
             #récupérer le tag wikipédia
-            if 'wikipedia' in dic_osm[mhs][1]:
-                musee.collection[mhs].description[mhs]['osm']['wikipedia']=dic_osm[mhs][1]['wikipedia']
+            # if 'wikipedia' in dic_osm[mhs][1]:
+            #     musee.collection[mhs].description[mhs]['osm']['wikipedia']=dic_osm[mhs][1]['wikipedia']
     return musee
 
 def charge_wp(d,musee):
@@ -154,7 +151,7 @@ def charge_wp(d,musee):
     exemple de dic_wp => {PA01000033' : ['Le Café français', 'Bourg-en-Bresse','01035',
     'https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Bourg-en-Bresse', 'Cafe_francais',[]]
             '''
-    dic_wp = wikipedia.get_wikipedia(d['url_d'],d['url_d_2'])
+    dic_wp = wikipedia.get_wikipedia(d['url_d'])
     for mhs in dic_wp:
         if mhs not in musee.collection:
             m=MoHist(mhs)
@@ -184,7 +181,7 @@ if __name__ == "__main__":
         # Créer les monuments du museum
         # FIXME !!! supprimer le passage par le dictionnaire dans la génération...
         museum = charge_merimee(d,museum)
-        museum = charge_osm(ini.dep[d],museum)
+        museum = charge_osm(ini.dep[d][d],museum)
         museum = charge_wp(ini.dep[d],museum)
         # créer les classements
         liste_salle = museum.classer_MH()

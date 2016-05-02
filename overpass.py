@@ -5,8 +5,8 @@
     Requette sur la base OSM pour rechercher les ref:mhs d'un département
 
     en entrée : un code département = '01'
-                Attention : le rhône est à assembler avec la Métropole de Lyon
-                2 boundary level =6 différentes
+                Attention : pour le rhône est à assembler avec la Métropole de Lyon
+                2 boundary (level=6) différentes
     en sortie : un dico avec les clés ref:mhs renvoyant les infos de chaque monument.
                 dic= { 'ref:mhs1':[lien type/id,le dico des tags, la liste des tags manquants],...}
 exemple=>   PA00116550 : ['way/391391471', {'mhs:inscription_date': '1981', 'name': 'Ferme de Pérignat', 'heritage': '2', 'ref:mhs': 'PA00116550',
@@ -92,7 +92,7 @@ def get_elements(data,tt,dico):
                 dico[tags_mhs["ref:mhs"]] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
     return dico
 
-def get_osm(departement, dic=None):
+def get_osm(departement):
     '''
         Obtenir les objets OSM contenant le tag 'ref:mhs'
         pour un département = '01' par exemple
@@ -124,14 +124,10 @@ def get_osm(departement, dic=None):
 
 if __name__ == "__main__":
     departement = '69'
-    # choix du dico departement
-    dp = ini.dep[departement]
-    print(dp.keys())
-    #choix du dico de la clé departement
-    dic_osm = get_osm(dp[departement])
-    # if dp['zone_osm_alt']:
-    #     dic_osm=get_osm(dp['zone_osm_alt'],dic_osm)
+    # choix du dico de la clé departement
+    dic_osm = get_osm(ini.dep[departement][departement])
+
     for key in dic_osm:
         print (key,':',dic_osm[key])
     #print(dic_osm)
-    print ("il y a {} Monuments du département {} dans OpenStreetMap.".format(len(dic_osm),dp['text']))
+    print ("il y a {} Monuments du département {} dans OpenStreetMap.".format(len(dic_osm),ini.dep[departement]['text']))

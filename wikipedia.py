@@ -230,12 +230,10 @@ def get_wikipedia(url_list):
 
 if __name__ == "__main__":
     departement = '69'
-
-    dp = ini.dep[departement]
     dic_wp = {}
     Nb_noMHS=0
-    # dp['url_d'] est une liste
-    dic_wp = get_wikipedia(dp['url_d'])
+
+    dic_wp = get_wikipedia(ini.dep[departement]['url_d'])
     for key in dic_wp:
         #print (key,':',dic_wp[key])
         if 'ERR-' in key:
@@ -243,5 +241,5 @@ if __name__ == "__main__":
             #print(dic_wp[key])
 
 
-    print ("il y a {} Monuments du département {} dans Wikipédia.".format(len(dic_wp),dp['text']))
-    print ("Monuments du département {} sans code MH : {}".format(dp[('text')],Nb_noMHS))
+    print ("il y a {} Monuments du département {} dans Wikipédia.".format(len(dic_wp),ini.dep[departement]['text']))
+    print ("Monuments du département {} sans code MH : {}".format(ini.dep[departement][('text')],Nb_noMHS))
