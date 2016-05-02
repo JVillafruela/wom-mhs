@@ -65,7 +65,7 @@ def write_bandeau(file,t,dic):
         <ul>\n'''
     for d in dic:
         link = d+"_pages/"+d+"_merosmwip.html"
-        title = dic[d][d]
+        title = dic[d][d][0]
         contenu += '       <li><a href="{}" title="{}">{}</a></li>\n'.format(link,title,title)
     contenu+= '''   </ul>
         </div>

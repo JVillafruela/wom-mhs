@@ -53,20 +53,27 @@ class Musee:
             #print (m, v.description[m])
             #print(liste_salle[0].collection)
             '''Créer une salle avec les MH communs à Mérimée, OSM et WP '''
-            if  v.description[m]['mer'] and v.description[m]['osm'] and (v.description[m]['wip'] or "wikipedia" in v.description[m]['osm']['tags_mh']):
+            if  v.description[m]['mer'] and v.description[m]['osm'] and (v.description[m]['wip']
+                    or "wikipedia" in v.description[m]['osm']['tags_mh']) or \
+                    (not v.description[m]['mer'] and not v.description[m]['wip'] and "IA" in v.description[m]['osm']['tags_mh']['ref:mhs']
+                    and  "wikipedia" in v.description[m]['osm']['tags_mh']):
                 list_salle[0].collection[m] = v
             ''' Créer une salle avec les MH communs à Mérimée et OSM'''
             if  v.description[m]['mer'] and v.description[m]['osm'] and not v.description[m]['wip'] and ("wikipedia" not in v.description[m]['osm']['tags_mh']):
                 #print ("code=", m, v.description[m])
                 list_salle[1].collection[m] = v
             ''' Créer une salle avec les MH communs à Mérimée et WP'''
-            if v.description[m]['mer'] and v.description[m]['wip'] and not v.description[m]['osm'] :
+            if (v.description[m]['mer'] and v.description[m]['wip'] and not v.description[m]['osm']) or \
+                ( not v.description[m]['mer'] and v.description[m]['wip'] and "IA" in m) :
                 list_salle[2].collection[m] = v
             ''' Créer une salle avec les MH présents seulement dans Osm '''
-            if  not v.description[m]['mer'] and v.description[m]['osm'] and not v.description[m]['wip'] and 'Bis' not in m:
+            if  not v.description[m]['mer'] and v.description[m]['osm'] and not v.description[m]['wip'] and 'Bis' not in m \
+                 and not (not v.description[m]['mer'] and not v.description[m]['wip'] and "IA" in v.description[m]['osm']['tags_mh']['ref:mhs']
+                and  "wikipedia" in v.description[m]['osm']['tags_mh']):
                 list_salle[3].collection[m] = v
             ''' Créer une salle avec les MH présents seulement dans WP '''
-            if  not v.description[m]['mer'] and not v.description[m]['osm'] and (v.description[m]['wip'] or 'ERR' in m ):
+            if  not v.description[m]['mer'] and not v.description[m]['osm'] and (v.description[m]['wip'] or 'ERR' in m ) \
+            and (v.description[m]['wip'] and not "IA" in m) :
                 list_salle[4].collection[m] = v
             ''' Créer une salle avec les MH communs à OSM et WP '''
             if  v.description[m]['osm'] and v.description[m]['wip'] and not v.description[m]['mer']:

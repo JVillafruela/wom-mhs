@@ -18,7 +18,10 @@ def get_table_merosmwip(salle):
         #print( mh,MH.description[mh])
         # print (MH.description[mh][mh]['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
-        description = MH.description[mh]['mer']['nom'][:45]+'; '+MH.description[mh]['mer']['commune'][:20]
+        if 'nom' in MH.description[mh]['mer']:
+            description = MH.description[mh]['mer']['nom'][:45]+'; '+MH.description[mh]['mer']['commune'][:20]
+        else :
+            description =  MH.description[mh]['osm']['tags_mh']['name']
         # les urls OSM
         if 'url_osm' in MH.description[mh]['osm']:
             url_osm_org='href="http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['url_osm']
@@ -138,10 +141,14 @@ def get_table_merwip(salle):
     l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
     for mh,MH in salle.collection.items():
         note_wp="-Wp: "
-    #      print( mh,MH.description[mh])
+        #print( mh,MH.description[mh])
     #      print (MH.description[mh]['osm']['url_osm'])
         # les infos sur le monuments dans mérimée
-        description = MH.description[mh]['mer']['nom'][:45]+'; '+MH.description[mh]['mer']['commune'][:20]
+        if 'nom' in MH.description[mh]['mer']:
+            description = MH.description[mh]['mer']['nom'][:45]+'; '+MH.description[mh]['mer']['commune'][:20]
+        else :
+            description =  MH.description[mh]['wip']['commune']+'; '+ MH.description[mh]['wip']['nom_MH']
+        #description = MH.description[mh]['mer']['nom'][:45]+'; '+MH.description[mh]['mer']['commune'][:20]
         #debut de la table
         table += '''<div class="TableRow">'''
         #colonne description
@@ -448,7 +455,7 @@ if __name__ == "__main__":
         # Créer les monuments du museum
         # FIXME !!! supprimer le passage par le dictionnaire dans la génération...
         museum = mohist.charge_merimee(d,museum)
-        museum = mohist.charge_osm(ini.dep[d],museum)
+        museum = mohist.charge_osm(ini.dep[d][d],museum)
         museum = mohist.charge_wp(ini.dep[d],museum)
         # Obtenir les stats du Musée
         stats['musee']=len(museum.collection)
