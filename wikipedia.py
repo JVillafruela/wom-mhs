@@ -19,14 +19,27 @@ import requests,bs4
 from bs4 import BeautifulSoup
 import ini,insee
 from collections import OrderedDict
+from beaker.cache import CacheManager
+from beaker.util import parse_cache_config_options
 
 url_base ="https://fr.wikipedia.org"
 #compteur de monument sans code mhs
 ctr_no_mhs=0
 
+cache_opts = {
+    'cache.type': 'file',
+    'cache.data_dir': '/tmp/cache/data',
+    'cache.lock_dir': '/tmp/cache/lock'
+}
+
+cache = CacheManager(**parse_cache_config_options(cache_opts))
+
+@cache.cache('query-wip-cache', expire=7200)
+def makeQuery(url):
+    return requests.get(url)
 
 def getData(url):
-    r = requests.get(url)
+    r = makeQuery(url)
     contenu = r.text
     #contenu = open("wiki.html", "r").read()
     main_page = BeautifulSoup(contenu,'html.parser')
@@ -204,24 +217,25 @@ def analyseSecondData(data,url,dic_mhs):
 
     return dic_mhs
 
-def get_wikipedia(url_departement,url_dep_2=None):
+def get_wikipedia(url_list):
     ''' Faire la requette overpass puis l'analyse du résultat '''
     dic_mhs_wp = {}
-    main_page = getData(url_base+url_departement)
-    dic_mhs_wp = analyseData(main_page,url_base+url_departement,dic_mhs_wp)
-    if url_dep_2 :
-        main_page = getData(url_base+url_dep_2)
-        dic_mhs_wp = analyseData(main_page,url_base+url_dep_2,dic_mhs_wp)
+    for url in url_list:
+        main_page = getData(url_base+url)
+        dic_mhs_wp = analyseData(main_page,url_base+url,dic_mhs_wp)
+
     dic_mhs_wp = OrderedDict(sorted(dic_mhs_wp.items(), key=lambda t: t[0]))
     return dic_mhs_wp
 
+
 if __name__ == "__main__":
-    dp = ini.dep['01']
+    departement = '69'
+
+    dp = ini.dep[departement]
     dic_wp = {}
     Nb_noMHS=0
-    # url_d_2 est nécéssairepour la métropole de Lyon qui n'est pas directement
-    # liée au département du Rhe
-    dic_wp = get_wikipedia(dp['url_d'],dp['url_d_2'])
+    # dp['url_d'] est une liste
+    dic_wp = get_wikipedia(dp['url_d'])
     for key in dic_wp:
         #print (key,':',dic_wp[key])
         if 'ERR-' in key:

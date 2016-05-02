@@ -3,18 +3,16 @@
 
 '''
     Requette sur la base OSM pour rechercher les ref:mhs d'un département
-    http://api.openstreetmap.org/api/0.6/way/67071084/full #pour la tour de guy (id=67071084)
-            // Ain -> '3600007387'
-            // Rhône -> 3600660056
+
     en entrée : un code département = '01'
+                Attention : le rhône est à assembler avec la Métropole de Lyon
+                2 boundary level =6 différentes
     en sortie : un dico avec les clés ref:mhs renvoyant les infos de chaque monument.
                 dic= { 'ref:mhs1':[lien type/id,le dico des tags, la liste des tags manquants],...}
 exemple=>   PA00116550 : ['way/391391471', {'mhs:inscription_date': '1981', 'name': 'Ferme de Pérignat', 'heritage': '2', 'ref:mhs': 'PA00116550',
                         'wikipedia': 'fr:Ferme de Pérignat', 'heritage:operator': 'mhs'}, ['source']]
 
-        FIXME => Nécéssité de trouver le code_area du département par une requete manuelle sur overpass.eu quand on veut ajouter un département
         FIXME => la Bbox de l'objet OSM n'est pas sauvé... geo:46.02403,4.99101?z=19 ? URl géo ?
-        FIXME => Pb avec le département du Rhône qui ne renvoie rein alors que la métropole_de_Lyon contient des monuments. Pb de frontières dans OSM ?
 '''
 
 from __future__ import unicode_literals
@@ -45,6 +43,7 @@ def get_data(query):
         print ('TooManyRequests : Trop de requêtes pour le serveur Overpass.eu. Patienter et ré-essayer plus tard.')
     else :
         #print (type(result))
+        # si erreur timeout attendre un moment et recommencer (pas planter)
         return result
 
 def get_tags(dico):
@@ -70,8 +69,8 @@ def get_elements(data,tt,dico):
         'data' ne contient qu'un seul type : relation,way ou node (tex_typ) qui
         permettra de reconstruire le lien de l'objet sur une carte OSM
         la sortie : le dictionnaire des résultats
-
     '''
+
     tags_mhs = {}
     tags_manquants =[]
 
@@ -93,69 +92,25 @@ def get_elements(data,tt,dico):
                 dico[tags_mhs["ref:mhs"]] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
     return dico
 
-# def mise_en_forme(dic_elements):
-#     '''
-#         Recherche / Préparation pour affichage sous forme de tableau sur la page web
-#     '''
-#     ctr=0
-#     t={'r':'relation','w':'way','n':'node'}
-#     liste_monuments = []
-#
-#     for key in dic_elem:
-#         #print (len(dic_elem[key]),' ',text[key])
-#
-#         for m in (dic_elem[key]):
-# #exemple
-# #[<class 'overpy.Way'>, 40550808, {'wikipedia': 'fr:Église Saint-Just de Lyon', 'heritage': '2', 'heritage:operator': 'mhs', 'mhs:inscription_date': '1980/12/18', 'source': 'cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2009', 'ref:mhs': 'PA00117799', 'name': 'Église Saint-Just'}, []]
-#         #print (t[key],str(m[1]))
-#             # permettra de construire le lien d'affichage de l'objet OSM
-#             # ex : http://www.openstreetmap.org/relation/1635056
-#             # construit la partie finale : relation,way,node/id
-#             osm = t[key]+'/'+str(m[1])
-#             #print lien
-#             if is_tag(m[2],'name') :
-#                 nom= m[2]['name']
-#             else :
-#                 nom=''
-#             mhs= m[2]['ref:mhs']
-#             if is_tag(m[2],'wikipedia'):
-#                 wp = m[2]['wikipedia']
-#             else :
-#                 wp=''
-#             monument = [nom,mhs,osm,wp,m[3]]
-#             liste_monuments.append(monument)
-#             #print('     ', nom,' ',mhs,' ',osm,' ',wp,' ',m[3])
-#         ctr += len(dic_elem[key])
-#     return ctr,liste_monuments
-
-def get_osm(zone,dic=None):
+def get_osm(departement, dic=None):
     '''
         Obtenir les objets OSM contenant le tag 'ref:mhs'
-        pour un département
+        pour un département = '01' par exemple
     '''
-    if dic:
-        dic_elements=dic
-    else:
-        dic_elements = {}
-    # correction provisoire pour le rhône
-    if zone =="3600660056" :
-        query = '''area[admin_level=6]["name"="Rhône"]->.boundaryarea;
-        ( node(area.boundaryarea)["ref:mhs"];
-        way(area.boundaryarea)["ref:mhs"];
-        relation(area.boundaryarea)["ref:mhs"]);
-        out meta;>;out meta;
-        '''
-        result = get_data(query)
-    else:
-        query ='''
-        [out:json];area( {} )->.searchArea;
-        (
-          node["ref:mhs"](area.searchArea);
-          way["ref:mhs"](area.searchArea);
-          relation["ref:mhs"](area.searchArea);
-        );
-        out meta;>;out meta;'''
-        result = get_data(query.format(zone))
+    dic_elements={}
+    query=""
+    query_part1 = '''area[admin_level=6]["name"="{}"]->.boundaryarea;
+    ( node(area.boundaryarea)["ref:mhs"];
+    way(area.boundaryarea)["ref:mhs"];
+    relation(area.boundaryarea)["ref:mhs"]);'''
+
+    query_end='''out meta;>;out meta;'''
+
+    for d in departement :
+        query += query_part1.format(d)
+    query+=query_end
+    result = get_data(query)
+
     #print (result.relations)
     ensemble ={'r':result.relations,'w':result.ways,'n':result.nodes}
     dic_typ = {'r':'relation','w':'way','n':'node'}
@@ -167,13 +122,15 @@ def get_osm(zone,dic=None):
     dic_elements = OrderedDict(sorted(dic_elements.items(), key=lambda t: t[0]))
     return dic_elements
 
-
 if __name__ == "__main__":
-    dp = ini.dep['69']
+    departement = '69'
+    # choix du dico departement
+    dp = ini.dep[departement]
     print(dp.keys())
-    dic_osm = get_osm(dp['zone_osm'])
-    if dp['zone_osm_alt']:
-        dic_osm=get_osm(dp['zone_osm_alt'],dic_osm)
+    #choix du dico de la clé departement
+    dic_osm = get_osm(dp[departement])
+    # if dp['zone_osm_alt']:
+    #     dic_osm=get_osm(dp['zone_osm_alt'],dic_osm)
     for key in dic_osm:
         print (key,':',dic_osm[key])
     #print(dic_osm)
