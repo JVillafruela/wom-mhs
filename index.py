@@ -56,7 +56,7 @@ def write_bandeau(file,t,dic):
         <p>
     <p>
     <p>Pour le moment, et pour tester la faisabilité, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts.
-    <p>Ces pages sont complètement statiques. Elles sont générées automatiquement chaque nuit, par un script Python, puis transférées sur le serveur.
+    <p>Ces pages sont complètement statiques. Elles sont générées automatiquement chaque nuit, par un script python, puis transférées sur le serveur.
     <p> Dernière construction des pages, le :<b> {}</b></p>
     '''.format(time.strftime('%d-%m-%Y %H:%M',time.localtime()))
 

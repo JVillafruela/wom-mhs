@@ -137,16 +137,25 @@ def get_osm(zone,dic=None):
         dic_elements=dic
     else:
         dic_elements = {}
-
-    query ='''
-    [out:json];area( {} )->.searchArea;
-    (
-      node["ref:mhs"](area.searchArea);
-      way["ref:mhs"](area.searchArea);
-      relation["ref:mhs"](area.searchArea);
-    );
-    out meta;>;out meta;'''
-    result = get_data(query.format(zone))
+    # correction provisoire pour le rhône
+    if zone =="3600660056" :
+        query = '''area[admin_level=6]["name"="Rhône"]->.boundaryarea;
+        ( node(area.boundaryarea)["ref:mhs"];
+        way(area.boundaryarea)["ref:mhs"];
+        relation(area.boundaryarea)["ref:mhs"]);
+        out meta;>;out meta;
+        '''
+        result = get_data(query)
+    else:
+        query ='''
+        [out:json];area( {} )->.searchArea;
+        (
+          node["ref:mhs"](area.searchArea);
+          way["ref:mhs"](area.searchArea);
+          relation["ref:mhs"](area.searchArea);
+        );
+        out meta;>;out meta;'''
+        result = get_data(query.format(zone))
     #print (result.relations)
     ensemble ={'r':result.relations,'w':result.ways,'n':result.nodes}
     dic_typ = {'r':'relation','w':'way','n':'node'}
