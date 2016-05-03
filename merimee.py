@@ -49,7 +49,7 @@ def get_merimee(dep,musee):
                 musee.collection[mhs].description[mhs]['mer']['adresse']=row[7]
                 musee.collection[mhs].description[mhs]['mer']['nom']=row[6]
                 musee.collection[mhs].description[mhs]['mer']['classement']=row[-3]
-                musee.collection[mhs].note = 1
+                musee.collection[mhs].note += 1
     finally:
         file.close()
     return musee

@@ -16,7 +16,7 @@ exemple=>   PA00116550 : ['way/391391471', {'mhs:inscription_date': '1981', 'nam
 '''
 
 from __future__ import unicode_literals
-import overpy,ini
+import overpy,ini,mohist
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 from collections import OrderedDict
@@ -63,7 +63,7 @@ def get_tags(dico):
     # print(tags_manquants)
     return tags_mhs,tags_absents
 
-def get_elements(data,tt,dico):
+def get_elements(data,tt,musee):
     '''
         Récupérer les éléments contenus dans 'data'
         'data' ne contient qu'un seul type : relation,way ou node (tex_typ) qui
@@ -78,21 +78,38 @@ def get_elements(data,tt,dico):
         tags_mhs,tags_manquants = get_tags(d.tags)
         if 'ref:mhs' in tags_mhs:
             #tag mhs déjà présent dans le dico
-            if tags_mhs["ref:mhs"] in dico :
+            if tags_mhs["ref:mhs"] in musee.collection :
+                if tags_mhs["ref:mhs"] in musee.collection[tags_mhs["ref:mhs"]].description:
+                    if 'osm' in  musee.collection[tags_mhs["ref:mhs"]].description[tags_mhs["ref:mhs"]]:
                 # code ref:mhs identique sur deux objets OSM
                 # ajouter le texte 'Bis' au code
-                 tags_mhs["ref:mhs"] += '-Bis'
+                        tags_mhs["ref:mhs"] += '-Bis'
                  #print(tags_mhs["ref:mhs"])
 
             # Si le tag mhs contient deux refs ref:mhs=PA01000012;PA01000013
             if ';' in tags_mhs["ref:mhs"]:
-                dico[tags_mhs["ref:mhs"].split(';')[0]] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
-                dico[tags_mhs["ref:mhs"].split(';')[1]] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
+                mhs1= tags_mhs["ref:mhs"].split(';')[0]
+                mhs2=tags_mhs["ref:mhs"].split(';')[1]
+                if mhs1 not in musee.collection :
+                    m=mohist.MoHist(mhs1)
+                    musee.collection[mhs1]=m
+                musee.collection[mhs1].description[mhs1]['osm'] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
+                musee.collection[mhs1].note +=2
+                if mhs2 not in musee.collection :
+                    m=mohist.MoHist(mhs2)
+                    musee.collection[mhs2]=m
+                musee.collection[mhs2].description[mhs2]['osm'] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
+                musee.collection[mhs2].note +=2
             else :
-                dico[tags_mhs["ref:mhs"]] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
-    return dico
+                #print ()
+                if tags_mhs["ref:mhs"] not in musee.collection :
+                    m=mohist.MoHist(tags_mhs["ref:mhs"])
+                    musee.collection[tags_mhs["ref:mhs"]]=m
+                musee.collection[tags_mhs["ref:mhs"]].description[tags_mhs["ref:mhs"]]['osm'] = [tt+'/'+str(d.id),tags_mhs,tags_manquants]
+                musee.collection[tags_mhs["ref:mhs"]].note += 2
+    return musee
 
-def get_osm(departement):
+def get_osm(departement,musee):
     '''
         Obtenir les objets OSM contenant le tag 'ref:mhs'
         pour un département = '01' par exemple
@@ -116,18 +133,19 @@ def get_osm(departement):
     dic_typ = {'r':'relation','w':'way','n':'node'}
     for key in ensemble:
         #print(ensemble[key])
-        dic_elements = get_elements(ensemble[key],dic_typ[key],dic_elements)
+        musee = get_elements(ensemble[key],dic_typ[key],musee)
         #print (len(liste_elements[key]),' ',text[key]) #,liste_elements[key][0][0]
         #ctr += len(liste_elements[key])
-    dic_elements = OrderedDict(sorted(dic_elements.items(), key=lambda t: t[0]))
-    return dic_elements
+    #dic_elements = OrderedDict(sorted(dic_elements.items(), key=lambda t: t[0]))
+    return musee
 
 if __name__ == "__main__":
     departement = '69'
+    musee = mohist.Musee()
     # choix du dico de la clé departement
-    dic_osm = get_osm(ini.dep[departement][departement])
-
-    for key in dic_osm:
-        print (key,':',dic_osm[key])
-    #print(dic_osm)
-    print ("il y a {} Monuments du département {} dans OpenStreetMap.".format(len(dic_osm),ini.dep[departement]['text']))
+    musee = get_osm(ini.dep[departement]['name'],musee)
+    for mh,MH in musee.collection.items():
+        #print(mh, MH)
+        #for value in MH.description[mh]['osm']:
+        print (MH.description[mh]['osm'])
+    print("Pour le département {}, il y a {} monuments dans la base OpenStreetMap.".format(departement,len(musee.collection)))
