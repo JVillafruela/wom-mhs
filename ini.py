@@ -4,17 +4,20 @@
 # dictionnaire des départements à analyser
 dep = {
            '01' : {
-                "01": ["Ain"],
+                "name": ["Ain"],
+                "code" : "01",
                 "text":"de l'Ain",
                 "url_d" : ["/wiki/Liste_des_monuments_historiques_de_l'Ain"],
                     },
             '42' : {
-                "42":["Loire"],
+                "name":["Loire"],
+                "code" : "42",
                 "text" : "de la Loire",
                 "url_d" : ["/wiki/Liste_des_monuments_historiques_de_la_Loire"],
                 },
             '69': {
-                "69":['Rhône','Métropole de Lyon'],
+                "name":['Rhône','Métropole de Lyon'],
+                "code" : "69",
                 "text": "du Rhône",
                 "url_d" : ["/wiki/Liste_des_monuments_historiques_du_Rhône","/wiki/Liste_des_monuments_historiques_de_la_métropole_de_Lyon"],
                 },

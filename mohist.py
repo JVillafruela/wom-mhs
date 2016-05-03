@@ -89,28 +89,37 @@ class Musee:
 class MoHist:
     '''
         Un monument historique est décrit par :
-            un code MHS : code donné officiel extrait sur le site du ministère de la culture (base Mérimée)
+            un code MHS : code donné officiel extrait sur le site du ministère de la culture (base Mérimée ouverte)
                             ou un code d'erreur si le code précédent n'existe pas
             une description : Un dico contenant le dico obtenu par analyse de chaque base.
                             C'est regroupement des informations fournies par chaque base pour un même code mhs.
+            une note : à l'import des bases les datas sont analysées et une note pour chaque base est attribué au MH :
+                    1 Présent dans Mérimée ouverte
+                    2 Présent dans OSM
+                    4 Présent dans WP
+            la somme et l'analyse des trois notes permet le classement pour les pages du site web :
+                    3 = Présent Mérimée et OSM
+                    5 = Présent Mérimée et WP
+                    6 = Présent OSM et WP
+                    7 = Présent dans les trois bases
+
     '''
     ctr_monument=0
 
     def __init__(self,ref_mhs):
-        if ref_mhs:
-            self.mhs=ref_mhs
+        self.mhs=ref_mhs
         # else:
         #     # self.mhs = "no_mhs_"+str(MoHist.ctr_monument)
         #     # le code d'erreur est donné dans la fonction d'analyse de la base wikipédia
         #     self.mhs = ""
 
         self.description={self.mhs:{"mer":{},"osm":{},"wip":{}}}
-        #self.description = {"mer":{},"osm":{},"wip":{}}
+        self.note = 0
         MoHist.ctr_monument+=1
 
 def charge_merimee(dep,musee):
     ''' Créer les MH à partir de la base Mérimée
-    dic_merimee => {ref:mhs :[N°insee_commune, Nom commune, Nom monument, infos classement avec dates], ref_suivante : [,,,], etc...}'''
+    dic_merimee => {ref:mhs :[N°insee_commune, Nom commune, Nom monument, Adresse, infos classement avec dates], ref_mhs : [,,,], ref:mhs : [...], etc...}'''
     dic_mer = merimee.get_merimee(dep)
     for mhs in dic_mer:
         if mhs not in musee.collection:
@@ -118,6 +127,7 @@ def charge_merimee(dep,musee):
             musee.collection[mhs]=m
         musee.collection[mhs].description[mhs]["mer"]['insee']=dic_mer[mhs][0]
         musee.collection[mhs].description[mhs]['mer']['commune']=dic_mer[mhs][1]
+        musee.collection[mhs].description[mhs]['mer']['adresse']=dic_mer[mhs][4]
         musee.collection[mhs].description[mhs]['mer']['nom']=dic_mer[mhs][2]
         musee.collection[mhs].description[mhs]['mer']['classement']=dic_mer[mhs][3]
     return musee
