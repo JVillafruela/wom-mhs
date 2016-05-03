@@ -9,10 +9,7 @@
             'ERR-0023' :[[nom,commune,url_ville,identifiant],[....]]
             (l'identifiant est l'id, ancre de la page web)
     tester avec le rhône pour avoir des erreurs cde mhs absents
-    FIXME => il y a un dico pour convertir le Numéro du département en lien wikipédia. Avec dans certains cas, deux liens (voir le rhône)
-    FIXME => supprimer le code dep_text du dico d'entrée... et reporter cela à l'affichage des pages html  ---(OK)
-    FIXME => pb avec les url et url_ville dans les analyses
-    FIXME => Ajouter une recherche du code insee d'une commune
+
     '''
 from __future__ import unicode_literals
 import requests,bs4

@@ -335,7 +335,7 @@ def write_contenu(outF,stats,salle):
                 }
 
     header='''
-<div class="TableComplet" >
+    <div class="TableComplet" >
     <div class="TableTitre"> {}</div>
     <div class="TableHeading">
         <div class="TableHead2">    Description</div>
@@ -353,7 +353,6 @@ def write_contenu(outF,stats,salle):
     for r in tableau:
         outF.write(r)
 
-
 def write_bandeau(outF,t,d,d_dep,stats,page):
     # page est le nom de la salle, salle est l'objet
     menu=""
@@ -370,9 +369,9 @@ def write_bandeau(outF,t,d,d_dep,stats,page):
     intro='''</h4> <p><b>Pour le département {}</b>, la base Mérimée décrit {} monuments historiques.<p>\
         Ils sont {} dans wikipédia (pages départementales), et OSM en connait {}.<p><p>'''.format(d_dep[d]['text'],stats['mer'],stats['wip'],stats['osm'])
     bandeau1 = '''</body>
-<div id="bandeau"> <h4 class='Titre'>'''
+    <div id="bandeau"> <h4 class='Titre'>'''
     bandeau2='''
-<div id="menu">
+    <div id="menu">
     <ul>'''
     for p in pages:
         #créer le lien vers les autre pages
@@ -392,7 +391,7 @@ def write_bandeau(outF,t,d,d_dep,stats,page):
     menu+='<li class="retour"><a href="../index.html" title="Autres départements" > Menu général </a></li>'
     close= '''</ul>
     </div>
-</div>'''
+    </div>'''
     contenu=[bandeau1,t,intro,bandeau2,menu,close]
     for c in contenu:
         outF.write(c)
