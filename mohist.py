@@ -232,10 +232,14 @@ if __name__ == "__main__":
         # monument.description[mhs]['mer']['commune']="Ambérieu en Bugey"
         # monument.description[mhs]['mer']['nom']=monument
         # monument.note=3
-
+        mhs3='AP123456'
+        monu3=MoHist(mhs2)
+        monu3.add_infos_osm('node/124578',{'name':'gare sncf', 'ref:mhs': 'AP123456', 'heritage':'2', 'wikipedia':'fr:wiki/église'},[])
+        # monument.description[mhs]['mer']['commune']="Ambérieu en Bugey"
 
         musee.add_Mh(monument)
         musee.add_Mh(monu2)
+        musee.add_Mh(monu3)
         print (monument.mhs, monument)
         print (monu2.mhs, monu2)
         #print(musee.get_salle_de_mh(mhs))
