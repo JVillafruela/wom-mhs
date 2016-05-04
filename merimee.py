@@ -41,21 +41,15 @@ def get_merimee(dep,musee):
         for row in reader:
             if dep in row[3]:
                 mhs=row[0]
-                if mhs not in musee.collection:
-                    m=mohist.MoHist(mhs)
-                    musee.collection[mhs]=m
-                musee.collection[mhs].description[mhs]["mer"]['insee']=row[5]
-                musee.collection[mhs].description[mhs]['mer']['commune']=row[4]
-                musee.collection[mhs].description[mhs]['mer']['adresse']=row[7]
-                musee.collection[mhs].description[mhs]['mer']['nom']=row[6]
-                musee.collection[mhs].description[mhs]['mer']['classement']=row[-3]
-                musee.collection[mhs].note += 1
+                MH=musee.add_Mh(mhs)
+                #m.add_infos_mer('insee','commune','adresse','Nom mh', 'Infos classement')
+                MH.add_infos_mer(row[5],row[4],row[7],row[6],row[-3])
     finally:
         file.close()
     return musee
 
 if __name__ == "__main__":
-    departement = '69'
+    departement = '01'
     musee = mohist.Musee()
     musee = get_merimee(ini.dep[departement]['code'],musee)
     for mh,MH in musee.collection.items():
@@ -64,3 +58,5 @@ if __name__ == "__main__":
             print (key,':',value)
     print("Pour le département {}, il y a {} monuments dans la base Mérimée.".format(departement,len(musee.collection)))
     #print(dic_merimee['PA01000038'])
+    musee.maj_salle()
+    print(musee)

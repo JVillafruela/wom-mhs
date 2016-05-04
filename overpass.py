@@ -110,16 +110,24 @@ def get_elements(data,tt,musee):
                 if tags_mhs["ref:mhs"] in musee.collection[tags_mhs["ref:mhs"]].description:
                     if 'osm' in  musee.collection[tags_mhs["ref:mhs"]].description[tags_mhs["ref:mhs"]]:
                         # code ref:mhs identique sur deux objets OSM : ajouter le texte 'Bis' au code
-                        tags_mhs["ref:mhs"] += '-Bis'
+                        #tags_mhs["ref:mhs"] += '-Bis'
+                        musee.collection[tags_mhs["ref:mhs"]].description[tags_mhs["ref:mhs"]]['osm']['mhs_bis']=[tt+'/'+str(d.id),tags_mhs,tags_manquants]
                         #print(tags_mhs["ref:mhs"])
-            # Si le tag mhs contient deux refs ref:mhs=PA01000012;PA01000013
-            if ';' in tags_mhs["ref:mhs"]:
-                mhs1= tags_mhs["ref:mhs"].split(';')[0]
-                mhs2=tags_mhs["ref:mhs"].split(';')[1]
-                musee = add_mh(mhs1,[tt+'/'+str(d.id),tags_mhs,tags_manquants],musee)
-                musee = add_mh(mhs2,[tt+'/'+str(d.id),tags_mhs,tags_manquants],musee)
-            else :
-                musee=add_mh(tags_mhs["ref:mhs"],[tt+'/'+str(d.id),tags_mhs,tags_manquants],musee)
+            else:
+                # Si le tag mhs contient deux refs ref:mhs=PA01000012;PA01000013
+                if ';' in tags_mhs["ref:mhs"]:
+                    mhs1= tags_mhs["ref:mhs"].split(';')[0]
+                    mhs2=tags_mhs["ref:mhs"].split(';')[1]
+                    # musee = add_mh(mhs1,[tt+'/'+str(d.id),tags_mhs,tags_manquants],musee)
+                    # musee = add_mh(mhs2,[tt+'/'+str(d.id),tags_mhs,tags_manquants],musee)
+                    MH=musee.add_Mh(mhs1)
+                    MH.add_infos_osm(tt+'/'+str(d.id),tags_mhs,tags_manquants)
+                    MH=musee.add_Mh(mhs2)
+                    MH.add_infos_osm(tt+'/'+str(d.id),tags_mhs,tags_manquants)
+                else :
+                    #musee=add_mh(tags_mhs["ref:mhs"],[tt+'/'+str(d.id),tags_mhs,tags_manquants],musee)
+                    MH=musee.add_Mh(tags_mhs["ref:mhs"])
+                    MH.add_infos_osm(tt+'/'+str(d.id),tags_mhs,tags_manquants)
 
     return musee
 
@@ -154,7 +162,7 @@ def get_osm(departement,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '01'
+    departement = '42'
     osmWip=[]
     musee = mohist.Musee()
     # choix du dico de la clé departement
@@ -164,8 +172,8 @@ if __name__ == "__main__":
     #for mh,MH in musee.collection.items():
         #print(mh, MH)
         #for value in MH.description[mh]['osm']:
-        #print (mh, MH.description[mh]['osm'][0], MH.note)
-    [ osmWip.append(mh) for mh,MH in musee.collection.items() if MH.note == 7 ]
-    print(osmWip)
+    #     #print (mh, MH.description[mh]['osm'][0], MH.note)
+    musee.maj_salle()
+    print(musee)
 
     print("Pour le département {}, il y a {} monuments dans la base OpenStreetMap.".format(departement,len(musee.collection)))
