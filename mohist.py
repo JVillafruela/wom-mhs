@@ -21,7 +21,54 @@ class Musee:
             self.nom=nom
         else:
             self.nom="Musée_général"
-        #self.salle_merosmwip = Musee("merosmwip")
+
+        self.salles=[Salle("vrac",'Monuments historiques non classés'),
+                    Salle("mer",'Monuments historiques présents seulement dans Mérimée'),
+                    Salle("osm",'Monuments historiques présents seulement dans OpenStreetMap'),
+                    Salle("merosm", 'Monuments historiques présents dans Mérimée et OpenStreetMap'),
+                    Salle("wip", 'Monuments historiques présents seulement dans wikipédia'),
+                    Salle("merwip", 'Monuments historiques présents dans Mérimée et Wikipédia',),
+                    Salle("osmwip", 'Monuments historiques présents dans OpenStreetMap et Wikipédia'),
+                    Salle("merosmwip", 'Monuments historiques présents dans Mérimée, OpenStreetMap et Wikipédia')]
+
+    def add_Mh(self, m):
+        #self.collection[ref]=MH
+        num_salle=m.note
+        print(m.note)
+        ref = m.mhs
+        print(ref)
+        self.salles[num_salle].collection[ref]=m
+        #MH.salle=salle
+
+    def move_MH(self, monument, new_salle):
+        old_salle= monument.note
+        ref= monument.mhs
+        del self.salles[old_salle].collection[ref]
+        monument.note=new_salle
+        self.salles[new_salle].collection[ref]= monument
+        #MH.salle=new_salle
+
+    def get_salle_de_mh(self,ref):
+        for salle in self.salles:
+            #print(salle)
+            if ref in salle.collection:
+                reponse= salle.salle['nom']
+        if reponse == "":
+            reponse = "Monument {} inconnu".format(ref)
+        return reponse
+
+    def get_monument(self, ref, salle):
+        ''' Renvoie le monument de la ref  appeler toujours is_in avant pour trouver la salle'''
+        return self.salles[salle].collection[ref]
+
+    def is_in(self,ref):
+        ''' Renvoie true si la référence est déjà dans le musee et le nom de la salle '''
+        trouve = False
+        for salle in self.salles:
+            if ref in salle.collection:
+                trouve=True
+                break
+        return trouve, salle.salle['nom']
 
     def trier(self):
         '''Renvoie la collection triée'''
@@ -86,6 +133,16 @@ class Musee:
             s.collection = OrderedDict(sorted(s.collection.items(), key=lambda t: t[0]))
         return list_salle
 
+class Salle:
+
+    def __init__(self,nom,titre):
+        #l'id sera la note de classement ?
+        self.salle ={"nom": nom, "titre": titre}
+        self.collection = {}
+
+    def __repr__(self):
+        return("Classe "+self.salle['nom']+" : "+str(len(self.collection)))+" Monument"
+
 class MoHist:
     '''
         Un monument historique est décrit par :
@@ -104,60 +161,40 @@ class MoHist:
                     7 = Présent dans les trois bases
 
     '''
+
     ctr_monument=0
 
     def __init__(self,ref_mhs):
         self.mhs=ref_mhs
-        # else:
-        #     # self.mhs = "no_mhs_"+str(MoHist.ctr_monument)
-        #     # le code d'erreur est donné dans la fonction d'analyse de la base wikipédia
-        #     self.mhs = ""
-
         self.description={self.mhs:{"mer":{},"osm":{},"wip":{}}}
         self.note = 0
+
         MoHist.ctr_monument+=1
 
-def charge_merimee(dep,musee):
-    ''' Créer les MH à partir de la base Mérimée
-    dic_merimee => {ref:mhs :[N°insee_commune, Nom commune, Nom monument, Adresse, infos classement avec dates], ref_mhs : [,,,], ref:mhs : [...], etc...}'''
-    dic_mer = merimee.get_merimee(dep)
-    for mhs in dic_mer:
-        if mhs not in musee.collection:
-            m=MoHist(mhs)
-            musee.collection[mhs]=m
-        musee.collection[mhs].description[mhs]["mer"]['insee']=dic_mer[mhs][0]
-        musee.collection[mhs].description[mhs]['mer']['commune']=dic_mer[mhs][1]
-        musee.collection[mhs].description[mhs]['mer']['adresse']=dic_mer[mhs][4]
-        musee.collection[mhs].description[mhs]['mer']['nom']=dic_mer[mhs][2]
-        musee.collection[mhs].description[mhs]['mer']['classement']=dic_mer[mhs][3]
-    return musee
+    def __repr__(self):
+        return "ref: "+self.mhs+' classé dans : '+ str(self.note)
 
-def charge_osm(d,musee):
-    ''' Créer les MH à partir de la requette overpass sur OSM
-    dic_osm => {'ref:mhs':[type/id,le dico des tags, la liste des tags manquants],ref_suivante : [,,,], etc...}
-    '''
-    dic_osm = overpass.get_osm(d)
-    #ajouter un tri pour être sur que le code mhs-bis arrive après le code mhs-bis donc déja créé dans la collection
-    dic_osm = OrderedDict(sorted(dic_osm.items(), key=lambda t: t[0]))
-    for mhs in dic_osm:
-        #traitement des doubles
-        if '-Bis' in mhs:
-            mhs_bis = mhs.split('-')[0]
-            #print (mhs_bis)
-            #print(dic_osm[mhs])
-            # sauvegarde de la description bis dnas un champ particulier
-            musee.collection[mhs_bis].description[mhs_bis]['osm']['mhs_bis']=dic_osm[mhs]
-        else:
-            if mhs not in musee.collection:
-                m=MoHist(mhs)
-                musee.collection[mhs]=m
-            musee.collection[mhs].description[mhs]["osm"]['url_osm']=dic_osm[mhs][0]
-            musee.collection[mhs].description[mhs]['osm']['tags_mh']=dic_osm[mhs][1]
-            musee.collection[mhs].description[mhs]['osm']['tags_manquants']=dic_osm[mhs][2]
-            #récupérer le tag wikipédia
-            # if 'wikipedia' in dic_osm[mhs][1]:
-            #     musee.collection[mhs].description[mhs]['osm']['wikipedia']=dic_osm[mhs][1]['wikipedia']
-    return musee
+    def add_infos_mer(self, insee, commune, adresse, nom, classement):
+        self.description[self.mhs]['mer'] = {'insee' : insee,
+                                             'commune': commune,
+                                             'adresse': adresse,
+                                             'nom': nom,
+                                             'classement': classement }
+        self.note+=1
+
+    def add_infos_osm(self, url, tag_mhs, tags_absents, mhs_bis=None ):
+        self.description[self.mhs]['osm'] = {'url': url,
+                                             'tags_mhs': tag_mhs,
+                                             'tags_absents': tags_absents,
+                                             'mhs_bis': mhs_bis}
+        self.note+=2
+        #correction si présence lien vers wikipédia
+        if 'wikipedia' in self.description[self.mhs]['osm']['tags_mhs']:
+            #self.add_url_wip(self.description[self.mhs]['osm']['tags_mhs']['wikipedia'])
+            self.note+=4
+        #correction si mhs n'est pas dans mérimée
+        if not self.description[self.mhs]['mer']:
+            self.note+=1
 
 def charge_wp(d,musee):
     '''Créer les MH à partir du scrapping des pages départementales et grandes villes sur Wikipédia
@@ -182,60 +219,33 @@ def charge_wp(d,musee):
     return musee
 
 if __name__ == "__main__":
-    bases =['mer','osm','wip']
-    # Une salle va correspondre à une page_web : une sélection de MH d'une certaine catégorie
-    #noms_salle= ['s_merosmwip','s_merosm','s_merwip','s_osmwip','s_osm','s_wip','s_mer']
+        musee=Musee()
+        #cryte= Salle("cryte","première salle")
+        #print (cryte)
+        mhs='AP123456'
+        monument=MoHist(mhs)
+        monument.add_infos_mer('01004','ambérieu en Bugey','9 rue truchon','Maison Navarro', 'classé : 1928')
 
-    # print(liste_salle[0])
-
-    # par département
-    for d in ini.dep:
-        liste_salle=[]
-        #print(d,ini.dep[d])
-        # Un musée museum par département !!
-        museum = Musee(ini.dep[d][d])
-        print("Nombre de MH init dans le Musee {} : {}".format(ini.dep[d]['text'],len(museum.collection)))
-        # Créer les monuments du museum
-        # FIXME !!! supprimer le passage par le dictionnaire dans la génération...
-        museum = charge_merimee(d,museum)
-        museum = charge_osm(ini.dep[d][d],museum)
-        museum = charge_wp(ini.dep[d],museum)
-        # créer les classements
-        liste_salle = museum.classer_MH()
-
-#################################################################################
-        # des affichages pour tests intermédiaires
-        ''' Affichage  extrait base Mérimée '''
-        #print(museum.collection['PA00116330'].description['PA00116330']['mer'])
-        # museum_trier=museum.trier()
-        # for m,value in museum_trier.items():
-        #     print(value.description[m]['mer']['commune'])
+        mhs2='AP456789'
+        monu2=MoHist(mhs2)
+        monu2.add_infos_osm('way/124578',{'name':'église de la gare', 'ref:mhs': 'AP456789', 'heritage':'3', 'wikipedia':'fr:wiki/église'},['source',])
+        # monument.description[mhs]['mer']['commune']="Ambérieu en Bugey"
+        # monument.description[mhs]['mer']['nom']=monument
+        # monument.note=3
 
 
-        museum_trier=museum.trier()
-        # for m,value in museum_trier.items():
-        #     #Affichage  double extrait base OSM
-        #     if "mhs_bis" in value.description[m]['osm'] :
-        #         print(" Premier Mh =", value.description[m]['osm']['url_osm']," => ","Mh en double : ", value.description[m]['osm']['mhs_bis'][0])
-        #         # Affichage No code mHS base wikipédia
-        #     if "ERR" in m :
-        #         print(m)
-        #         print(value.description[m]['wip']['nom_MH'],', ',value.description[m]['wip']['commune'])
+        musee.add_Mh(monument)
+        musee.add_Mh(monu2)
+        print (monument.mhs, monument)
+        print (monu2.mhs, monu2)
+        #print(musee.get_salle_de_mh(mhs))
+        # musee.move_MH(monument,6)
+        # print (monument)
 
-        ''' qq stats'''
-        print("Nombre de MH dans le Musee {} : {}".format(ini.dep[d]['text'],len(museum.collection)))
-        for bs in bases:
-            print ("Nombre de MH issues de la base {} : {}".format(bs,museum.calcul_nbMH(bs)))
+        # #print(musee.get_salle_de_mh(mhs))
+        # test, salle = musee.is_in(mhs2)
+        # if test:
+        #     print (salle)
 
-
-        for n in range(len(liste_salle)):
-            print("Nombre de MH dans la salle : {} = {}".format(liste_salle[n].nom, len(liste_salle[n].collection)))
-
-        print (MoHist.ctr_monument, " Références traitées !")
-        # for mh in museum.collection:
-        #     #print(museum.collection[mh].description[mh])
-        #     if mh in salle_merosmwip.collection :
-        #         print(salle_merosmwip.collection[mh]['wip'])
-
-        # for mh in salle_merosmwip.collection:
-        #     print (mh,salle_merosmwip.collection[mh]['osm'] )
+        for s in musee.salles:
+            print(s)

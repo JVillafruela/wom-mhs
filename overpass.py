@@ -7,9 +7,9 @@
     en entrée : un code département = '01'
                 Attention : pour le rhône est à assembler avec la Métropole de Lyon
                 2 boundary (level=6) différentes
-    en sortie : un dico avec les clés ref:mhs renvoyant les infos de chaque monument.
-                dic= { 'ref:mhs1':[lien type/id,le dico des tags, la liste des tags manquants],...}
-exemple=>   PA00116550 : ['way/391391471', {'mhs:inscription_date': '1981', 'name': 'Ferme de Pérignat', 'heritage': '2', 'ref:mhs': 'PA00116550',
+    en sortie : un musee avec les clés ref:mhs renvoyant les infos de chaque monument à partir de la clé osm
+                'osm' = { 'url_osm':'lien type/id', 'tags_mhs': '{dico des tags}' , 'tags_manquants': 'liste des tags manquants', 'mhs_bis' : {osm double} }
+old_exemple =>   PA00116550 : ['way/391391471', {'mhs:inscription_date': '1981', 'name': 'Ferme de Pérignat', 'heritage': '2', 'ref:mhs': 'PA00116550',
                         'wikipedia': 'fr:Ferme de Pérignat', 'heritage:operator': 'mhs'}, ['source']]
 
         FIXME => la Bbox de l'objet OSM n'est pas sauvé... geo:46.02403,4.99101?z=19 ? URl géo ?
