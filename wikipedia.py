@@ -102,12 +102,13 @@ def analyseData(data,url,musee):
                     #analyse de la géolocalisation
                     rep = val.find('span', {'class':'geo-dec'})
                     if isinstance(rep,bs4.element.Tag) :
-                        # geo = val.find('span', {'class':'geo-dec'}).get_text().strip()
-                        # lat =  geo.split(',')[0]
-                        # lon =  geo.split(',')[1]
-                        pass
+                        geo = val.find('span', {'class':'geo-dec'}).get_text().strip()
+                        #lat =  geo.split(',')[0]
+                        #lon =  geo.split(',')[1]
+                        #pass
                     else:
                         #print ("Erreur : "+nom+" à "+commune+' -> Pas de Géolocalisation\n')
+                        geo=""
                         infos_manquantes.append("Géolocalisation absente")
                         #lat=lon=''
                 if n == 7:
@@ -127,14 +128,14 @@ def analyseData(data,url,musee):
                         #enregistrement d'un momument si le code mhs existe
                         MH=musee.add_Mh(code)
                         #def add_infos_wip(self, insee, commune, nom, url, ident, infos_manquantes):
-                        MH.add_infos_wip(c_insee,commune,nom,url,identifiant,infos_manquantes)
+                        MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
                         #dic_mhs[code] = [nom,commune,c_insee,url,identifiant,infos_manquantes]
                     else :
                         #print ("Erreur : Pas de code MHS pour "+nom+" à "+commune+'\n')
                         code = "ERR-"+str(ctr_no_mhs).zfill(4)
                         infos_manquantes.append("Code MHS absent")
                         MH=musee.add_Mh(code)
-                        MH.add_infos_wip(c_insee,commune,nom,url,identifiant,infos_manquantes)
+                        MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
                         #dic_mhs[code] = [nom,commune,c_insee,url,identifiant,infos_manquantes]
                         ctr_no_mhs+=1
                     grande_commune = False
@@ -186,12 +187,13 @@ def analyseSecondData(data,url,musee):
                     #analyse de la géolocalisation
                     rep = val.find('span', {'class':'geo-dec'})
                     if isinstance(rep,bs4.element.Tag) :
-                        # geo = val.find('span', {'class':'geo-dec'}).get_text().strip()
+                        geo = val.find('span', {'class':'geo-dec'}).get_text().strip()
                         # lat =  geo.split(',')[0]
                         # lon =  geo.split(',')[1]
-                        pass
+                        #pass
                     else:
                         #print ("Erreur : "+nom+" à "+commune+' -> Pas de Géolocalisation\n')
+                        geo=""
                         infos_manquantes.append("Géolocalisation absente")
                         # liste_incomplet.append([nom,commune,"géolocalisation absente"])
                         # lat=lon=''
@@ -211,13 +213,13 @@ def analyseSecondData(data,url,musee):
                     #enregistrement d'un momument si le code mhs existe
                         #dic_mhs[code] = [nom,commune,c_insee,url,identifiant,infos_manquantes]
                         MH=musee.add_Mh(code)
-                        MH.add_infos_wip(c_insee,commune,nom,url,identifiant,infos_manquantes)
+                        MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
                     else :
                         #print ("Erreur : Pas de code MHS pour "+nom+" à "+commune+'\n')
                         code = "ERR-"+str(ctr_no_mhs).zfill(4)
                         infos_manquantes.append("Code MHS absent")
                         MH=musee.add_Mh(code)
-                        MH.add_infos_wip(c_insee,commune,nom,url,identifiant,infos_manquantes)
+                        MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
                         #dic_mhs[code] = [nom,commune,c_insee,url,identifiant,infos_manquantes]
                         ctr_no_mhs+=1
     return musee
@@ -244,6 +246,8 @@ if __name__ == "__main__":
     #print(dic_merimee['PA01000038'])
     musee.maj_salle()
     print(musee)
+    nb=musee.get_nb_MH('wip')
+    print(nb)
 
 
     # print ("il y a {} Monuments du département {} dans Wikipédia.".format(len(dic_wp),ini.dep[departement]['text']))

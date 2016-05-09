@@ -177,3 +177,5 @@ if __name__ == "__main__":
     print(musee)
 
     print("Pour le département {}, il y a {} monuments dans la base OpenStreetMap.".format(departement,len(musee.collection)))
+    nb=musee.get_nb_MH('osm')
+    print(nb)
