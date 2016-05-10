@@ -14,11 +14,11 @@ def write_entete(file, title, cssFile) :
     '''
     header=""
     header += '''<!DOCTYPE html>
-        <html>
+    <html>
     <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-    <title>{}</title>'''.format(title)
-    header+='''<link rel="stylesheet" type="text/css" href="{}"></head>'''.format(cssFile)
+    <title>{}</title>\n\t'''.format(title)
+    header+='''<link rel="stylesheet" type="text/css" href="{}">\n\t'''.format(cssFile)
     header+='''<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"> </script>'''
     header+='''
     <script>
@@ -30,8 +30,9 @@ def write_entete(file, title, cssFile) :
      $(this).addClass("active");
      });
     });
-    </script> '''
-    header+="</head>"
+    </script>
+    </head>'''
+
     file.write(header)
 
 def write_bandeau(file,t,dic):
@@ -43,7 +44,7 @@ def write_bandeau(file,t,dic):
         <ul>
         <li>Le ministère de la culture propose en "Open-Data" une
         <a href="https://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/" title="Base Mérimée" target="blank">
-        Base des immeubles de France</a>, une partie de la base Mérimée.</li>
+        Base des immeubles de France</a>, une partie de la base Mérimée. Seulement les codes "PA*"". Les codes "IA*" et "EA*" n'apparaisent pas dans cette base ouverte."</li>
 
         <li>L'encyclopédie "Wikipédia" a des pages dédiées aux monuments historiques par département
         et/ou par ville, par exemple pour <a href="https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_l'Ain" title="L'Ain" target="blank">l'Ain</a>,</li>
@@ -77,16 +78,24 @@ def write_footer(file):
     '''
     file.write(footer)
 
-def creer_fichier(name,repertoire):
+def creer_fichier(name,d=None):
     '''
         Vérifier si le repertoire existe sinon le créer.
         puis ouvrir le fichier et renvoyer un writer
     '''
+    if d :
+        s_rep=str(d['code'])+"_pages"
+    else:
+        s_rep=""
+    if ini.prod :
+        rep=ini.url_prod+"/Wom/"+s_rep
+    else :
+        rep=ini.url_dev+"/Wom/"+s_rep
     # FIXME !! Le répertoire racine n'est pas créer et ne doit pas être effacé
-    if not os.path.exists(repertoire):
-        os.mkdir(repertoire)
-    if os.path.isdir(repertoire):
-        return open(repertoire+'/'+name,"w")
+    if not os.path.exists(rep):
+        os.mkdir(rep)
+    if os.path.isdir(rep):
+        return open(rep+'/'+name,"w")
 
 def gen_page_index(dico):
     '''
@@ -94,15 +103,15 @@ def gen_page_index(dico):
         et une petite présentation du projet.
         le fichier index.html est créer à la racine d'un répertoire /Wom
     '''
+    # génération dans l'odre des départements pour le menu
     dico = OrderedDict(sorted(dico.items(), key=lambda t: t[0]))
+
     page_name="index.html"
 
     titre=" Wom : Mérimée, OpenStreetMap, Wikipédia"
     #changer le répertoire de génération des pages : prod=True or not
-    if ini.prod :
-        oF = creer_fichier(page_name,ini.url_prod+"/Wom")
-    else :
-        oF = creer_fichier(page_name,ini.url_dev+"/Wom")
+    oF = creer_fichier(page_name)
+
     write_entete(oF,titre,ini.cssFile)
 
     titre="Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"

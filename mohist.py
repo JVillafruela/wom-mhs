@@ -22,14 +22,15 @@ class Musee:
         else:
             self.nom="Musée_général"
 
-        self.salles=[Salle("vrac",'Monuments historiques non classés'),
-                    Salle("mer",'Monuments historiques présents seulement dans Mérimée'),
-                    Salle("osm",'Monuments historiques présents seulement dans OpenStreetMap'),
-                    Salle("merosm", 'Monuments historiques présents dans Mérimée et OpenStreetMap'),
-                    Salle("wip", 'Monuments historiques présents seulement dans wikipédia'),
-                    Salle("merwip", 'Monuments historiques présents dans Mérimée et Wikipédia',),
-                    Salle("osmwip", 'Monuments historiques présents dans OpenStreetMap et Wikipédia'),
-                    Salle("merosmwip", 'Monuments historiques présents dans Mérimée, OpenStreetMap et Wikipédia')]
+        self.salles=[Salle("vrac", 'Monuments historiques non classés'),
+                    Salle("mer", 'Monuments historiques présents seulement dans Mérimée', 'Seulement Mérimée', 'Monuments à créer dans Wikipédia et dans OpenstreetMap'),
+                    Salle("osm", 'Monuments historiques présents seulement dans OpenStreetMap', 'Seulement Osm', 'Monuments non présents dans la base Mérimée Ouverte ou Erreur de code MHS'),
+                    Salle("merosm", 'Monuments historiques présents dans Mérimée et OpenStreetMap', 'Mérimée, Osm', 'Monuments à créer dans Wikipédia'),
+                    Salle("wip", 'Monuments historiques présents seulement dans wikipédia','Seulement Wp ','Monuments non présents dans la base Mérimée Ouverte ou Erreur de code MHS'),
+                    Salle("merwip", 'Monuments historiques présents dans Mérimée et Wikipédia','Mérimée, Wp','Monuments à créer dans OpenStreetMap'),
+                    Salle("osmwip", 'Monuments historiques présents dans OpenStreetMap et Wikipédia', 'Osm, Wp', 'Monuments non présents dans la base Mérimée Ouverte ou Erreur de code MHS'),
+                    Salle("merosmwip", 'Monuments historiques présents dans Mérimée, OpenStreetMap et Wikipédia', 'Mérimée, Osm, Wp', 'Monuments présents dans les trois bases.')]
+        self.stats={}
 
     def __repr__(self):
         result=""
@@ -62,6 +63,12 @@ class Musee:
                 MH.corrige_note()
             self.salles[MH.note].s_collection.append(ref)
 
+    def maj_stats(self):
+        ''' Compter les MH '''
+        base = ['mer','osm','wip']
+        for bs in base:
+            self.stats[bs]=self.get_nb_MH(bs)
+
     def trier(self):
         '''Renvoie la collection triée'''
         return OrderedDict(sorted(self.collection.items(), key=lambda t: t[0]))
@@ -70,7 +77,7 @@ class Musee:
         '''Renvoie le nombre de MH dans 'base' (mer,osm ou wip) '''
         x=0
         for m,v in self.collection.items():
-            if  v.description[m][base]:
+            if  v.description[m][base] != {}:
                 x+=1
         return x
 
@@ -78,14 +85,14 @@ class Musee:
 
 class Salle:
 
-    def __init__(self,nom,titre):
+    def __init__(self, nom, titre, onglet=None, titre_onglet=None):
         #l'id sera la note de classement ?
-        self.salle ={"nom": nom, "titre": titre}
+        self.salle ={"nom": nom, "titre": titre, "onglet": onglet, "titre_onglet": titre_onglet}
         #la liste de ref:mhs
         self.s_collection = []
 
     def __repr__(self):
-        return("Classe "+self.salle['nom']+" : "+str(len(self.s_collection)))+" Monument"
+        return("Page "+self.salle['nom']+" : "+str(len(self.s_collection)))+" Monuments"
 
 class MoHist:
     '''
