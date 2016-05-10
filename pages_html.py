@@ -51,6 +51,100 @@ def get_header():
     '''
     return header
 
+def get_table(salle,musee):
+
+    table=""
+    l0 = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
+    url_osm_org= url_osm_id= url_osmwp=""
+    url_josm= url_osm= url_wip=""
+    #for mh,MH in salle.s_collection.items():
+    for mh in salle.s_collection:
+        MH=musee.collection[mh]
+        note_osm="-Osm: "
+        note_wp="-Wp: "
+        # Variables Champ Description
+        if 'nom' in MH.description[mh]['mer']:
+            description = MH.description[mh]['mer']['nom'][:45]+'; '+MH.description[mh]['mer']['commune'][:20]
+        else :
+            description =  MH.description[mh]['osm']['tags_mhs']['name']
+        # Variables Champ Mérimée
+            # RAS
+        # Variables Champ OSM
+        if 'osm' in salle.salle['nom']:
+            # les urls OSM
+            if 'url' in MH.description[mh]['osm']:
+                url_osm_org='href="http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['url']
+                type_osm = MH.description[mh]['osm']['url'].split('/')[0]
+                id_osm = MH.description[mh]['osm']['url'].split('/')[1]
+                url_osm_id ='href="http://www.openstreetmap.org/edit?editor=id&'+type_osm+'='+id_osm
+                url_josm= 'href="http://localhost:8111/load_object?new_layer=true&objects='+type_osm[0]+id_osm
+            #les tags manquants dans OSM
+            if len(MH.description[mh]['osm']['tags_manquants'])>0:
+                note_osm+=", ".join(MH.description[mh]['osm']['tags_manquants'])
+            elif MH.description[mh]['osm']['mhs_bis'] != None :
+                note_osm+=' <a href="http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
+            else :
+                note_osm =""
+            # recherche des urls WP
+            if 'wikipedia' in MH.description[mh]['osm']['tags_mhs']:
+                url_osmwp = 'href="https://fr.wikipedia.org/wiki/'+MH.description[mh]['osm']['tags_mhs']['wikipedia']
+            else :
+                url_osmwp =""
+        # Variables champ Wikipédia
+        if 'wip' in salle.salle['nom'] :
+            #les infos manquantes dans wikipédia
+            if 'infos_manquantes' in MH.description[mh]['wip']:
+                #print(MH.description[mh]['wip'])
+                if len(MH.description[mh]['wip']['infos_manquantes'])>0:
+                    note_wp+=", ".join(MH.description[mh]['wip']['infos_manquantes'])
+                else:
+                    note_wp=""
+            # recherche des urls WP
+            if 'url' in MH.description[mh]['wip']:
+                url_wip = MH.description[mh]['wip']['url']+"#"+MH.description[mh]['wip']['id']
+            else :
+                url_wip=""
+    ###########################################
+        #debut de la table
+        table += '''<div class="TableRow">'''
+        #colonne description
+        table+= '''           <div class="TableCell2">{}</div>'''.format(description)
+        #colonne mérimée
+        table+= ''' <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>'''.format(l0,mh,mh)
+        #colonne OSM
+        if 'osm' in salle.salle['nom']:
+            table += '''<div class="TableCell12"><a {}" target="blank" title="Voir sur openstreetmap.org"> ORG </a> -
+            <a {}" target="blank" title="Editer avec ID"> ID </a> - <a {}" target="blank" title="Editer avec Josm"> Josm </a> </div>
+            '''.format(url_osm_org, url_osm_id, url_josm)
+        else:
+            table+='''<div class="TableCell12">  ---- </div>'''
+
+        # colonne WP
+        if url_wip and url_osmwp :
+            table+='''<div class="TableCell1"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> -
+          <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </div>'''.format(url_wip,url_osmwp)
+        elif url_wip and not url_osmwp:
+            url_wip = MH.description[mh]['wip']['url']+"#"+MH.description[mh]['wip']['id']
+            table+='''<div class="TableCell1"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> </div>'''.format(url_wip)
+        elif not url_wip and url_osmwp:
+            url_osmwp = 'href="https://fr.wikipedia.org/wiki/'+MH.description[mh]['osm']['tags_mhs']['wikipedia']
+            table+='''<div class="TableCell1">  <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </div>'''.format(url_osmwp)
+        else:
+            table+='''<div class="TableCell1">  ---- </div>'''
+        #table note OSM
+        if note_osm !="-Osm: ":
+            table += '''<div class="TableCell3"> {} </div> '''.format(note_osm)
+        else:
+            table += '''<div class="TableCell3">  </div>'''
+        #table note WP
+        if note_wp !="" and not note_wp=="-Wp: ":
+            table += '''<div class="TableCell3"> {} </div> '''.format(note_wp)
+        else:
+            table += '''<div class="TableCell3">  </div>'''
+        #table fin
+        table+='''</div>'''
+    return table
+
 def gen_pages(dep, musee):
     '''Définir le bandeau '''
     titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
@@ -73,6 +167,9 @@ def gen_pages(dep, musee):
         '''écrire le contenu'''
         header=get_header().format(page.salle['titre'])
         oF.write(header)
+        ''' le tableau '''
+        table = get_table(page,musee)
+        oF.write(table)
     # # write_contenu(oF,stats,salle)
     # # '''écrire le pied de page'''
     # index.write_footer(oF)

@@ -139,7 +139,7 @@ class MoHist:
     def add_infos_osm(self, url, tag_mhs, tags_absents, mhs_bis=None ):
         self.description[self.mhs]['osm'] = {'url': url,
                                              'tags_mhs': tag_mhs,
-                                             'tags_absents': tags_absents,
+                                             'tags_manquants': tags_absents,
                                              'mhs_bis': mhs_bis}
         self.note+=2
 
