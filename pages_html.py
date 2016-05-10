@@ -58,7 +58,7 @@ def get_table(salle,musee):
     url_osm_org= url_osm_id= url_osmwp=""
     url_josm= url_osm= url_wip=""
     #for mh,MH in salle.s_collection.items():
-    for mh in salle.s_collection:
+    for mh in sorted(salle.s_collection):
         MH=musee.collection[mh]
         note_osm="-Osm: "
         note_wp="-Wp: "
