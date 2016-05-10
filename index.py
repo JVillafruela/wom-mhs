@@ -17,11 +17,8 @@ def write_entete(file, title, cssFile) :
         <html>
     <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-    <title>'''
-    header+=title
-    header+='''</title>
-    <link rel="stylesheet" type="text/css" href="{}">
-    </head>'''.format(cssFile)
+    <title>{}</title>'''.format(title)
+    header+='''<link rel="stylesheet" type="text/css" href="{}"></head>'''.format(cssFile)
     header+='''<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"> </script>'''
     header+='''
     <script>
@@ -34,15 +31,15 @@ def write_entete(file, title, cssFile) :
      });
     });
     </script> '''
+    header+="</head>"
     file.write(header)
 
 def write_bandeau(file,t,dic):
-    menu=""
+    #menu=""
     contenu=""
-    contenu+='''</body>
-    <div id="bandeau"> <h4 class="Titre">'''
-    contenu += t
-    contenu += '''</h4>\n <p>Les pages de ce site présentent des tableaux comparatifs des monuments historiques dans les bases de données suivantes :
+    contenu+=''' <body>
+    <div id="bandeau"> <h4 class="Titre">{}</h4>\n'''.format(t)
+    contenu += ''' <p>Les pages de ce site présentent des tableaux comparatifs des monuments historiques dans les bases de données suivantes :
         <ul>
         <li>Le ministère de la culture propose en "Open-Data" une
         <a href="https://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/" title="Base Mérimée" target="blank">
@@ -51,12 +48,12 @@ def write_bandeau(file,t,dic):
         <li>L'encyclopédie "Wikipédia" a des pages dédiées aux monuments historiques par département
         et/ou par ville, par exemple pour <a href="https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_l'Ain" title="L'Ain" target="blank">l'Ain</a>,</li>
         <li>Le site de cartographie participative "OpenStreetMap" répertorie aussi des monuments historiques ... voir
-        <a href="http://wiki.openstreetmap.org/wiki/FR:Key:ref:mhs" title ="sur le Wiki OSM" target="blank">le wiki des tags 'mhs'</a>.</li>
+        <a href="http://wiki.openstreetmap.org/wiki/FR:Key:ref:mhs" title ="sur le Wiki OSM" target="blank">le wiki des tags 'mhs'</a> ou encore la page
+        <a href="https://wiki.openstreetmap.org/wiki/Saint-%C3%89tienne/Patrimoine" title =" St Etienne Patrimoine" target="blank">  St Etienne Patrimoine</a>.</li>
         </ul>
-        <p>
-    <p>
-    <p>Pour le moment, et pour tester la faisabilité, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts.
-    <p>Ces pages sont complètement statiques. Elles sont générées automatiquement chaque nuit, par un script python, puis transférées sur le serveur.
+        </p>
+    <p>Pour le moment, et pour tester la faisabilité, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts.</p>
+    <p>Ces pages sont complètement statiques. Elles sont générées automatiquement chaque nuit, par un script python, puis transférées sur le serveur.</p>
     <p> Dernière construction des pages, le :<b> {}</b></p>
     '''.format(time.strftime('%d-%m-%Y %H:%M',time.localtime()))
 
@@ -64,11 +61,12 @@ def write_bandeau(file,t,dic):
     <div id="menu">
         <ul>\n'''
     for d in dic:
+        print (d)
         link = d+"_pages/"+d+"_merosmwip.html"
-        title = dic[d][d][0]
+        title = dic[d]['name'][0]
         contenu += '       <li><a href="{}" title="{}">{}</a></li>\n'.format(link,title,title)
     contenu+= '''   </ul>
-        </div>
+            </div>
         </div>'''
     file.write(contenu)
 
@@ -84,7 +82,7 @@ def creer_fichier(name,repertoire):
         Vérifier si le repertoire existe sinon le créer.
         puis ouvrir le fichier et renvoyer un writer
     '''
-    # FIXME !! Le répertoire racine n'est pas créer et ne doit pas être effacer
+    # FIXME !! Le répertoire racine n'est pas créer et ne doit pas être effacé
     if not os.path.exists(repertoire):
         os.mkdir(repertoire)
     if os.path.isdir(repertoire):
@@ -99,20 +97,20 @@ def gen_page_index(dico):
     dico = OrderedDict(sorted(dico.items(), key=lambda t: t[0]))
     page_name="index.html"
 
-    titre=" Wom "
+    titre=" Wom : Mérimée, OpenStreetMap, Wikipédia"
     #changer le répertoire de génération des pages : prod=True or not
     if ini.prod :
         oF = creer_fichier(page_name,ini.url_prod+"/Wom")
     else :
         oF = creer_fichier(page_name,ini.url_dev+"/Wom")
     write_entete(oF,titre,ini.cssFile)
+
     titre="Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
     write_bandeau(oF,titre,dico)
     #    write_footer(oF)
     oF.close()
 
 if __name__ == "__main__":
-    d_dep = ini.dep   #{'01':'Ain', '69':'Rhône','42':'Loire'}
-    #print(d_dep)
+
     ''' générer la page index'''
-    gen_page_index(d_dep)
+    gen_page_index(ini.dep)

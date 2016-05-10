@@ -34,8 +34,7 @@ def get_merimee(dep,musee):
     csv.register_dialect('merimee', Merimee())
     fname = "merimee-MH-valid.csv"
     file = open(fname, "r")
-    dic_m ={}
-    print(dep)
+    #print(dep)
     try:
         reader = csv.reader(file,'merimee')
         for row in reader:
@@ -52,10 +51,10 @@ if __name__ == "__main__":
     departement = '01'
     musee = mohist.Musee()
     musee = get_merimee(ini.dep[departement]['code'],musee)
-    for mh,MH in musee.collection.items():
-        print(mh, MH)
-        for key,value in MH.description[mh]['mer'].items():
-            print (key,':',value)
+    # for mh,MH in musee.collection.items():
+    #     print(mh, MH)
+    #     for key,value in MH.description[mh]['mer'].items():
+    #         print (key,':',value)
     print("Pour le département {}, il y a {} monuments dans la base Mérimée.".format(departement,len(musee.collection)))
     #print(dic_merimee['PA01000038'])
     musee.maj_salle()

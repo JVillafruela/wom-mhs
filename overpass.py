@@ -162,20 +162,21 @@ def get_osm(departement,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '42'
-    osmWip=[]
+    departement = '01'
+    #osmWip=[]
     musee = mohist.Musee()
     # choix du dico de la clé departement
-    print("avant =",mohist.MoHist.ctr_monument)
+    #print("avant =",mohist.MoHist.ctr_monument)
     musee = get_osm(ini.dep[departement]['name'],musee)
-    print ("apres =", mohist.MoHist.ctr_monument)
+    #print ("apres =", mohist.MoHist.ctr_monument)
     #for mh,MH in musee.collection.items():
         #print(mh, MH)
         #for value in MH.description[mh]['osm']:
     #     #print (mh, MH.description[mh]['osm'][0], MH.note)
+    print("Pour le département {}, il y a {} monuments dans la base OpenStreetMap.".format(departement,len(musee.collection)))
     musee.maj_salle()
     print(musee)
 
-    print("Pour le département {}, il y a {} monuments dans la base OpenStreetMap.".format(departement,len(musee.collection)))
+
     nb=musee.get_nb_MH('osm')
     print(nb)

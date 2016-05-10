@@ -233,19 +233,20 @@ def get_wikipedia(url_list,musee):
 
 
 if __name__ == "__main__":
-    departement = '69'
-    dic_wp = {}
-    Nb_noMHS=0
+    departement = '01'
+    # dic_wp = {}
+    # Nb_noMHS=0
     musee = mohist.Musee()
     musee = get_wikipedia(ini.dep[departement]['url_d'],musee)
-    for mh,MH in musee.collection.items():
-        print(mh, MH)
-        for key,value in MH.description[mh]['wip'].items():
-            print (key,':',value)
+    # for mh,MH in musee.collection.items():
+    #     print(mh, MH)
+    #     for key,value in MH.description[mh]['wip'].items():
+    #         print (key,':',value)
     print("Pour le département {}, il y a {} monuments dans Wikipédia.".format(departement,len(musee.collection)))
     #print(dic_merimee['PA01000038'])
     musee.maj_salle()
     print(musee)
+
     nb=musee.get_nb_MH('wip')
     print(nb)
 

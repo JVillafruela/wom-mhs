@@ -433,15 +433,14 @@ if __name__ == "__main__":
         base_url=ini.url_dev+"/Wom"
 
     ''' Définir les variables d'entrée'''
-    #d_dep ={'01':'Ain', '69':'Rhône','42':'Loire','38':'Isère'}
-    d_dep = ini.dep
-    d_dep = OrderedDict(sorted(d_dep.items(), key=lambda t: t[0]))
+    d_dep = OrderedDict(sorted(ini.dep.items(), key=lambda t: t[0]))
     bases =['mer','osm','wip']
+    
     ''' Générer la page index'''
     index.gen_page_index(d_dep)
     ''' Déplacer le fichier style.css vers la racine du site web'''
     copier_css(base_url)
-    '''générer les six pages de chaque département'''
+    '''générer les pages de chaque département'''
     # d= 01, 69   ...
     for d in d_dep:
         liste_salle=[]

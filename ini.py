@@ -5,22 +5,22 @@
 dep = {
            '01' : {
                 "name": ["Ain"],
-                "code" : "01",
-                "text":"de l'Ain",
-                "url_d" : ["/wiki/Liste_des_monuments_historiques_de_l'Ain"],
+                "code": "01",
+                "text": "de l'Ain",
+                "url_d": ["/wiki/Liste_des_monuments_historiques_de_l'Ain"],
                     },
-            '42' : {
-                "name":["Loire"],
-                "code" : "42",
-                "text" : "de la Loire",
-                "url_d" : ["/wiki/Liste_des_monuments_historiques_de_la_Loire"],
-                },
-            '69': {
-                "name":['Rhône','Métropole de Lyon'],
-                "code" : "69",
-                "text": "du Rhône",
-                "url_d" : ["/wiki/Liste_des_monuments_historiques_du_Rhône","/wiki/Liste_des_monuments_historiques_de_la_métropole_de_Lyon"],
-                },
+            # '42' : {
+            #     "name": ["Loire"],
+            #     "code": "42",
+            #     "text": "de la Loire",
+            #     "url_d": ["/wiki/Liste_des_monuments_historiques_de_la_Loire"],
+            #     },
+            # '69': {
+            #     "name": ['Rhône','Métropole de Lyon'],
+            #     "code": "69",
+            #     "text": "du Rhône",
+            #     "url_d": ["/wiki/Liste_des_monuments_historiques_du_Rhône","/wiki/Liste_des_monuments_historiques_de_la_métropole_de_Lyon"],
+            #     },
             # '38': {
             #     "38":['Isère'],
             #     "text": "de l'Isère",
