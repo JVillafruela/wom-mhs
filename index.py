@@ -44,17 +44,20 @@ def write_bandeau(file,t,dic):
         <ul>
         <li>Le ministère de la culture propose en "Open-Data" une
         <a href="https://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/" title="Base Mérimée" target="blank">
-        Base des immeubles de France</a>, une partie de la base Mérimée. Seulement les codes "PA*"". Les codes "IA*" et "EA*" n'apparaisent pas dans cette base ouverte."</li>
+        Base des immeubles de France</a>, une partie de la base Mérimée ( les codes PA* ). Les codes IA* et EA* qui n'apparaissent pas dans cette base ouverte ne sont donc pas comptés dans les colonnes Mérimée.</li>
 
         <li>L'encyclopédie "Wikipédia" a des pages dédiées aux monuments historiques par département
-        et/ou par ville, par exemple pour <a href="https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_l'Ain" title="L'Ain" target="blank">l'Ain</a>,</li>
+        et/ou par ville, par exemple pour <a href="https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_l'Ain" title="L'Ain" target="blank">l'Ain</a>,
+        ou pour <a href="https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_de_Bourg-en-Bresse#" title="Bourg-en-Bresse" target="blank">Bourg-en-Bresse</a></li>
         <li>Le site de cartographie participative "OpenStreetMap" répertorie aussi des monuments historiques ... voir
         <a href="http://wiki.openstreetmap.org/wiki/FR:Key:ref:mhs" title ="sur le Wiki OSM" target="blank">le wiki des tags 'mhs'</a> ou encore la page
         <a href="https://wiki.openstreetmap.org/wiki/Saint-%C3%89tienne/Patrimoine" title =" St Etienne Patrimoine" target="blank">  St Etienne Patrimoine</a>.</li>
         </ul>
         </p>
-    <p>Pour le moment, et pour tester la faisabilité, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts.</p>
-    <p>Ces pages sont complètement statiques. Elles sont générées automatiquement chaque nuit, par un script python, puis transférées sur le serveur.</p>
+    <p>Pour le moment, et pour tester l'intérêt de cet outil, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts.</p>
+    <p>Ces pages sont statiques avec un peu de jQuery. Elles sont générées automatiquement chaque nuit, par un script python sur un Nas, puis poussées sur le serveur.
+     Le code est visible et disponible sur <a href="http://jearro.noip.me/gitlist/Mhs.git" target="blank"> Mhs.git </a>.
+     <a href="http://jearro.noip.me/gitlist/Wom.git" target ="blank">L'historique des pages web</a> est aussi accessible.</p>
     <p> Dernière construction des pages, le :<b> {}</b></p>
     '''.format(time.strftime('%d-%m-%Y %H:%M',time.localtime()))
 
@@ -62,7 +65,7 @@ def write_bandeau(file,t,dic):
     <div id="menu">
         <ul>\n'''
     for d in dic:
-        print (d)
+        #print (d)
         link = d+"_pages/"+d+"_merosmwip.html"
         title = dic[d]['name'][0]
         contenu += '       <li><a href="{}" title="{}">{}</a></li>\n'.format(link,title,title)

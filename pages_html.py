@@ -177,13 +177,14 @@ def gen_pages(dep, musee):
             ''' le tableau '''
             table = get_table(page,musee)
             oF.write(table)
-        # # write_contenu(oF,stats,salle)
         # # '''écrire le pied de page'''
-        # index.write_footer(oF)
+            index.write_footer(oF)
         # # '''fermer le fichier'''
             oF.close()
 
-
+def copier_css(racine):
+    shutil.copy('./style.css',racine+"/style.css")
+    
 if __name__ == "__main__":
     stats={}
     ''' Définir les variables d'entrée'''
@@ -193,9 +194,9 @@ if __name__ == "__main__":
         base_url=ini.url_dev+"/Wom"
     d_dep = OrderedDict(sorted(ini.dep.items(), key=lambda t: t[0]))
     ''' Générer la page index'''
-    #index.gen_page_index(d_dep)
+    index.gen_page_index(d_dep)
     ''' Déplacer le fichier style.css vers la racine du site web'''
-    #copier_css(base_url)
+    copier_css(base_url)
     '''générer les pages de chaque département'''
     # d= 01, 42, 69,  etc...
     for d in d_dep:
