@@ -20,7 +20,7 @@ def get_bandeau(dep,title,musee):
     return bandeau
 
 def get_menu(dep, musee):
-    '''Ecrirure du menu'''
+    '''Ecriture du menu'''
     menu='<div id="menu">\n<ul>\n'
     #print(type(musee.salles))
     for salle in reversed(musee.salles):
@@ -65,8 +65,8 @@ def get_table(salle,musee):
         # Variables Champ Description
         if 'nom' in MH.description[mh]['mer']:
             description= MH.description[mh]['mer']['commune']+' - <b>'+MH.description[mh]['mer']['nom']+'</b> - '+MH.description[mh]['mer']['adresse']
-        # elif 'commune' in MH.description[mh]['wip']:
-        #     description= MH.description[mh]['wip']['commune'][:20]+' - '+MH.description[mh]['wip']['nom'][:45]
+        elif 'commune' in MH.description[mh]['wip']:
+             description= MH.description[mh]['wip']['commune']+' - <b>'+MH.description[mh]['wip']['nom']+'</b>'
         else :
             description= ' <b>'+ MH.description[mh]['osm']['tags_mhs']['name']+' </b>'
         # Variables Champ Mérimée
@@ -112,14 +112,17 @@ def get_table(salle,musee):
         #colonne description
         table+= '''           <div class="TableCell2">{}</div>'''.format(description)
         #colonne mérimée
-        table+= ''' <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>'''.format(l0,mh,mh)
+        if 'ERR' in mh:
+            table+= ''' <div class="TableCell1">  ----  </div>'''
+        else:
+            table+= ''' <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>'''.format(l0,mh,mh)
         #colonne OSM
         if 'osm' in salle.salle['nom']:
             table += '''<div class="TableCell12"><a {}" target="blank" title="Voir sur openstreetmap.org"> ORG </a> -
             <a {}" target="blank" title="Editer avec ID"> ID </a> - <a {}" target="blank" title="Editer avec Josm"> Josm </a> </div>
             '''.format(url_osm_org, url_osm_id, url_josm)
         else:
-            table+='''<div class="TableCell12">  ---- </div>'''
+            table+='''<div class="TableCell12">  ----  </div>'''
 
         # colonne WP
         if url_wip and url_osmwp :
@@ -154,29 +157,31 @@ def gen_pages(dep, musee):
     '''Définir le menu '''
     menu = get_menu(dep, musee)
     for page in reversed(musee.salles):
-        page_name=str(dep['code'])+'_'+page.salle['nom']+'.html'
-        print("Construction de la page  {}.".format(page_name))
-        oF = index.creer_fichier(page_name, dep)
-        titre=" Wom : Mérimée, OpenStreetMap, Wikipédia"
-        index.write_entete(oF, titre, "../"+ini.cssFile)
-        oF.write(bandeau)
-        #corriger la classe active
-        menu=menu.replace('class="active"','')
-        chercher= '<li><a href="{}"'.format(page_name)
-        remplacer= '<li><a class="active" href="{}"'.format(page_name)
-        menu=menu.replace(chercher, remplacer)
-        oF.write(menu)
-        '''écrire le contenu'''
-        header=get_header().format(page.salle['titre'])
-        oF.write(header)
-        ''' le tableau '''
-        table = get_table(page,musee)
-        oF.write(table)
-    # # write_contenu(oF,stats,salle)
-    # # '''écrire le pied de page'''
-    # index.write_footer(oF)
-    # # '''fermer le fichier'''
-        oF.close()
+        if len(page.s_collection) >0:
+            page_name=str(dep['code'])+'_'+page.salle['nom']+'.html'
+            print("Construction de la page  {}.".format(page_name))
+            print(page)
+            oF = index.creer_fichier(page_name, dep)
+            titre=" Wom : Mérimée, OpenStreetMap, Wikipédia"
+            index.write_entete(oF, titre, "../"+ini.cssFile)
+            oF.write(bandeau)
+            #corriger la classe active
+            menu=menu.replace('class="active"','')
+            chercher= '<li><a href="{}"'.format(page_name)
+            remplacer= '<li><a class="active" href="{}"'.format(page_name)
+            menu=menu.replace(chercher, remplacer)
+            oF.write(menu)
+            '''écrire le contenu'''
+            header=get_header().format(page.salle['titre'])
+            oF.write(header)
+            ''' le tableau '''
+            table = get_table(page,musee)
+            oF.write(table)
+        # # write_contenu(oF,stats,salle)
+        # # '''écrire le pied de page'''
+        # index.write_footer(oF)
+        # # '''fermer le fichier'''
+            oF.close()
 
 
 if __name__ == "__main__":
@@ -196,6 +201,7 @@ if __name__ == "__main__":
     for d in d_dep:
         print('------'+d+'------')
         ''' Acquérir les datas'''
+        #print('----- Acquisition des datas ------')
         museum= mohist.Musee()
         museum= overpass.get_osm(d_dep[d]['name'],museum)
         museum= merimee.get_merimee(d_dep[d]['code'],museum)
@@ -203,7 +209,7 @@ if __name__ == "__main__":
         ''' Trier et compter '''
         museum.maj_salle()
         museum.maj_stats()
-        print('----- Statistiques globales ------')
+        #print('----- Statistiques globales ------')
         print("Merimée :",museum.stats['mer'])
         print("OSM :", museum.stats['osm'])
         print("wikipedia :",museum.stats['wip'])
