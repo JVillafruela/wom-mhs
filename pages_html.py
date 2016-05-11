@@ -22,7 +22,7 @@ def get_bandeau(dep,title,musee):
 def get_menu(dep, musee):
     '''Ecrirure du menu'''
     menu='<div id="menu">\n<ul>\n'
-    print(type(musee.salles))
+    #print(type(musee.salles))
     for salle in reversed(musee.salles):
         if len(salle.s_collection) >0:
             link = dep["code"]+"_"+salle.salle['nom']+".html"

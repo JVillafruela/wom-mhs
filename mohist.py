@@ -143,9 +143,6 @@ class MoHist:
                                              'mhs_bis': mhs_bis}
         self.note+=2
 
-        # #correction si mhs n'est pas dans mérimée
-        # if not self.description[self.mhs]['mer']:
-        #     self.note+=1
 
     def add_infos_wip(self, insee, commune, nom, geo, url, ident, infos_manquantes):
         self.description[self.mhs]['wip'] = {'insee': insee,

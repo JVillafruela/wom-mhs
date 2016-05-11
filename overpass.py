@@ -19,7 +19,6 @@ from __future__ import unicode_literals
 import overpy,ini,mohist
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
-from collections import OrderedDict
 
 cache_opts = {
     'cache.type': 'file',

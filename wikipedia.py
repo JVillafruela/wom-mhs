@@ -15,7 +15,6 @@ from __future__ import unicode_literals
 import requests,bs4
 from bs4 import BeautifulSoup
 import ini,insee,mohist
-from collections import OrderedDict
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 

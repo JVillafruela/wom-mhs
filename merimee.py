@@ -16,7 +16,6 @@
 '''
 from __future__ import unicode_literals
 import csv
-from collections import OrderedDict
 import mohist,ini
 
 class Merimee(csv.excel):
