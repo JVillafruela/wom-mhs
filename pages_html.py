@@ -64,9 +64,11 @@ def get_table(salle,musee):
         note_wp="-Wp: "
         # Variables Champ Description
         if 'nom' in MH.description[mh]['mer']:
-            description = MH.description[mh]['mer']['nom'][:45]+'; '+MH.description[mh]['mer']['commune'][:20]
+            description= MH.description[mh]['mer']['commune']+' - <b>'+MH.description[mh]['mer']['nom']+'</b> - '+MH.description[mh]['mer']['adresse']
+        # elif 'commune' in MH.description[mh]['wip']:
+        #     description= MH.description[mh]['wip']['commune'][:20]+' - '+MH.description[mh]['wip']['nom'][:45]
         else :
-            description =  MH.description[mh]['osm']['tags_mhs']['name']
+            description= ' <b>'+ MH.description[mh]['osm']['tags_mhs']['name']+' </b>'
         # Variables Champ Mérimée
             # RAS
         # Variables Champ OSM

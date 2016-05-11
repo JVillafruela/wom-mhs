@@ -82,7 +82,6 @@ class Musee:
         return x
 
 
-
 class Salle:
 
     def __init__(self, nom, titre, onglet=None, titre_onglet=None):
@@ -142,7 +141,6 @@ class MoHist:
                                              'tags_manquants': tags_absents,
                                              'mhs_bis': mhs_bis}
         self.note+=2
-
 
     def add_infos_wip(self, insee, commune, nom, geo, url, ident, infos_manquantes):
         self.description[self.mhs]['wip'] = {'insee': insee,
