@@ -100,7 +100,13 @@ def get_table(salle,musee):
                 if len(MH.description[mh]['wip']['infos_manquantes'])>0:
                     note_wp+=", ".join(MH.description[mh]['wip']['infos_manquantes'])
                 else:
-                    note_wp=""
+                    note_wp+=""
+            if 'mhs_ter' in MH.description[mh]['wip'] :
+                note_wp+=', <a href="'+MH.description[mh]['wip']['mhs_ter']['url']+'#'+MH.description[mh]['wip']['mhs_ter']['id']+'" target="blank" \
+                        title="Monument en triple dans WP"> Triple WP </a>'
+            elif 'mhs_ter' not in MH.description[mh]['wip'] and 'mhs_bis' in MH.description[mh]['wip'] :
+                note_wp+=', <a href="'+MH.description[mh]['wip']['mhs_bis']['url']+'#'+MH.description[mh]['wip']['mhs_bis']['id']+'" target="blank" \
+                        title="Monument en double dans WP"> Double WP </a>'
             # recherche des urls WP
             if 'url' in MH.description[mh]['wip']:
                 url_wip = MH.description[mh]['wip']['url']+"#"+MH.description[mh]['wip']['id']
@@ -184,7 +190,7 @@ def gen_pages(dep, musee):
 
 def copier_css(racine):
     shutil.copy('./style.css',racine+"/style.css")
-    
+
 if __name__ == "__main__":
     stats={}
     ''' Définir les variables d'entrée'''

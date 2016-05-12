@@ -78,7 +78,6 @@ def analyseData(data,url,musee):
                         infos_manquantes.append("Page monument absente")
                     else :
                         nom =''
-
                 if n == 1:
                     # recherche la commune et l'url_commune
                     commune = val.find('a').string.lstrip().rstrip()
@@ -87,7 +86,6 @@ def analyseData(data,url,musee):
                     #recherche code_insee
                     c_insee=insee.get_insee(commune)
                     #print ('commune =', commune, "code insee =",c_insee)
-
                 if n == 2 and nom == '' :
                     ''' le nom est vide s'il y a une grande ville (sauf métropole de lyon) '''
                     url_gc = val.find('a')['href']
@@ -96,7 +94,6 @@ def analyseData(data,url,musee):
                     grande_commune=True
                     dat = getData(url_gc)
                     analyseSecondData(dat,url_gc,musee)
-
                 if n == 3:
                     #analyse de la géolocalisation
                     rep = val.find('span', {'class':'geo-dec'})
@@ -115,20 +112,40 @@ def analyseData(data,url,musee):
                     if "Image manquante" in val.text:
                         #print(nom,"  Pas d'image")
                         infos_manquantes.append("Image absente")
-
                 if n == 4 and not grande_commune:
                     #recherche du code MHS
                     rep = val.find('cite', {'style':'font-style: normal'})
                     if isinstance(rep,bs4.element.Tag) :
                         code = rep.get_text().strip()
-                        # print ('Mhs : ', code)
+                        # if code == 'PA00117533' or code == 'PA00117545':
+                        #     print ('Mhs : ', code)
                         # mhs_url = val.find('a').attrs['href']
                         # print(mhs_url)
-                        #enregistrement d'un momument si le code mhs existe
-                        MH=musee.add_Mh(code)
-                        #def add_infos_wip(self, insee, commune, nom, url, ident, infos_manquantes):
-                        MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
-                        #dic_mhs[code] = [nom,commune,c_insee,url,identifiant,infos_manquantes]
+                        # vérifier si le mH exite déjà dans le musee
+                        if (code in musee.collection) and (code in musee.collection[code].description) and (musee.collection[code].description[code]['wip'] !={}):
+                            # code identique sur deux/trois objets WIP :
+                            if 'mhs_bis' in  musee.collection[code].description[code]['wip'] :
+                                musee.collection[code].description[code]['wip']['mhs_ter']={'insee': insee,
+                                                                         'commune': commune,
+                                                                         'nom': nom,
+                                                                         'geoloc' : geo,
+                                                                         'url': url,
+                                                                         'id': identifiant,
+                                                                         'infos_manquantes': infos_manquantes }
+                            else :
+                                musee.collection[code].description[code]['wip']['mhs_bis']={'insee': insee,
+                                                                     'commune': commune,
+                                                                     'nom': nom,
+                                                                     'geoloc' : geo,
+                                                                     'url': url,
+                                                                     'id': identifiant,
+                                                                     'infos_manquantes': infos_manquantes }
+                            #print (musee.collection[code].description[code]['wip'])
+                        else:
+                            #enregistrement d'un momument si le code mhs existe
+                            MH=musee.add_Mh(code)
+                            #def add_infos_wip(self, insee, commune, nom, url, ident, infos_manquantes):
+                            MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
                     else :
                         #print ("Erreur : Pas de code MHS pour "+nom+" à "+commune+'\n')
                         code = "ERR-"+str(ctr_no_mhs).zfill(4)
@@ -149,6 +166,8 @@ def analyseSecondData(data,url,musee):
         commune=commune.replace("%C3%A9","é")
     if "%C3%B4" in commune:
         commune=commune.replace("%C3%B4","ô")
+    if "%C3%89" in commune:
+        commune=commune.replace("%C3%89","É")
     print (commune)
     c_insee = insee.get_insee(commune)
     #print ("commune = ",commune," code insee =",c_insee )
@@ -213,10 +232,30 @@ def analyseSecondData(data,url,musee):
                         #print (code)
                         # mhs_url = val.find('a').attrs['href']
                         # print(mhs_url)
-                    #enregistrement d'un momument si le code mhs existe
-                        #dic_mhs[code] = [nom,commune,c_insee,url,identifiant,infos_manquantes]
-                        MH=musee.add_Mh(code)
-                        MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
+                        #enregistrement d'un momument si le code mhs existe
+                        # vérifier si le mH exite déjà dans le musee
+                        if (code in musee.collection) and (code in musee.collection[code].description) and (musee.collection[code].description[code]['wip'] !={}):
+                            # code identique sur deux objets WIP : ajouter le texte 'Bis' au code
+                            if 'mhs_bis' in  musee.collection[code].description[code]['wip'] :
+                                musee.collection[code].description[code]['wip']['mhs_ter']={'insee': insee,
+                                                                         'commune': commune,
+                                                                         'nom': nom,
+                                                                         'geoloc' : geo,
+                                                                         'url': url,
+                                                                         'id': identifiant,
+                                                                         'infos_manquantes': infos_manquantes }
+                            else :
+                                musee.collection[code].description[code]['wip']['mhs_bis']={'insee': insee,
+                                                                     'commune': commune,
+                                                                     'nom': nom,
+                                                                     'geoloc' : geo,
+                                                                     'url': url,
+                                                                     'id': identifiant,
+                                                                     'infos_manquantes': infos_manquantes }
+
+                        else:
+                            MH=musee.add_Mh(code)
+                            MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
                     else :
                         #print ("Erreur : Pas de code MHS pour "+nom+" à "+commune+'\n')
                         code = "ERR-"+str(ctr_no_mhs).zfill(4)
@@ -236,7 +275,7 @@ def get_wikipedia(url_list,musee):
 
 
 if __name__ == "__main__":
-    departement = '69'
+    departement = '42'
     # dic_wp = {}
     # Nb_noMHS=0
     musee = mohist.Musee()
