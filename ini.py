@@ -3,12 +3,12 @@
 
 # dictionnaire des départements à analyser
 dep = {
-           '01' : {
-                "name": ["Ain"],
-                "code": "01",
-                "text": "de l'Ain",
-                "url_d": ["/wiki/Liste_des_monuments_historiques_de_l'Ain"],
-                    },
+        #    '01' : {
+        #         "name": ["Ain"],
+        #         "code": "01",
+        #         "text": "de l'Ain",
+        #         "url_d": ["/wiki/Liste_des_monuments_historiques_de_l'Ain"],
+        #             },
             # '42' : {
             #     "name": ["Loire"],
             #     "code": "42",

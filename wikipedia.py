@@ -147,7 +147,9 @@ def analyseSecondData(data,url,musee):
     #correction encodage nom de commune
     if "%C3%A9" in commune:
         commune=commune.replace("%C3%A9","é")
-
+    if "%C3%B4" in commune:
+        commune=commune.replace("%C3%B4","ô")
+    print (commune)
     c_insee = insee.get_insee(commune)
     #print ("commune = ",commune," code insee =",c_insee )
     #url_ville = url.split('.org')[1]
@@ -182,7 +184,7 @@ def analyseSecondData(data,url,musee):
                     else :
                         nom =''
 
-                if n == 2:
+                if (commune!="Lyon" and n==2) or (commune=="Lyon" and n==3) :
                     #analyse de la géolocalisation
                     rep = val.find('span', {'class':'geo-dec'})
                     if isinstance(rep,bs4.element.Tag) :
@@ -196,17 +198,19 @@ def analyseSecondData(data,url,musee):
                         infos_manquantes.append("Géolocalisation absente")
                         # liste_incomplet.append([nom,commune,"géolocalisation absente"])
                         # lat=lon=''
-                if n == 6:
+                if (commune!="Lyon" and n == 6) or (commune=="Lyon" and n==7) :
                     # analyse présence image
                     if "Image manquante" in val.text:
                         #print(nom,"  Pas d'image")
                         infos_manquantes.append("Image absente")
-                if n == 3 :
+                if (commune!="Lyon" and n == 3) or (commune=="Lyon" and n==4):
                     #recherche du code MHS
                     rep = val.find('cite', {'style':'font-style: normal'})
+                    #rep = val.find('cite')
+                    #print (rep)
                     if isinstance(rep,bs4.element.Tag) :
                         code = rep.get_text().strip()
-                        # print ('Mhs : ', code)
+                        #print (code)
                         # mhs_url = val.find('a').attrs['href']
                         # print(mhs_url)
                     #enregistrement d'un momument si le code mhs existe
@@ -232,7 +236,7 @@ def get_wikipedia(url_list,musee):
 
 
 if __name__ == "__main__":
-    departement = '01'
+    departement = '69'
     # dic_wp = {}
     # Nb_noMHS=0
     musee = mohist.Musee()
