@@ -36,7 +36,7 @@ def get_menu(dep, musee):
      </div>'''
     return menu
 
-def get_header():
+ def get_header():
     header='''
     <div class="TableComplet" >
     <div class="TableTitre"> {}</div>
