@@ -48,7 +48,6 @@ class Musee:
         else:
             MH=MoHist(ref)
             self.collection[ref]=MH
-
         return MH
 
     def maj_salle(self):
@@ -59,8 +58,10 @@ class Musee:
         # mise à jour
         for ref, MH in self.collection.items():
             #correction de la note si osm donne un lien wikipédia
+            #print(MH.note, ref)
             if MH.note in [2,3]:
                 MH.corrige_note()
+
             self.salles[MH.note].s_collection.append(ref)
 
     def maj_stats(self):
