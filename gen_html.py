@@ -32,22 +32,24 @@ def get_menu(dep, musee):
             menu += '<li><a href="{}" title="{}" >{} {}</a></li>'.format(link, titre_onglet, nb_MH, onglet)
     menu+='<li class="retour"><a href="../index.html" title="Autres départements" > Menu général </a></li>'
     menu+= '''</ul>
-        </div>
-     </div>'''
+        </div>'''
     return menu
 
- def get_header():
+def get_header():
     header='''
-    <div class="TableComplet" >
-    <div class="TableTitre"> {}</div>
-    <div class="TableHeading">
-        <div class="TableHead2">    Description</div>
-        <div class="TableHead1">Mérimée</div>
-        <div class="TableHead12">OSM</div>
-        <div class="TableHead1">WP</div>
-        <div class="TableHead3">    Remarques : erreurs ou manques </div>
-    </div>
-    <div class="TableBody">
+    <div id="container">
+    <table id="tableau">
+    <caption id='titre'> {}</caption>
+    <thead class='heading'>
+        <tr>
+            <th>Description</th>
+            <th>Mérimée</th>
+            <th>OSM</th>
+            <th>WP</th>
+            <th colspan="2">Remarques : erreurs ou manques</th>
+        </tr>
+    </thead>
+    <tbody>
     '''
     return header
 
@@ -114,46 +116,50 @@ def get_table(salle,musee):
                 url_wip=""
     ###########################################
         #debut de la table
-        table += '''<div class="TableRow">'''
+        table += '''<tr>'''
         #colonne description
-        table+= '''           <div class="TableCell2">{}</div>'''.format(description)
+        table+= '''           <td class="desc">{}</td>'''.format(description)
         #colonne mérimée
         if 'ERR' in mh:
-            table+= ''' <div class="TableCell1">  ----  </div>'''
+            table+= ''' <td class="lien">  ----  </td>'''
         else:
-            table+= ''' <div class="TableCell1"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></div>'''.format(l0,mh,mh)
+            table+= ''' <td class="lien"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></td>'''.format(l0,mh,mh)
         #colonne OSM
         if 'osm' in salle.salle['nom']:
-            table += '''<div class="TableCell12"><a {}" target="blank" title="Voir sur openstreetmap.org"> ORG </a> -
-            <a {}" target="blank" title="Editer avec ID"> ID </a> - <a {}" target="blank" title="Editer avec Josm"> Josm </a> </div>
+            table += '''<td class="lien"><a {}" target="blank" title="Voir sur openstreetmap.org"> ORG </a> -
+            <a {}" target="blank" title="Editer avec ID"> ID </a> - <a {}" target="blank" title="Editer avec Josm"> Josm </a> </td>
             '''.format(url_osm_org, url_osm_id, url_josm)
         else:
-            table+='''<div class="TableCell12">  ----  </div>'''
+            table+='''<td class="lien">  ----  </td>'''
 
         # colonne WP
         if url_wip and url_osmwp :
-            table+='''<div class="TableCell1"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> -
-          <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </div>'''.format(url_wip,url_osmwp)
+            table+='''<td class="lien"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> -
+          <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </td>'''.format(url_wip,url_osmwp)
         elif url_wip and not url_osmwp:
             url_wip = MH.description[mh]['wip']['url']+"#"+MH.description[mh]['wip']['id']
-            table+='''<div class="TableCell1"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> </div>'''.format(url_wip)
+            table+='''<td class="lien"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> </td>'''.format(url_wip)
         elif not url_wip and url_osmwp:
             url_osmwp = 'href="https://fr.wikipedia.org/wiki/'+MH.description[mh]['osm']['tags_mhs']['wikipedia']
-            table+='''<div class="TableCell1">  <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </div>'''.format(url_osmwp)
+            table+='''<td class="lien">  <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </td>'''.format(url_osmwp)
         else:
-            table+='''<div class="TableCell1">  ---- </div>'''
+            table+='''<td class="lien">  ---- </td>'''
         #table note OSM
         if note_osm !="-Osm: ":
-            table += '''<div class="TableCell3"> {} </div> '''.format(note_osm)
+            table += '''<td class="texte"> {} </td> '''.format(note_osm)
         else:
-            table += '''<div class="TableCell3">  </div>'''
+            table += '''<td class="texte" >  </td>'''
         #table note WP
         if note_wp !="" and not note_wp=="-Wp: ":
-            table += '''<div class="TableCell3"> {} </div> '''.format(note_wp)
+            table += '''<td  class="texte" > {} </td> '''.format(note_wp)
         else:
-            table += '''<div class="TableCell3">  </div>'''
+            table += '''<td  class="texte">  </td>'''
         #table fin
-        table+='''</div>'''
+        table+='''</tr>'''
+    table+=''' </tbody>
+    </table>
+    </div>
+    '''
     return table
 
 def gen_pages(dep, musee):
@@ -184,7 +190,7 @@ def gen_pages(dep, musee):
             table = get_table(page,musee)
             oF.write(table)
         # # '''écrire le pied de page'''
-            index.write_footer(oF)
+            #index.write_footer(oF)
         # # '''fermer le fichier'''
             oF.close()
 
@@ -202,7 +208,7 @@ if __name__ == "__main__":
     ''' Générer la page index'''
     index.gen_page_index(d_dep)
     ''' Déplacer le fichier style.css vers la racine du site web'''
-    copier_css(base_url)
+    #copier_css(base_url)
     '''générer les pages de chaque département'''
     # d= 01, 42, 69,  etc...
     for d in d_dep:
