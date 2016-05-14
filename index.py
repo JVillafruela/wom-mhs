@@ -23,8 +23,8 @@ def write_entete(file, title, cssFile) :
     header+='''
     <script>
     $(document).ready(function(){
-     $(".tr").click(function(){
-     $(".tr").each(function(){
+     $(".TableRow").click(function(){
+     $(".TableRow").each(function(){
      $(this).removeClass("active");
      });
      $(this).addClass("active");
