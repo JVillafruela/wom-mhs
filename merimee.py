@@ -15,12 +15,26 @@
         la version actuelle est datée du : 12 avril 2016
 '''
 from __future__ import unicode_literals
+import requests
+from bs4 import BeautifulSoup
 import csv
 import mohist,ini
 
 class Merimee(csv.excel):
     # Séparateur de champ
     delimiter = "|"
+
+def get_commune(code):
+	'''
+    faire une requette sur http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1=IA01000159
+    pour récupérer le nom de la commune d'un monument s'il ne fait pas partie de la base ouverte
+	'''
+	url= "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
+	r = requests.get(url+code)
+	contenu = r.text
+	page= BeautifulSoup(contenu,'html.parser')
+	tableau=  page.find_all("td", attrs={"class":u"champ"})[2].text
+	return tableau.split("; ")[-1]
 
 def get_merimee(dep,musee):
     '''
