@@ -14,6 +14,7 @@ def get_bandeau(dep,title,musee):
 
     bandeau= '''<body>
      <div id="bandeau"> <h4 class='Titre'>{}'''.format(title)
+    #bandeau+=''' <p id="msg">&nbsp;</p> '''
     bandeau+= '''</h4> <p><b>Pour le département {}</b>, la base Mérimée Ouverte décrit {} monuments historiques.</p>
          <p>Ils sont {} dans wikipédia (pages départementales), et OSM en connait {}.</p>'''.format(dep['text'],musee.stats['mer'],musee.stats['wip'],musee.stats['osm'])
     bandeau+= '''\n</div>'''
@@ -42,11 +43,11 @@ def get_header():
     <caption id='titre'> {}</caption>
     <thead class='heading'>
         <tr>
-            <th>Description</th>
-            <th>Mérimée</th>
+            <th data-sort="string">Description</th>
+            <th data-sort="string">Mérimée</th>
             <th>OSM</th>
             <th>WP</th>
-            <th>Remarques : erreurs ou manques</th>
+            <th colspan="2">Remarques : erreurs ou manques</th>
         </tr>
     </thead>
     <tbody>
@@ -147,13 +148,13 @@ def get_table(salle,musee):
             table+='''<td class="lien">  ---- </td>'''
         #table remarques OSM et WP
         if note_osm !="<b> Osm : </b>" and note_wp!="<b> Wp : </b>":
-            table += '''<td class="texte"> {} {} </td> '''.format(note_osm,note_wp)
+            table += '''<td class="texte"> {}  </td> <td class="texte"> {} </td> '''.format(note_osm,note_wp)
         elif note_osm !="<b> Osm : </b>" and not note_wp!="<b> Wp : </b>":
-            table += '''<td class="texte"> {} </td> '''.format(note_osm)
+            table += '''<td class="texte"> {} </td> <td class="texte"></td> '''.format(note_osm)
         elif not note_osm !="<b> Osm : </b>" and note_wp!="<b> Wp : </b>":
-            table += '''<td class="texte">   {} </td> '''.format(note_wp)
+            table += '''<td class="texte"></td> <td class="texte"> {} </td>  '''.format(note_wp)
         else:
-            table += '''<td class="texte" >  </td>'''
+            table += '''<td class="texte" ></td><td class="texte"></td>  '''
 
         #table fin
         table+='''</tr>'''
@@ -197,6 +198,7 @@ def gen_pages(dep, musee):
 
 def copier_css(racine):
     shutil.copy('./style.css',racine+"/style.css")
+    shutil.copytree('./js',racine+"/js")
 
 if __name__ == "__main__":
     stats={}
@@ -209,7 +211,7 @@ if __name__ == "__main__":
     ''' Générer la page index'''
     index.gen_page_index(d_dep)
     ''' Déplacer le fichier style.css vers la racine du site web'''
-    #copier_css(base_url)
+    copier_css(base_url)
     '''générer les pages de chaque département'''
     # d= 01, 42, 69,  etc...
     for d in d_dep:

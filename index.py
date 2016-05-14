@@ -19,7 +19,9 @@ def write_entete(file, title, cssFile) :
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>{}</title>\n\t'''.format(title)
     header+='''<link rel="stylesheet" type="text/css" href="{}">\n\t'''.format(cssFile)
-    header+='''<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"> </script>'''
+    #header+='''<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"> </script>'''
+    header+='''<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+                <script src="../js/stupidtable.min.js?dev"></script>'''
     header+='''
     <script>
     $(document).ready(function(){
@@ -31,6 +33,32 @@ def write_entete(file, title, cssFile) :
      });
     });
     </script>
+     <script>
+    $(function(){
+        var table = $("table").stupidtable();
+
+        table.on("beforetablesort", function (event, data) {
+          // Apply a "disabled" look to the table while sorting.
+          // Using addClass for "testing" as it takes slightly longer to render.
+          $("#msg").text("Sorting...");
+          $("table").addClass("disabled");
+        });
+
+        table.on("aftertablesort", function (event, data) {
+          // Reset loading message.
+          $("#msg").html("&nbsp;");
+          $("table").removeClass("disabled");
+
+          var th = $(this).find("th");
+          th.find(".arrow").remove();
+          var dir = $.fn.stupidtable.dir;
+
+          var arrow = data.direction === dir.ASC ? "&uarr;" : "&darr;";
+          th.eq(data.column).append('<span class="arrow"> ' + arrow +'</span>');
+        });
+    });
+    </script>
+
     </head>'''
 
     file.write(header)

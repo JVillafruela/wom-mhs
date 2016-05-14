@@ -30,7 +30,7 @@ dep = {
 
 # Attention ce répertoire doit être créer avant le lancement du programme !
 # racine des pages web
-prod=False
+prod=True
 # en local
 url_dev="/home/jean/osm/monuments_historiques"
 # sur Syno
