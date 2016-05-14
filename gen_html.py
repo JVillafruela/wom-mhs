@@ -46,7 +46,7 @@ def get_header():
             <th>Mérimée</th>
             <th>OSM</th>
             <th>WP</th>
-            <th colspan="2">Remarques : erreurs ou manques</th>
+            <th>Remarques : erreurs ou manques</th>
         </tr>
     </thead>
     <tbody>
@@ -62,8 +62,8 @@ def get_table(salle,musee):
     #for mh,MH in salle.s_collection.items():
     for mh in sorted(salle.s_collection):
         MH=musee.collection[mh]
-        note_osm="-Osm: "
-        note_wp="-Wp: "
+        note_osm="<b> Osm : </b>"
+        note_wp="<b> Wp : </b>"
         # Variables Champ Description
         if 'nom' in MH.description[mh]['mer']:
             description= MH.description[mh]['mer']['commune']+' - <b>'+MH.description[mh]['mer']['nom']+'</b> - '+MH.description[mh]['mer']['adresse']
@@ -145,16 +145,16 @@ def get_table(salle,musee):
             table+='''<td class="lien">  <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </td>'''.format(url_osmwp)
         else:
             table+='''<td class="lien">  ---- </td>'''
-        #table note OSM
-        if note_osm !="-Osm: ":
+        #table remarques OSM et WP
+        if note_osm !="<b> Osm : </b>" and note_wp!="<b> Wp : </b>":
+            table += '''<td class="texte"> {} {} </td> '''.format(note_osm,note_wp)
+        elif note_osm !="<b> Osm : </b>" and not note_wp!="<b> Wp : </b>":
             table += '''<td class="texte"> {} </td> '''.format(note_osm)
+        elif not note_osm !="<b> Osm : </b>" and note_wp!="<b> Wp : </b>":
+            table += '''<td class="texte">   {} </td> '''.format(note_wp)
         else:
             table += '''<td class="texte" >  </td>'''
-        #table note WP
-        if note_wp !="" and not note_wp=="-Wp: ":
-            table += '''<td  class="texte" > {} </td> '''.format(note_wp)
-        else:
-            table += '''<td  class="texte">  </td>'''
+
         #table fin
         table+='''</tr>'''
     table+=''' </tbody>
