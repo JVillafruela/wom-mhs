@@ -70,7 +70,8 @@ def get_table(salle,musee):
         elif 'commune' in MH.description[mh]['wip']:
              description= MH.description[mh]['wip']['commune']+' - <b>'+MH.description[mh]['wip']['nom']+'</b>'
         else :
-            description= ' <b>'+ MH.description[mh]['osm']['tags_mhs']['name']+' </b>'
+            commune=merimee.get_commune(mh)
+            description= commune+' - <b>'+ MH.description[mh]['osm']['tags_mhs']['name']+' </b>'
         # Variables Champ Mérimée
             # RAS
         # Variables Champ OSM
