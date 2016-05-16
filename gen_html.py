@@ -198,7 +198,8 @@ def gen_pages(dep, musee):
 
 def copier_css(racine):
     shutil.copy('./style.css',racine+"/style.css")
-    shutil.copytree('./js',racine+"/js")
+    if not os.path.exists(racine+"/js"):
+        shutil.copytree('./js',racine+"/js")
 
 if __name__ == "__main__":
     stats={}
