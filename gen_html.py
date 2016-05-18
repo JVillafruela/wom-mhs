@@ -225,6 +225,7 @@ if __name__ == "__main__":
         museum= wikipedia.get_wikipedia(d_dep[d]['url_d'],museum)
         ''' Trier et compter '''
         museum.maj_salle()
+        #pour les salles mer et merwip
         for x in [1,5]:
             museum.gen_infos_osm(x)
         museum.maj_stats()

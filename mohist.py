@@ -93,6 +93,8 @@ class Musee:
                 infos=""
                 #print ("ref:mhs = {}".format(mh))
                 infos+="<ul><li>ref:mhs= {}".format(mh)+"</li>"
+                # le nom probable du MH
+                infos+="<li>name= {}</li>".format(self.collection[mh].description[mh]['mer']['nom'])
                 #print ("heritage:operator= mhs")
                 infos+="<li>heritage:operator= mhs</li>"
                 classement = self.collection[mh].description[mh]['mer']['classement']
