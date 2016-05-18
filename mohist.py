@@ -82,11 +82,13 @@ class Musee:
                 x+=1
         return x
 
-    def gen_infos_osm(self):
-        ''' Produire des infos d'aide pour la création du MH dans OSM'''
-
-        if len(self.salles[5].s_collection) > 0:
-            for mh in self.salles[5].s_collection:
+    def gen_infos_osm(self,n):
+        ''' Produire des infos d'aide pour la création du MH dans OSM
+            n est le rang de la salle dans la liste des salles (voir plus haut)
+        '''
+        #print("Génération complémentaire pour : {}".format(self.salles[n].salle['nom']))
+        if len(self.salles[n].s_collection) > 0 :
+            for mh in self.salles[n].s_collection:
                 #print (self.collection[mh])
                 infos=""
                 #print ("ref:mhs = {}".format(mh))
@@ -109,7 +111,7 @@ class Musee:
                     infos+="<li>Classement : {}".format(classement)
                 #print ("Source : Base Mérimée ouverte - avril 2016 ")
                 infos+="<li>Source : Base Mérimée ouverte - avril 2016</li>"
-                if self.collection[mh].description[mh]['wip']['geoloc']:
+                if 'geoloc' in self.collection[mh].description[mh]['wip']:
                     #print ("Geolocalisation : {}".format(self.collection[mh].description[mh]['wip']['geoloc']))
                     lat= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[0]
                     lon= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[1]

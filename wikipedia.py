@@ -168,7 +168,7 @@ def analyseSecondData(data,url,musee):
         commune=commune.replace("%C3%B4","ô")
     if "%C3%89" in commune:
         commune=commune.replace("%C3%89","É")
-    print (commune)
+    #print (commune)
     c_insee = insee.get_insee(commune)
     #print ("commune = ",commune," code insee =",c_insee )
     #url_ville = url.split('.org')[1]

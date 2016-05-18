@@ -173,7 +173,7 @@ def gen_pages(dep, musee):
     for page in reversed(musee.salles):
         if len(page.s_collection) >0:
             page_name=str(dep['code'])+'_'+page.salle['nom']+'.html'
-            print("Construction de la page  {}.".format(page_name))
+            #print("Construction de la page  {}.".format(page_name))
             print(page)
             oF = index.creer_fichier(page_name, dep)
             titre=" Wom : Mérimée, OpenStreetMap, Wikipédia"
@@ -225,7 +225,8 @@ if __name__ == "__main__":
         museum= wikipedia.get_wikipedia(d_dep[d]['url_d'],museum)
         ''' Trier et compter '''
         museum.maj_salle()
-        museum.gen_infos_osm()
+        for x in [1,5]:
+            museum.gen_infos_osm(x)
         museum.maj_stats()
         #print('----- Statistiques globales ------')
         print("Merimée :",museum.stats['mer'])
