@@ -82,6 +82,45 @@ class Musee:
                 x+=1
         return x
 
+    def gen_infos_osm(self):
+        ''' Produire des infos d'aide pour la création du MH dans OSM'''
+
+        if len(self.salles[5].s_collection) > 0:
+            for mh in self.salles[5].s_collection:
+                #print (self.collection[mh])
+                infos=""
+                #print ("ref:mhs = {}".format(mh))
+                infos+="<ul><li>ref:mhs= {}".format(mh)+"</li>"
+                #print ("heritage:operator= mhs")
+                infos+="<li>heritage:operator= mhs</li>"
+                classement = self.collection[mh].description[mh]['mer']['classement']
+                # si une seule date
+                if not ";" in classement:
+                    if "classé" in classement:
+                        #print ("heritage=2")
+                        infos+="<li>heritage= 2</li>"
+                    elif "inscrit" in classement:
+                        #print ("heritage=3")
+                        infos+="<li>heritage= 3</li>"
+                    #print( "mhs:inscription_date={}".format(classement.split(":")[0].replace("/","-")))
+                    infos+="<li>mhs:inscription_date={}".format(classement.split(":")[0].replace("/","-"))+"</li>"
+                else:
+                    #print ("Classement : {}".format(classement))+"</li>"
+                    infos+="<li>Classement : {}".format(classement)
+                #print ("Source : Base Mérimée ouverte - avril 2016 ")
+                infos+="<li>Source : Base Mérimée ouverte - avril 2016</li>"
+                if self.collection[mh].description[mh]['wip']['geoloc']:
+                    #print ("Geolocalisation : {}".format(self.collection[mh].description[mh]['wip']['geoloc']))
+                    lat= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[0]
+                    lon= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[1]
+                    #print("Position estimée : http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}".format(lat,lon,lat,lon))
+                    infos+='<li><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Position à vérifier" target="blank"'.format(lat,lon,lat,lon)
+                    infos+='>Position estimée</a></li></ul>'
+                    #exemple = http://www.openstreetmap.org/?mlat=45.44024&mlon=4.38175#map=19/45.44024/4.38175
+                #print (infos)
+                self.collection[mh].description[mh]['infos_osm']=infos
+                #print()
+
 
 class Salle:
 

@@ -225,6 +225,7 @@ if __name__ == "__main__":
         museum= wikipedia.get_wikipedia(d_dep[d]['url_d'],museum)
         ''' Trier et compter '''
         museum.maj_salle()
+        museum.gen_infos_osm()
         museum.maj_stats()
         #print('----- Statistiques globales ------')
         print("Merimée :",museum.stats['mer'])
