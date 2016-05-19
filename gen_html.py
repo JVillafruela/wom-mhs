@@ -61,10 +61,12 @@ def get_table(salle,musee):
     url_osm_org= url_osm_id= url_osmwp=""
     url_josm= url_osm= url_wip=""
     #for mh,MH in salle.s_collection.items():
+    n=0
     for mh in sorted(salle.s_collection):
         MH=musee.collection[mh]
         note_osm="<b> Osm : </b>"
         note_wp="<b> Wp : </b>"
+
         # Variables Champ Description
         if 'nom' in MH.description[mh]['mer']:
             description= MH.description[mh]['mer']['commune']+' - <b>'+MH.description[mh]['mer']['nom']+'</b> - '+MH.description[mh]['mer']['adresse']
@@ -131,6 +133,19 @@ def get_table(salle,musee):
             table += '''<td class="lien"><a {}" target="blank" title="Voir sur openstreetmap.org"> ORG </a> -
             <a {}" target="blank" title="Editer avec ID"> ID </a> - <a {}" target="blank" title="Editer avec Josm"> Josm </a> </td>
             '''.format(url_osm_org, url_osm_id, url_josm)
+
+        elif 'infos_osm' in MH.description[mh]:
+            table+='''<td class="lien" ><button id="opener{}">Infos OSM</button>'''.format(n)
+            #print(MH.description[mh]['infos_osm'])
+            table+='''     <div id="dialog{}" title="Infos pour OSM">{}</div>'''.format(n,MH.description[mh]['infos_osm'])
+            table+='''<script>
+                    $("#dialog{}")'''.format(n)
+            table+='''.dialog({autoOpen: false});'''
+            table+='''     $(" #opener{}").click(function() '''.format(n)
+            table+='''{'''
+            table+=''' $("#dialog{}").dialog("open", "width", 1000);'''.format(n)
+            table+=''' }); </script></td> '''
+            n+=1
         else:
             table+='''<td class="lien">  ----  </td>'''
 

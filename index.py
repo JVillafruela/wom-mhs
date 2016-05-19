@@ -19,9 +19,12 @@ def write_entete(file, title, cssFile) :
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>{}</title>\n\t'''.format(title)
     header+='''<link rel="stylesheet" type="text/css" href="{}">\n\t'''.format(cssFile)
+    header+='''<link rel="stylesheet" type="text/css" href="../js/jquery-ui.css">'''
     #header+='''<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"> </script>'''
     header+='''<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-                <script src="../js/stupidtable.min.js?dev"></script>'''
+                <script src="../js/stupidtable.min.js?dev"></script>
+                <script src="../js/jquery-ui.js"></script>
+                '''
     header+='''
     <script>
     $(document).ready(function(){
@@ -84,8 +87,8 @@ def write_bandeau(file,t,dic):
         </p>
     <p>Pour le moment, et pour tester l'intérêt de cet outil, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts.</p>
     <p>Ces pages sont statiques avec un peu de jQuery. Elles sont générées automatiquement chaque nuit, par un script python sur un Nas, puis poussées sur le serveur.
-     Le code est visible et disponible sur <a href="http://jearro.noip.me/gitlist/Mhs.git" target="blank"> Mhs.git </a>.
-     <a href="http://jearro.noip.me/gitlist/Wom.git" target ="blank">L'historique des pages web</a> est aussi accessible.</p>
+     Le code est visible et disponible sur <a href="https://jearro.noip.me/gitlist/Mhs.git" target="blank"> Mhs.git </a>.
+     <a href="https://jearro.noip.me/gitlist/Wom.git" target ="blank">L'historique des pages web</a> est aussi accessible.</p>
     <p> Dernière construction des pages, le :<b> {}</b></p>
     '''.format(time.strftime('%d-%m-%Y %H:%M',time.localtime()))
 
