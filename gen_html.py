@@ -135,16 +135,12 @@ def get_table(salle,musee):
             '''.format(url_osm_org, url_osm_id, url_josm)
 
         elif 'infos_osm' in MH.description[mh]:
-            table+='''<td class="lien" ><button id="opener{}">Infos OSM</button>'''.format(n)
+            table+='''<td id="info_bloc{}" class="infoBloc" > Pour OSM'''.format(n)
+            table+='''   <div id="bloc{}" class="dialogBloc">
+                            <ul>{}</ul>
+                        </div>'''.format(n,MH.description[mh]['infos_osm'])
+            table+='''</td> '''
             #print(MH.description[mh]['infos_osm'])
-            table+='''     <div id="dialog{}" title="Infos pour OSM">{}</div>'''.format(n,MH.description[mh]['infos_osm'])
-            table+='''<script>
-                    $("#dialog{}")'''.format(n)
-            table+='''.dialog({autoOpen: false});'''
-            table+='''     $(" #opener{}").click(function() '''.format(n)
-            table+='''{'''
-            table+=''' $("#dialog{}").dialog("open", "width", 1000);'''.format(n)
-            table+=''' }); </script></td> '''
             n+=1
         else:
             table+='''<td class="lien">  ----  </td>'''

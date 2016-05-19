@@ -28,12 +28,32 @@ def write_entete(file, title, cssFile) :
     header+='''
     <script>
     $(document).ready(function(){
-     $("tr").click(function(){
-     $("tr").each(function(){
-     $(this).removeClass("active");
-     });
-     $(this).addClass("active");
-     });
+         $("tr").click(function(){
+             $("tr").each(function(){
+             $(this).removeClass("active");
+             });
+             $(this).addClass("active");
+         });
+
+        $(".infoBloc").click(function(){
+            $("#"+this.id.slice(5)).dialog({
+                draggable: false,
+                resizable: false,
+                width:400,
+                height:250,
+                modal: true,
+                overlay: {
+                    backgroundColor: '#000',
+                    opacity: 0.5
+                },
+                buttons: {
+                    'Fermer': function() {
+                        $(this).dialog('close');
+                    }
+                }
+            });
+            return false;
+        });
     });
     </script>
      <script>
