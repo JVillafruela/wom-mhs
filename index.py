@@ -8,6 +8,20 @@
 import os,ini,time
 from collections import OrderedDict
 
+def write_entete_index(file, title, cssFile):
+    '''
+        Ecrire l'entête du fichier html
+    '''
+    header=""
+    header += '''<!DOCTYPE html>
+    <html>
+    <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <title>{}</title>\n\t'''.format(title)
+    header+='''<link rel="stylesheet" type="text/css" href="{}">\n\t'''.format(cssFile)
+    header+='''   </head>'''
+    file.write(header)
+
 def write_entete(file, title, cssFile) :
     '''
         Ecrire l'entête du fichier html
@@ -167,7 +181,7 @@ def gen_page_index(dico):
     #changer le répertoire de génération des pages : prod=True or not
     oF = creer_fichier(page_name)
 
-    write_entete(oF,titre,ini.cssFile)
+    write_entete_index(oF,titre,ini.cssFile)
 
     titre="Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
     write_bandeau(oF,titre,dico)
