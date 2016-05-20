@@ -74,7 +74,10 @@ def get_table(salle,musee):
              description= MH.description[mh]['wip']['commune']+' - <b>'+MH.description[mh]['wip']['nom']+'</b>'
         else :
             commune=merimee.get_commune(mh)
-            description= commune+' - <b>'+ MH.description[mh]['osm']['tags_mhs']['name']+' </b>'
+            if 'name' in MH.description[mh]['osm']['tags_mhs'] :
+                description= commune+' - <b>'+ MH.description[mh]['osm']['tags_mhs']['name']+' </b>'
+            else:
+                description= commune
         # Variables Champ Mérimée
             # RAS
         # Variables Champ OSM
@@ -130,12 +133,12 @@ def get_table(salle,musee):
             table+= ''' <td class="lien"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></td>'''.format(l0,mh,mh)
         #colonne OSM
         if 'osm' in salle.salle['nom']:
-            table += '''<td class="lien"><a {}" target="blank" title="Voir sur openstreetmap.org"> ORG </a> -
+            table += '''<td class="lien"><a {}" target="blank" title="Voir sur OpenStreetMap.org"> ORG </a> -
             <a {}" target="blank" title="Editer avec ID"> ID </a> - <a {}" target="blank" title="Editer avec Josm"> Josm </a> </td>
             '''.format(url_osm_org, url_osm_id, url_josm)
 
         elif 'infos_osm' in MH.description[mh]:
-            table+='''<td id="info_bloc{}" class="infoBloc" > Pour OSM'''.format(n)
+            table+='''<td id="info_bloc{}" class="infoBloc" > Tags pour OSM'''.format(n)
             table+='''   <div id="bloc{}" class="dialogBloc">
                             <ul>{}</ul>
                         </div>'''.format(n,MH.description[mh]['infos_osm'])

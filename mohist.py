@@ -113,12 +113,12 @@ class Musee:
                     infos+="<li>Classement : {}".format(classement)
                 #print ("Source : Base Mérimée ouverte - avril 2016 ")
                 infos+="<li>Source : Base Mérimée ouverte - avril 2016</li>"
-                if 'geoloc' in self.collection[mh].description[mh]['wip']:
+                if 'geoloc' in self.collection[mh].description[mh]['wip'] and self.collection[mh].description[mh]['wip']['geoloc'] != '':
                     #print ("Geolocalisation : {}".format(self.collection[mh].description[mh]['wip']['geoloc']))
                     lat= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[0]
                     lon= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[1]
                     #print("Position estimée : http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}".format(lat,lon,lat,lon))
-                    infos+='<li><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Position à vérifier" target="blank"'.format(lat,lon,lat,lon)
+                    infos+='<li><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Géocodage fourni par Wikipédia : à vérifier" target="blank"'.format(lat,lon,lat,lon)
                     infos+='>Position estimée</a></li>'
                     #exemple = http://www.openstreetmap.org/?mlat=45.44024&mlon=4.38175#map=19/45.44024/4.38175
                 #print (infos)

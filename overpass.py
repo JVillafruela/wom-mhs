@@ -77,11 +77,11 @@ def add_mh(ref_mhs, data, musee):
             musee.collection[ref_mhs]=m
         #musee.collection[ref_mhs].description[ref_mhs]['osm']=data
         musee.collection[ref_mhs].description[ref_mhs]["osm"]['url_osm']=data[0]
-        musee.collection[ref_mhs].description[ref_mhs]['osm']['tags_mh']=data[1]
+        musee.collection[ref_mhs].description[ref_mhs]['osm']['tags_mhs']=data[1]
         musee.collection[ref_mhs].description[ref_mhs]['osm']['tags_manquants']=data[2]
         musee.collection[ref_mhs].note +=2
         #corrige la note si lien wikipédia
-        if 'wikipedia' in musee.collection[ref_mhs].description[ref_mhs]['osm']['tags_mh']:
+        if 'wikipedia' in musee.collection[ref_mhs].description[ref_mhs]['osm']['tags_mhs']:
             musee.collection[ref_mhs].note +=4
         # corrige la note si n'est pas déja dans merimée
         if not musee.collection[ref_mhs].description[ref_mhs]['mer'] :
@@ -104,30 +104,23 @@ def get_elements(data,tt,musee):
     for d in data:
         tags_mhs,tags_manquants = get_tags(d.tags)
         if 'ref:mhs' in tags_mhs:
+            # Si le tag mhs contient deux refs ref:mhs=PA01000012;PA01000013
+            if ';' in tags_mhs["ref:mhs"]:
+                #print(tags_mhs["ref:mhs"])
+                mhs= tags_mhs["ref:mhs"].split(';')[0]
+                #mhs2=tags_mhs["ref:mhs"].split(';')[1] --> NON TRAITE
+            else:
+                mhs = tags_mhs["ref:mhs"]
             #tag mhs déjà présent dans le dico
-            if tags_mhs["ref:mhs"] in musee.collection :
-                if tags_mhs["ref:mhs"] in musee.collection[tags_mhs["ref:mhs"]].description:
-                    if 'osm' in  musee.collection[tags_mhs["ref:mhs"]].description[tags_mhs["ref:mhs"]]:
+            if mhs in musee.collection :
+                if mhs in musee.collection[mhs].description:
+                    if 'osm' in  musee.collection[mhs].description[mhs]:
                         # code ref:mhs identique sur deux objets OSM : ajouter le texte 'Bis' au code
-                        #tags_mhs["ref:mhs"] += '-Bis'
-                        musee.collection[tags_mhs["ref:mhs"]].description[tags_mhs["ref:mhs"]]['osm']['mhs_bis']=[tt+'/'+str(d.id),tags_mhs,tags_manquants]
+                        musee.collection[mhs].description[mhs]['osm']['mhs_bis']=[tt+'/'+str(d.id),tags_mhs,tags_manquants]
                         #print(tags_mhs["ref:mhs"])
             else:
-                # Si le tag mhs contient deux refs ref:mhs=PA01000012;PA01000013
-                if ';' in tags_mhs["ref:mhs"]:
-                    mhs1= tags_mhs["ref:mhs"].split(';')[0]
-                    mhs2=tags_mhs["ref:mhs"].split(';')[1]
-                    # musee = add_mh(mhs1,[tt+'/'+str(d.id),tags_mhs,tags_manquants],musee)
-                    # musee = add_mh(mhs2,[tt+'/'+str(d.id),tags_mhs,tags_manquants],musee)
-                    MH=musee.add_Mh(mhs1)
-                    MH.add_infos_osm(tt+'/'+str(d.id),tags_mhs,tags_manquants)
-                    MH=musee.add_Mh(mhs2)
-                    MH.add_infos_osm(tt+'/'+str(d.id),tags_mhs,tags_manquants)
-                else :
-                    #musee=add_mh(tags_mhs["ref:mhs"],[tt+'/'+str(d.id),tags_mhs,tags_manquants],musee)
-                    MH=musee.add_Mh(tags_mhs["ref:mhs"])
-                    MH.add_infos_osm(tt+'/'+str(d.id),tags_mhs,tags_manquants)
-
+                MH=musee.add_Mh(mhs)
+                MH.add_infos_osm(tt+'/'+str(d.id),tags_mhs,tags_manquants)
     return musee
 
 def get_osm(departement,musee):
@@ -161,7 +154,7 @@ def get_osm(departement,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '01'
+    departement = '38'
     #osmWip=[]
     musee = mohist.Musee()
     # choix du dico de la clé departement

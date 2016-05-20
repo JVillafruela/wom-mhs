@@ -42,124 +42,23 @@ def getData(url):
     #print(main_page.prettify())
     return main_page
 
-def analyseData(data,url,musee):
-    global ctr_no_mhs
-    # encoding = data.find('meta').attrs['charset']
-    # print (encoding)
-    # url_ville=url.split('.org')[1]
+def normalise(td, commune=None):
+    ''' Normalise les champs de wikipédia pour faciliter l'analyse '''
+    list_champs=[]
+    # list_champs= [nom,commune,adresse,geoloc,code_mhs,image]
+    list_champs.append(td[0])
+    if len(td) == 8 :
+        for n in [1,2,3,4,7] :
+            list_champs.append(td[n])
+    else:
+        list_champs.append(commune)
+        for n in [1,2,3,6] :
+            list_champs.append(td[n])
+    #print(len(list_champs))
+    return list_champs
 
-    grande_commune = False
-    tableau =  data.find_all("table", "wikitable sortable")[0]
-    for i, tr in enumerate(tableau):
-        #print (i, type(tr), tr)
-        infos_manquantes=[]
-        if isinstance(tr,bs4.element.Tag):
-            #l'id du monument permet de le retrouver dans la page
-            if 'id' in tr.attrs:
-                identifiant = tr.attrs['id']
-                #print('Id = ',tr.attrs['id'])
-            else:
-                identifiant= ''
-            td = tr.find_all('td')
-            for n, val in enumerate(td):
-                #print (n, val)
-                code = ''
-                # n=0 => nom du monument et lien vers la page Wp du monument
-                if n == 0:
-                    #print("typedeval = ",type(val.find('a')))
-                    if isinstance(val.find('a'),bs4.element.Tag):
-                        nom = val.find('a').text
-                        # Rechercher si page WP du monument existe
-                        if "page inexistante" in val.find('a').attrs['title']:
-                            #print(val.find('a').attrs['title'])
-                            infos_manquantes.append("Page monument absente")
-                    elif val.find('a') == None:
-                        nom = val.text
-                        infos_manquantes.append("Page monument absente")
-                    else :
-                        nom =''
-                if n == 1:
-                    # recherche la commune et l'url_commune
-                    commune = val.find('a').string.lstrip().rstrip()
-                    #print ('commune =', commune)
-                    # print('commune url = ', "/wiki/"+commune)
-                    #recherche code_insee
-                    c_insee=insee.get_insee(commune)
-                    #print ('commune =', commune, "code insee =",c_insee)
-                if n == 2 and nom == '' :
-                    ''' le nom est vide s'il y a une grande ville (sauf métropole de lyon) '''
-                    url_gc = val.find('a')['href']
-                    url_gc = url_base+url_gc
-                    #print ('url_grosse_commune = ',url_gc)
-                    grande_commune=True
-                    dat = getData(url_gc)
-                    analyseSecondData(dat,url_gc,musee)
-                if n == 3:
-                    #analyse de la géolocalisation
-                    rep = val.find('span', {'class':'geo-dec'})
-                    if isinstance(rep,bs4.element.Tag) :
-                        geo = val.find('span', {'class':'geo-dec'}).get_text().strip()
-                        #lat =  geo.split(',')[0]
-                        #lon =  geo.split(',')[1]
-                        #pass
-                    else:
-                        #print ("Erreur : "+nom+" à "+commune+' -> Pas de Géolocalisation\n')
-                        geo=""
-                        infos_manquantes.append("Géolocalisation absente")
-                        #lat=lon=''
-                if n == 7:
-                    # analyse présence image
-                    if "Image manquante" in val.text:
-                        #print(nom,"  Pas d'image")
-                        infos_manquantes.append("Image absente")
-                if n == 4 and not grande_commune:
-                    #recherche du code MHS
-                    rep = val.find('cite', {'style':'font-style: normal'})
-                    if isinstance(rep,bs4.element.Tag) :
-                        code = rep.get_text().strip()
-                        # if code == 'PA00117533' or code == 'PA00117545':
-                        #     print ('Mhs : ', code)
-                        # mhs_url = val.find('a').attrs['href']
-                        # print(mhs_url)
-                        # vérifier si le mH exite déjà dans le musee
-                        if (code in musee.collection) and (code in musee.collection[code].description) and (musee.collection[code].description[code]['wip'] !={}):
-                            # code identique sur deux/trois objets WIP :
-                            if 'mhs_bis' in  musee.collection[code].description[code]['wip'] :
-                                musee.collection[code].description[code]['wip']['mhs_ter']={'insee': insee,
-                                                                         'commune': commune,
-                                                                         'nom': nom,
-                                                                         'geoloc' : geo,
-                                                                         'url': url,
-                                                                         'id': identifiant,
-                                                                         'infos_manquantes': infos_manquantes }
-                            else :
-                                musee.collection[code].description[code]['wip']['mhs_bis']={'insee': insee,
-                                                                     'commune': commune,
-                                                                     'nom': nom,
-                                                                     'geoloc' : geo,
-                                                                     'url': url,
-                                                                     'id': identifiant,
-                                                                     'infos_manquantes': infos_manquantes }
-                            #print (musee.collection[code].description[code]['wip'])
-                        else:
-                            #enregistrement d'un momument si le code mhs existe
-                            MH=musee.add_Mh(code)
-                            #def add_infos_wip(self, insee, commune, nom, url, ident, infos_manquantes):
-                            MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
-                    else :
-                        #print ("Erreur : Pas de code MHS pour "+nom+" à "+commune+'\n')
-                        code = "ERR-"+str(ctr_no_mhs).zfill(4)
-                        infos_manquantes.append("Code MHS absent")
-                        MH=musee.add_Mh(code)
-                        MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
-                        #dic_mhs[code] = [nom,commune,c_insee,url,identifiant,infos_manquantes]
-                        ctr_no_mhs+=1
-                    grande_commune = False
-    return musee
-
-def analyseSecondData(data,url,musee):
-    global ctr_no_mhs
-
+def extrait_commune(url):
+    ''' Récupère le nom de la commune dans une Url '''
     commune = url.split('_')[-1]
     #correction encodage nom de commune
     if "%C3%A9" in commune:
@@ -169,108 +68,149 @@ def analyseSecondData(data,url,musee):
     if "%C3%89" in commune:
         commune=commune.replace("%C3%89","É")
     #print (commune)
-    c_insee = insee.get_insee(commune)
-    #print ("commune = ",commune," code insee =",c_insee )
-    #url_ville = url.split('.org')[1]
+    return commune
+
+def extrait_infos(datas):
+    global ctr_no_mhs
+    infos_manquantes=[]
+
+    # nom - datas[0]
+    if isinstance(datas[0].find('a'),bs4.element.Tag):
+        nom = datas[0].find('a').text
+        # Rechercher si page WP du monument existe
+        if "page inexistante" in datas[0].find('a').attrs['title']:
+            #print(datas[0].find('a').attrs['title'])
+            infos_manquantes.append("Page monument absente")
+    elif datas[0].find('a') == None:
+        nom = datas[0].text
+        infos_manquantes.append("Page monument absente")
+    else :
+        nom =''
+    #print (nom)
+
+    # Commune - datas[1]
+    if isinstance(datas[1].find('a'),bs4.element.Tag):
+        #print(datas[1].find('a').text, type(datas[1].find('a').text))
+        if 'arrondissement' in datas[1].find('a').text:
+            commune ="Lyon_"+datas[1].find('a').text[0]
+        else:
+            commune = datas[1].find('a').text
+    else :
+        commune = datas[1]
+    #print ('commune =', commune)
+    # print('commune url = ', "/wiki/"+commune)
+    #recherche code_insee
+    #c_insee=insee.get_insee(commune)
+    #print ('commune =', commune, "code insee =",c_insee)
+    c_insee=""
+    # Adresse - datas[2]
+
+    # Geoloc - datas[3]
+    rep = datas[3].find('span', {'class':'geo-dec'})
+    if isinstance(rep,bs4.element.Tag) :
+        geo = datas[3].find('span', {'class':'geo-dec'}).get_text().strip()
+        #lat =  geo.split(',')[0]
+        #lon =  geo.split(',')[1]
+    else:
+        #print ("Erreur : "+nom+" à "+commune+' -> Pas de Géolocalisation\n')
+        geo=""
+        infos_manquantes.append("Géolocalisation absente")
+        #lat=lon=''
+    #print(geo)
+
+    # Code_Mhs - datas[4]
+    rep = datas[4].find('cite', {'style':'font-style: normal'})
+    # print(rep)
+    if isinstance(rep,bs4.element.Tag) :
+        code_mhs = rep.get_text().strip()
+        #print ('Mhs : ', code_mhs)
+        # mhs_url = datas[4].find('a').attrs['href']
+        # print(mhs_url)
+    else :
+        #print ("Erreur : Pas de code MHS pour "+nom+" à "+commune+'\n')
+        code_mhs = "ERR-"+str(ctr_no_mhs).zfill(4)
+        infos_manquantes.append("Code MHS absent")
+        ctr_no_mhs+=1
+    #print(code_mhs)
+
+    # image - datas[5]
+    # analyse présence image
+    if "Image manquante" in datas[5].text:
+        #print(nom,"  Pas d'image")
+        infos_manquantes.append("Image absente")
+
+    return [code_mhs,c_insee,commune,nom,geo,infos_manquantes]
+
+def ajoute_infos(infos, musee):
+    '''infos=[code_mhs,c_insee,commune,nom,geo,infos_manquantes,url,identifiant]
+                0          1        2   3    4         5         6        7       '''
+    if (infos[0] in musee.collection) and (infos[0] in musee.collection[infos[0]].description) and (musee.collection[infos[0]].description[infos[0]]['wip'] !={}):
+        # code identique sur deux/trois objets WIP :
+        if 'mhs_bis' in  musee.collection[infos[0]].description[infos[0]]['wip'] :
+            musee.collection[infos[0]].description[infos[0]]['wip']['mhs_ter']={'insee': infos[1],
+                                                     'commune': infos[2],
+                                                     'nom':infos[3],
+                                                     'geoloc' : infos[4],
+                                                     'url': infos[6],
+                                                     'id': infos[7],
+                                                     'infos_manquantes':infos[5] }
+        else :
+            musee.collection[infos[0]].description[infos[0]]['wip']['mhs_bis']={'insee': infos[1],
+                                                 'commune': infos[2],
+                                                 'nom': infos[3],
+                                                 'geoloc' : infos[4],
+                                                 'url': infos[6],
+                                                 'id': infos[7],
+                                                 'infos_manquantes': infos[5] }
+        #print (musee.collection[code].description[code]['wip'])
+    else:
+        #enregistrement d'un momument si le code mhs existe
+        MH=musee.add_Mh(infos[0])
+        #def add_infos_wip(self, insee, commune, nom, geo, url, ident, infos_manquantes):
+        MH.add_infos_wip(infos[1],infos[2],infos[3],infos[4],infos[6],infos[7],infos[5])
+    return musee
+
+def analyse(data,url,musee,commune=None):
+
     tableau =  data.find_all("table", "wikitable sortable")[0]
     for i, tr in enumerate(tableau):
         #print (i, type(tr), tr)
-        infos_manquantes=[]
+
         if isinstance(tr,bs4.element.Tag):
             #l'id du monument permet de le retrouver dans la page
             if 'id' in tr.attrs:
                 identifiant = tr.attrs['id']
                 #print('Id = ',tr.attrs['id'])
             else:
-                identifiant =''
-            #   identifiant= tr.find('td').find('a')['title']
+                identifiant= ''
             td = tr.find_all('td')
-            for n, val in enumerate(td):
-                #print (n, val)
-                code = ''
-                #n=0 => nom du monument et lien vers la page Wp du monument
-                if n == 0:
-                    #print("typedeval = ",type(val.find('a')))
-                    if isinstance(val.find('a'),bs4.element.Tag):
-                        nom = val.find('a').text
-                        # Rechercher si page WP du monument existe
-                        if "page inexistante" in val.find('a').attrs['title']:
-                            #print(val.find('a').attrs['title'])
-                            infos_manquantes.append("Page monument absente")
-                    elif val.find('a') == None:
-                        nom = val.text
-                        infos_manquantes.append("Page monument absente")
-                    else :
-                        nom =''
+            #print(len(td))
+            # pages des départements et ville de Lyon (8), grandes communes (7)
+            if len(td) in [7,8]:
+                datas=normalise(td,commune)
+                # obtenir les infos utilisables dans le musée
+                infos= extrait_infos(datas)
+                #Ajout de l'url et de l'identifiant dans les infos
+                infos.extend([url,identifiant])
+                #print(infos)
+                # Créer le musée
+                musee= ajoute_infos(infos, musee)
+            # lien vers pages des grandes communes
+            elif len(td) == 3 :
+                url_gc = td[2].find('a')['href']
+                url_gc = url_base+url_gc
+                commune = extrait_commune(url_gc)
+                #print ('url_grande_commune = ',url_gc)
+                dat = getData(url_gc)
+                analyse(dat,url_gc,musee,commune)
 
-                if (commune!="Lyon" and n==2) or (commune=="Lyon" and n==3) :
-                    #analyse de la géolocalisation
-                    rep = val.find('span', {'class':'geo-dec'})
-                    if isinstance(rep,bs4.element.Tag) :
-                        geo = val.find('span', {'class':'geo-dec'}).get_text().strip()
-                        # lat =  geo.split(',')[0]
-                        # lon =  geo.split(',')[1]
-                        #pass
-                    else:
-                        #print ("Erreur : "+nom+" à "+commune+' -> Pas de Géolocalisation\n')
-                        geo=""
-                        infos_manquantes.append("Géolocalisation absente")
-                        # liste_incomplet.append([nom,commune,"géolocalisation absente"])
-                        # lat=lon=''
-                if (commune!="Lyon" and n == 6) or (commune=="Lyon" and n==7) :
-                    # analyse présence image
-                    if "Image manquante" in val.text:
-                        #print(nom,"  Pas d'image")
-                        infos_manquantes.append("Image absente")
-                if (commune!="Lyon" and n == 3) or (commune=="Lyon" and n==4):
-                    #recherche du code MHS
-                    rep = val.find('cite', {'style':'font-style: normal'})
-                    #rep = val.find('cite')
-                    #print (rep)
-                    if isinstance(rep,bs4.element.Tag) :
-                        code = rep.get_text().strip()
-                        #print (code)
-                        # mhs_url = val.find('a').attrs['href']
-                        # print(mhs_url)
-                        #enregistrement d'un momument si le code mhs existe
-                        # vérifier si le mH exite déjà dans le musee
-                        if (code in musee.collection) and (code in musee.collection[code].description) and (musee.collection[code].description[code]['wip'] !={}):
-                            # code identique sur deux objets WIP : ajouter le texte 'Bis' au code
-                            if 'mhs_bis' in  musee.collection[code].description[code]['wip'] :
-                                musee.collection[code].description[code]['wip']['mhs_ter']={'insee': insee,
-                                                                         'commune': commune,
-                                                                         'nom': nom,
-                                                                         'geoloc' : geo,
-                                                                         'url': url,
-                                                                         'id': identifiant,
-                                                                         'infos_manquantes': infos_manquantes }
-                            else :
-                                musee.collection[code].description[code]['wip']['mhs_bis']={'insee': insee,
-                                                                     'commune': commune,
-                                                                     'nom': nom,
-                                                                     'geoloc' : geo,
-                                                                     'url': url,
-                                                                     'id': identifiant,
-                                                                     'infos_manquantes': infos_manquantes }
-
-                        else:
-                            MH=musee.add_Mh(code)
-                            MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
-                    else :
-                        #print ("Erreur : Pas de code MHS pour "+nom+" à "+commune+'\n')
-                        code = "ERR-"+str(ctr_no_mhs).zfill(4)
-                        infos_manquantes.append("Code MHS absent")
-                        MH=musee.add_Mh(code)
-                        MH.add_infos_wip(c_insee,commune,nom,geo,url,identifiant,infos_manquantes)
-                        #dic_mhs[code] = [nom,commune,c_insee,url,identifiant,infos_manquantes]
-                        ctr_no_mhs+=1
     return musee
 
 def get_wikipedia(url_list,musee):
-    ''' Faire la requette overpass puis l'analyse du résultat '''
+    ''' Faire la requette puis l'analyse du résultat '''
     for url in url_list:
         main_page = getData(url_base+url)
-        musee = analyseData(main_page,url_base+url,musee)
+        musee = analyse(main_page,url_base+url,musee)
     return musee
 
 
@@ -292,6 +232,7 @@ if __name__ == "__main__":
     nb=musee.get_nb_MH('wip')
     print(nb)
 
-
+    #print (musee.collection["PA00116593"].description["PA00116593"])
+    print(ctr_no_mhs)
     # print ("il y a {} Monuments du département {} dans Wikipédia.".format(len(dic_wp),ini.dep[departement]['text']))
     # print ("Monuments du département {} sans code MH : {}".format(ini.dep[departement][('text')],Nb_noMHS))

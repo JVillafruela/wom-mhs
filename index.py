@@ -21,8 +21,9 @@ def write_entete(file, title, cssFile) :
     header+='''<link rel="stylesheet" type="text/css" href="{}">\n\t'''.format(cssFile)
     header+='''<link rel="stylesheet" type="text/css" href="../js/jquery-ui.css">'''
     #header+='''<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"> </script>'''
-    header+='''<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-                <script src="../js/stupidtable.min.js?dev"></script>
+    #header+='''<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>'''
+    header+='''<script src="../js/jquery.js"></script>'''
+    header+='''<script src="../js/stupidtable.min.js?dev"></script>
                 <script src="../js/jquery-ui.js"></script>
                 '''
     header+='''
@@ -44,7 +45,7 @@ def write_entete(file, title, cssFile) :
                 modal: true,
                 overlay: {
                     backgroundColor: '#000',
-                    opacity: 0.5
+                    opacity: 0.5,
                 },
                 buttons: {
                     'Fermer': function() {
