@@ -88,7 +88,7 @@ def get_table(salle,musee):
                 type_osm = MH.description[mh]['osm']['url'].split('/')[0]
                 id_osm = MH.description[mh]['osm']['url'].split('/')[1]
                 url_osm_id ='href="http://www.openstreetmap.org/edit?editor=id&'+type_osm+'='+id_osm
-                url_josm= 'href="http://localhost:8111/load_object?new_layer=true&objects='+type_osm[0]+id_osm
+                url_josm= 'href="http://localhost:8111/load_object?objects='+type_osm[0]+id_osm
             #les tags manquants dans OSM
             if len(MH.description[mh]['osm']['tags_manquants'])>0:
                 note_osm+=", ".join(MH.description[mh]['osm']['tags_manquants'])

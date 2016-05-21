@@ -113,6 +113,12 @@ class Musee:
                     infos+="<li>Classement : {}".format(classement)
                 #print ("Source : Base Mérimée ouverte - avril 2016 ")
                 infos+="<li>Source : Base Mérimée ouverte - avril 2016</li>"
+                # lien wikipedia
+                if 'infos_manquantes' in self.collection[mh].description[mh]['wip']  and "Page monument absente" not in self.collection[mh].description[mh]['wip']['infos_manquantes']:
+                    texte =self.collection[mh].description[mh]['wip']['id']
+                    if texte=="":
+                        texte=self.collection[mh].description[mh]['mer']['nom'].replace(" ","_")
+                    infos+="<li> Wikipedia= fr:{}</li>".format(texte)
                 if 'geoloc' in self.collection[mh].description[mh]['wip'] and self.collection[mh].description[mh]['wip']['geoloc'] != '':
                     #print ("Geolocalisation : {}".format(self.collection[mh].description[mh]['wip']['geoloc']))
                     lat= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[0]
