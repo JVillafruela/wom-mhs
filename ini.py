@@ -37,4 +37,4 @@ url_dev="/home/jean/osm/monuments_historiques"
 # sur Syno
 url_prod="/var/services/homes/jean/web_wom"
 # fichier statique : style.css
-cssFile ="style.css"
+#cssFile ="style.css"

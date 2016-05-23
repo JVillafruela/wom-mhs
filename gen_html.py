@@ -39,15 +39,16 @@ def get_menu(dep, musee):
 def get_header():
     header='''
     <div id="container">
-    <table id="tableau">
+    <table id="table_data" class="display nowrap" cellspacing="0" width="100%">
     <caption id='titre'> {}</caption>
     <thead class='heading'>
         <tr>
-            <th data-sort="string">Description</th>
-            <th data-sort="string">Mérimée</th>
+            <th>Description</th>
+            <th>Mérimée</th>
             <th>OSM</th>
             <th>WP</th>
-            <th colspan="2">Remarques : erreurs ou manques</th>
+            <th>Remarques OSM</th>
+            <th>Remarques WP</th>
         </tr>
     </thead>
     <tbody>
@@ -191,7 +192,7 @@ def gen_pages(dep, musee):
             print(page)
             oF = index.creer_fichier(page_name, dep)
             titre=" Wom : Mérimée, OpenStreetMap, Wikipédia"
-            index.write_entete(oF, titre, "../"+ini.cssFile)
+            index.write_entete(oF, titre)
             oF.write(bandeau)
             #corriger la classe active
             menu=menu.replace('class="active"','')
@@ -211,9 +212,10 @@ def gen_pages(dep, musee):
             oF.close()
 
 def copier_css(racine):
-    shutil.copy('./style.css',racine+"/style.css")
-    if not os.path.exists(racine+"/js"):
-        shutil.copytree('./js',racine+"/js")
+    #shutil.copy('./style.css',racine+"/style.css")
+    # if not os.path.exists(racine+"/js"):
+    #     shutil.copytree('./js',racine+"/js")
+    pass
 
 if __name__ == "__main__":
     stats={}

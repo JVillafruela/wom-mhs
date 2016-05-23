@@ -8,7 +8,7 @@
 import os,ini,time
 from collections import OrderedDict
 
-def write_entete_index(file, title, cssFile):
+def write_entete_index(file, title):
     '''
         Ecrire l'entête du fichier html
     '''
@@ -18,11 +18,11 @@ def write_entete_index(file, title, cssFile):
     <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>{}</title>\n\t'''.format(title)
-    header+='''<link rel="stylesheet" type="text/css" href="{}">\n\t'''.format(cssFile)
+    header+='''<link rel="stylesheet" type="text/css" href="css/style.css" />'''
     header+='''   </head>'''
     file.write(header)
 
-def write_entete(file, title, cssFile) :
+def write_entete(file, title) :
     '''
         Ecrire l'entête du fichier html
     '''
@@ -32,26 +32,28 @@ def write_entete(file, title, cssFile) :
     <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>{}</title>\n\t'''.format(title)
-    header+='''<link rel="stylesheet" type="text/css" href="{}">\n\t'''.format(cssFile)
-    header+='''<link rel="stylesheet" type="text/css" href="../js/jquery-ui.css">'''
+    #header+='''<link rel="stylesheet" type="text/css" href="{}">\n\t'''.format(cssFile)
+    header+='''<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css">
+	           <link rel="stylesheet" type="text/css" href="../css/style.css" />
+	           <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables_mod.css"  />'''
     #header+='''<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"> </script>'''
     #header+='''<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>'''
-    header+='''<script src="../js/jquery.js"></script>'''
-    header+='''<script src="../js/stupidtable.min.js?dev"></script>
-                <script src="../js/jquery-ui.js"></script>
-                '''
+    header+='''<script src="../js/jquery.js"></script>
+	           <script src="../js/jquery.dataTables.min.js"></script>
+               <script src="../js/jquery-ui.js"></script>  '''
     header+='''
     <script>
     $(document).ready(function(){
          $("tr").click(function(){
              $("tr").each(function(){
-             $(this).removeClass("active");
+             $(this).removeClass("selected");
              });
-             $(this).addClass("active");
+             $(this).addClass("selected");
          });
 
         $(".infoBloc").click(function(){
             $("#"+this.id.slice(5)).dialog({
+				title: "Pour créer le monument dans OSM",
                 draggable: false,
                 resizable: false,
                 width:400,
@@ -61,42 +63,36 @@ def write_entete(file, title, cssFile) :
                     backgroundColor: '#000',
                     opacity: 0.5,
                 },
-                buttons: {
-                    'Fermer': function() {
-                        $(this).dialog('close');
-                    }
-                }
             });
             return false;
         });
+
+		$("#table_data").DataTable({
+			"columnDefs": [
+            {
+                "targets": [ 2 ],
+                "searchable": false,
+                "sortable" : false,
+            }],
+			"scrollX": true,
+			"pageLength": 25,
+			"language": {
+					"search": "Rechercher :",
+					"lengthMenu": "Voir _MENU_ monuments/page",
+					"zeroRecords": "Aucun résultat pour cette recherche - désolé",
+					"info": "Monuments visibles : de _START_ à _END_ sur _TOTAL_ ",
+					"infoEmpty": "Aucun résultat",
+					"infoFiltered": " sélectionnés parmi _MAX_ enregistrements",
+					"paginate": {
+						"first":      "Première",
+						"last":       "Dernière",
+						"next":       "Suivante",
+						"previous":   "Précédente"
+							},
+				}
+            });
     });
     </script>
-     <script>
-    $(function(){
-        var table = $("table").stupidtable();
-
-        table.on("beforetablesort", function (event, data) {
-          // Apply a "disabled" look to the table while sorting.
-          // Using addClass for "testing" as it takes slightly longer to render.
-          $("#msg").text("Sorting...");
-          $("table").addClass("disabled");
-        });
-
-        table.on("aftertablesort", function (event, data) {
-          // Reset loading message.
-          $("#msg").html("&nbsp;");
-          $("table").removeClass("disabled");
-
-          var th = $(this).find("th");
-          th.find(".arrow").remove();
-          var dir = $.fn.stupidtable.dir;
-
-          var arrow = data.direction === dir.ASC ? "&uarr;" : "&darr;";
-          th.eq(data.column).append('<span class="arrow"> ' + arrow +'</span>');
-        });
-    });
-    </script>
-
     </head>'''
 
     file.write(header)
@@ -181,7 +177,7 @@ def gen_page_index(dico):
     #changer le répertoire de génération des pages : prod=True or not
     oF = creer_fichier(page_name)
 
-    write_entete_index(oF,titre,ini.cssFile)
+    write_entete_index(oF,titre)
 
     titre="Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
     write_bandeau(oF,titre,dico)
