@@ -36,14 +36,16 @@ def get_data(query):
     api = overpy.Overpass()
     try :
         result = api.query(query)
-    except api.OverpassGatewayTimeout:
-        print ('TimeOut : Le serveur Overpass.eu ne réponds pas. Ré-essayer plus tard.')
-    except api.OverpassTooManyRequests:
+        #raise OverpassGatewayTimeout()
+    except OverpassTooManyRequests:
         print ('TooManyRequests : Trop de requêtes pour le serveur Overpass.eu. Patienter et ré-essayer plus tard.')
-    else :
+    except OverpassGatewayTimeout:
+        print ('TimeOut : Le serveur Overpass.eu ne réponds pas. Ré-essayer plus tard.')
+
+    # else :
         #print (type(result))
         # si erreur timeout attendre un moment et recommencer (pas planter)
-        return result
+    return result
 
 def get_tags(dico):
     '''
@@ -154,7 +156,7 @@ def get_osm(departement,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '38'
+    departement = '01'
     #osmWip=[]
     musee = mohist.Musee()
     # choix du dico de la clé departement
