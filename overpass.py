@@ -52,9 +52,14 @@ def get_tags(dico):
         Détecter les tags 'Monuments Historiques' présents et absents
         dico contient tous les tags de l'objet osm
     '''
-    base_tags=['ref:mhs','name','heritage','heritage:operator','mhs:inscription_date','source',"wikipedia"]
+    base_tags=['ref:mhs','name','heritage','heritage:operator','mhs:inscription_date',"wikipedia"]
+    source_tags=['source','source:heritage']
     tags_mhs = {}
     tags_absents = []
+    if  source_tags[0] or source_tags[1] in dico:
+        pass
+    else :
+        tags_absents.append('source')
     for tag in base_tags:
         if tag in dico:
             tags_mhs[tag] = dico[tag]
