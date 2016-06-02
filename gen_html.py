@@ -207,7 +207,7 @@ def gen_pages(dep, musee):
             table = get_table(page,musee)
             oF.write(table)
         # # '''écrire le pied de page'''
-            #index.write_footer(oF)
+            index.write_footer(oF)
         # # '''fermer le fichier'''
             oF.close()
 
