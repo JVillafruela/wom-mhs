@@ -15,14 +15,12 @@
         la version actuelle est datée du : 12 avril 2016
 '''
 from __future__ import unicode_literals
-import requests
+import requests,json
 from bs4 import BeautifulSoup
-import csv
 import mohist,ini
 
-class Merimee(csv.excel):
-    # Séparateur de champ
-    delimiter = "|"
+new_date=''
+datafile='merimee-MH.json'
 
 def get_commune(code):
 	'''
@@ -36,32 +34,84 @@ def get_commune(code):
 	tableau=  page.find_all("td", attrs={"class":u"champ"})[2].text
 	return tableau.split("; ")[-1]
 
+def get_url():
+    if ini.prod:
+        url = ini.url_prod+'/Mhs/'
+    else:
+        url = ini.url_dev+'/Mhs/'
+    return url
+
+def conv_date(d):
+	'''
+		en entrée une date dans une liste ['24', 'mai', '2016']
+		en sortie une date dans une chaine AAMMJJ '20160524' (permetre une comparaison)
+	'''
+	mois = ["Janvier", u"Février", "Mars", "Avril", "Mai", "Juin", "Juillet", u"Août",
+		"Septembtre", "Octobre", "Novembre", u"Décembre"]
+	return d[2]+str(mois.index(d[1].capitalize())+1).zfill(2)+d[0]
+
+def existe_nouvelle_version():
+	'''
+    	La base Mérimée est récupérable sur data.gouv.fr sur la page
+    	http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
+    	rechercher la date de la version du dataset.json
+    	et le comparer à la dernière version enregistrée
+    	télécharger : http://data.culture.fr/entrepot/MERIMEE/
+	'''
+	global new_date
+	url ="http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/"
+	contenu = requests.get(url).text
+	page= BeautifulSoup(contenu,'html.parser')
+	date = page.find("p", attrs={"class": "list-group-item-text ellipsis"}).text
+	old_date = open('last_date.txt','r').read()
+	new_date= conv_date(date.strip().split(' ')[-3:])
+	return new_date > old_date
+
+def miseAjour():
+	# '''
+	# 	Télécharger le nouveau fichier de la base Mérimée
+    # '''
+    global datafile
+    url_locale = get_url()
+    url_merimee= "http://data.culture.fr/entrepot/MERIMEE/"
+    r=requests.get(url_merimee+datafile,stream=True)
+    with open(url_locale+datafile, 'wb') as fd:
+        for chunk in r.iter_content(4096):
+            fd.write(chunk)
+
 def get_merimee(dep,musee):
     '''
-        Recherche sur le code département (01)
-        les champs du fichier csv :
-        REF|ETUD|REG|DPT|COM|INSEE|TICO|ADRS|STAT|AFFE|PPRO|DPRO|AUTR|SCLE
-         0    1   2   3   4    5     6   7     8    9    10   11  12   13
-        Renvoie un musee contenant des monuments par reférence mhs contenant la clé 'mer' avec la note 1
-    '''
-    csv.register_dialect('merimee', Merimee())
-    fname = "merimee-MH-valid.csv"
-    file = open(fname, "r")
-    #print(dep)
-    try:
-        reader = csv.reader(file,'merimee')
-        for row in reader:
-            if dep in row[3]:
-                mhs=row[0]
-                MH=musee.add_Mh(mhs)
-                #m.add_infos_mer('insee','commune','adresse','Nom mh', 'Infos classement')
-                MH.add_infos_mer(row[5],row[4],row[7],row[6],row[-3])
-    finally:
-        file.close()
+        Teste si une nouvelle version est disponible : si oui la télécharge
+         Recherche sur le code département (01)
+         les champs du fichier json :
+         REF|ETUD|REG|DPT|COM|INSEE|TICO|ADRS|STAT|AFFE|PPRO|DPRO|AUTR|SCLE
+         Renvoie un musee contenant des monuments par reférence mhs contenant la clé 'mer' avec la note 1
+     '''
+    global datafile
+    url_locale=get_url()
+
+    if existe_nouvelle_version():
+        print ('Nouvelle version disponible ! Téléchargement... ')
+        miseAjour()
+        open(url_locale+'last_date.txt','w').write(new_date)
+    else :
+        print('Base Mérimée : Version {}, à jour.'.format(new_date))
+
+    with open(url_locale+datafile) as data_file:
+	       data = json.load(data_file)
+
+    for mh in data[:-1]:
+        if mh['DPT'] == dep:
+			# print('mhs : ',mh['REF'])
+			# print (' insee :',mh['INSEE'],'\n','commune :',mh['COM'],'\n',\
+			#		'adresse:',mh['ADRS'],'\n','nom monument :',mh['TICO'],'\n','Classement :',mh['DPRO'])
+            MH=musee.add_Mh(mh['REF'])
+            #m.add_infos_mer('insee','commune','adresse','Nom mh', 'Infos classement')
+            MH.add_infos_mer(mh['INSEE'],mh['COM'],mh['ADRS'],mh['TICO'],mh['DPRO'])
     return musee
 
 if __name__ == "__main__":
-    departement = '01'
+    departement = '42'
     musee = mohist.Musee()
     musee = get_merimee(ini.dep[departement]['code'],musee)
     # for mh,MH in musee.collection.items():
