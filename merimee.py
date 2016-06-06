@@ -2,17 +2,13 @@
 # -*- coding: utf-8 -*-
 
 '''
-    Lire le fichier csv de la base mérimée et extraire
-    les codes mhs des monuments d'un département
+    Rechercher et lire le fichier .json de la base mérimée et extraire
+    les codes mhs des monuments d'un département. Un test sur la date de version est effectué et la nouvelle version est
+    téléchargée si nécéssaire.
     Entrée : le code d'un département  = '01'
-
     Sortie : un musee avec une clé par code MHS
-        'ref:mhs1':[le code insee commune,le nom de la commune, adresse, le nom du monument, infos classement avec dates],
+        'ref:mhs':[le code insee commune,le nom de la commune, adresse, le nom du monument, infos classement avec dates]
 
-
-        FIXME : il faudrait ajouter un test sur l'âge de la source Mérimée :
-        https://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
-        la version actuelle est datée du : 12 avril 2016
 '''
 from __future__ import unicode_literals
 import requests,json
@@ -111,7 +107,7 @@ def get_merimee(dep,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '42'
+    departement = '01'
     musee = mohist.Musee()
     musee = get_merimee(ini.dep[departement]['code'],musee)
     # for mh,MH in musee.collection.items():
