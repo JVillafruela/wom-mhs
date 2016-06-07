@@ -112,10 +112,10 @@ class Musee:
                     #print ("Classement : {}".format(classement))+"</li>"
                     infos+="<li>Classement : {}".format(classement)
                 #print ("Source : Base Mérimée ouverte - avril 2016 ")
-                infos+="<li>Source : data.gouv.fr : Base Mérimée ouverte - 2016</li>"
+                infos+="<li>Source : data.gouv.fr - Mérimée - 2016</li>"
                 # lien wikipedia
                 if 'infos_manquantes' in self.collection[mh].description[mh]['wip']  and "Page monument absente" not in self.collection[mh].description[mh]['wip']['infos_manquantes']:
-                    texte =self.collection[mh].description[mh]['wip']['id']
+                    texte =self.collection[mh].description[mh]['wip']['id'].replace('_',' ')
                     if texte=="":
                         texte=self.collection[mh].description[mh]['mer']['nom']
                     infos+="<li> Wikipedia= fr:{}</li>".format(texte)
