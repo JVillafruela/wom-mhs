@@ -63,21 +63,26 @@ def existe_nouvelle_version():
 	new_date= conv_date(date.strip().split(' ')[-3:])
 	return new_date > old_date
 
-def miseAjour():
-	# '''
-	# 	Télécharger le nouveau fichier de la base Mérimée
-    # '''
-    global datafile
-    url_locale = get_url()
-    url_merimee= "http://data.culture.fr/entrepot/MERIMEE/"
-    r=requests.get(url_merimee+datafile,stream=True)
-    with open(url_locale+datafile, 'wb') as fd:
-        for chunk in r.iter_content(4096):
-            fd.write(chunk)
+def get_maj_base_merimee():
+    '''
+        Tester si une nouvelle version est disponible : si oui la télécharge
+    '''
+    url_locale=get_url()
+
+    if existe_nouvelle_version():
+        print ('Nouvelle version disponible ! Téléchargement... ')
+        url_merimee= "http://data.culture.fr/entrepot/MERIMEE/"
+        r=requests.get(url_merimee+datafile,stream=True)
+        with open(url_locale+datafile, 'wb') as fd:
+            for chunk in r.iter_content(4096):
+                fd.write(chunk)
+        open(url_locale+'last_date.txt','w').write(new_date)
+    else :
+        print('Base Mérimée : Version {}, à jour.'.format(new_date))
+
 
 def get_merimee(dep,musee):
     '''
-        Teste si une nouvelle version est disponible : si oui la télécharge
          Recherche sur le code département (01)
          les champs du fichier json :
          REF|ETUD|REG|DPT|COM|INSEE|TICO|ADRS|STAT|AFFE|PPRO|DPRO|AUTR|SCLE
@@ -85,13 +90,6 @@ def get_merimee(dep,musee):
      '''
     global datafile
     url_locale=get_url()
-
-    if existe_nouvelle_version():
-        print ('Nouvelle version disponible ! Téléchargement... ')
-        miseAjour()
-        open(url_locale+'last_date.txt','w').write(new_date)
-    else :
-        print('Base Mérimée : Version {}, à jour.'.format(new_date))
 
     with open(url_locale+datafile) as data_file:
 	       data = json.load(data_file)
@@ -107,7 +105,8 @@ def get_merimee(dep,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '01'
+    departement = '42'
+    get_maj_base_merimee()
     musee = mohist.Musee()
     musee = get_merimee(ini.dep[departement]['code'],musee)
     # for mh,MH in musee.collection.items():

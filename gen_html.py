@@ -219,6 +219,8 @@ def copier_css(racine):
 
 if __name__ == "__main__":
     stats={}
+    ''' Rechercher une maj de la base Mérimée'''
+    merimee.get_maj_base_merimee()
     ''' Définir les variables d'entrée'''
     if ini.prod :
         base_url=ini.url_prod+"/Wom"
@@ -248,7 +250,8 @@ if __name__ == "__main__":
         #print('----- Statistiques globales ------')
         print("Merimée :",museum.stats['mer'])
         print("OSM :", museum.stats['osm'])
-        print("wikipedia :",museum.stats['wip'])
+        print("Wikipedia :",museum.stats['wip'])
+        print("     ---- ")
 
         #print(museum)
         ''' Générer le Html'''

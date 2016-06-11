@@ -16,7 +16,7 @@ old_exemple =>   PA00116550 : ['way/391391471', {'mhs:inscription_date': '1981',
 '''
 
 from __future__ import unicode_literals
-import overpy,ini,mohist
+import overpy,ini,mohist,time
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 
@@ -28,7 +28,7 @@ cache_opts = {
 
 cache = CacheManager(**parse_cache_config_options(cache_opts))
 
-@cache.cache('query-osm-cache', expire=7200)
+#@cache.cache('query-osm-cache', expire=7200)
 def get_data(query):
     '''
         Obtenir la selection géographique sur overpass.api
@@ -36,14 +36,15 @@ def get_data(query):
     api = overpy.Overpass()
     try :
         result = api.query(query)
-        #raise OverpassGatewayTimeout()
-    except OverpassTooManyRequests:
+        #raise overpy.exception.OverpassTooManyRequests()
+    except overpy.exception.OverpassTooManyRequests:
         print ('TooManyRequests : Trop de requêtes pour le serveur Overpass.eu. Patienter et ré-essayer plus tard.')
-    except OverpassGatewayTimeout:
-        print ('TimeOut : Le serveur Overpass.eu ne réponds pas. Ré-essayer plus tard.')
-
+        result=None
+    except overpy.exception.OverpassGatewayTimeout:
+        print ('TimeOut : Le serveur Overpass.eu ne réponds pas.')
+        result=None
     # else :
-        #print (type(result))
+    #print (type(result))
         # si erreur timeout attendre un moment et recommencer (pas planter)
     return result
 
@@ -148,7 +149,17 @@ def get_osm(departement,musee):
         query += query_part1.format(d)
     query+=query_end
     result = get_data(query)
-
+    ''' tester si le résulat est OK (!=None)
+        sinon attendre puis refaire
+    '''
+    x=0
+    while x<3 and result == None:
+        time.sleep(60) # 1 minute
+        #print('essais de {}'.format(x))
+        result = get_data(query)
+        x+=1
+    if result == None:
+        raise overpy.exception.OverPyException('Le serveur Overpass ne réponds pas.')
     #print (result.relations)
     ensemble ={'r':result.relations,'w':result.ways,'n':result.nodes}
     dic_typ = {'r':'relation','w':'way','n':'node'}
