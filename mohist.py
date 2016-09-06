@@ -92,33 +92,45 @@ class Musee:
                 #print (self.collection[mh])
                 infos=""
                 #print ("ref:mhs = {}".format(mh))
-                infos+="<li>ref:mhs= {}".format(mh)+"</li>"
+                tag_A= "ref:mhs={}".format(mh)
+                infos+="<li>"+tag_A+"</li>"
                 # le nom probable du MH
-                infos+="<li>name= {}</li>".format(self.collection[mh].description[mh]['mer']['nom'])
+                tag_B="name={}".format(self.collection[mh].description[mh]['mer']['nom'])
+                infos+="<li>"+tag_B+"</li>"
                 #print ("heritage:operator= mhs")
-                infos+="<li>heritage:operator= mhs</li>"
+                tag_C="heritage:operator=mhs"
+                infos+="<li>"+tag_C+"</li>"
                 classement = self.collection[mh].description[mh]['mer']['classement']
                 # si une seule date
                 if not ";" in classement:
+                    tag_D="heritage="
                     if "classé" in classement:
                         #print ("heritage=2")
-                        infos+="<li>heritage= 2</li>"
+                        tag_D= "heritage=2"
                     elif "inscrit" in classement:
                         #print ("heritage=3")
-                        infos+="<li>heritage= 3</li>"
+                        tag_D= "heritage=3"
+                    infos+="<li>"+tag_D +"</li>"
                     #print( "mhs:inscription_date={}".format(classement.split(":")[0].replace("/","-")))
-                    infos+="<li>mhs:inscription_date={}".format(classement.split(":")[0].replace("/","-"))+"</li>"
+                    tag_E= "mhs:inscription_date={}".format(classement.split(":")[0].replace("/","-"))
+                    infos+="<li>"+tag_E+"</li>"
                 else:
                     #print ("Classement : {}".format(classement))+"</li>"
-                    infos+="<li>Classement : {}".format(classement)
+                    infos+="<li>Classement : {}".format(classement)                
+                    tag_E="mhs:inscription_date="
+                    infos+="<b>Import sans classement</b> </li>"
                 #print ("Source : Base Mérimée ouverte - avril 2016 ")
-                infos+="<li>Source : data.gouv.fr - Mérimée - 2016</li>"
+                tag_F="source:heritage=data.gouv.fr, Ministère de la Culture - 2016"
+                infos+="<li>"+tag_F+"</li>"
                 # lien wikipedia
                 if 'infos_manquantes' in self.collection[mh].description[mh]['wip']  and "Page monument absente" not in self.collection[mh].description[mh]['wip']['infos_manquantes']:
                     texte =self.collection[mh].description[mh]['wip']['id'].replace('_',' ')
                     if texte=="":
                         texte=self.collection[mh].description[mh]['mer']['nom']
-                    infos+="<li> Wikipedia= fr:{}</li>".format(texte)
+                    tag_G="wikipedia=fr:{}".format(texte)
+                else:
+                    tag_G="wikipedia="
+                infos+="<li>"+tag_G+"</li>"
                 if 'geoloc' in self.collection[mh].description[mh]['wip'] and self.collection[mh].description[mh]['wip']['geoloc'] != '':
                     #print ("Geolocalisation : {}".format(self.collection[mh].description[mh]['wip']['geoloc']))
                     lat= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[0]
@@ -126,7 +138,12 @@ class Musee:
                     #print("Position estimée : http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}".format(lat,lon,lat,lon))
                     infos+='<li><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Géocodage fourni par Wikipédia : à vérifier" target="blank"'.format(lat,lon,lat,lon)
                     infos+='>Position estimée</a></li>'
+                    infos+="<p>"
+                    infos+='<li><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}|{}|{}|{}|{}|{}|{}"\
+                            title="Import automatique dans JOSM : Vérifier les tags !" target="blank" '.format(lon,lat,tag_A,tag_B,tag_C,tag_D,tag_E,tag_F,tag_G)
+                    infos+='>Josm import</a></li>'
                     #exemple = http://www.openstreetmap.org/?mlat=45.44024&mlon=4.38175#map=19/45.44024/4.38175
+                    # autre exemple = http://localhost:8111/add_node?lon=13.3&lat=53.2&addtags=natural=tree|name=%20%20%20==Great%20Oak==
                 #print (infos)
                 self.collection[mh].description[mh]['infos_osm']=infos
                 #print()
