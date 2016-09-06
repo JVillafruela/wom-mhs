@@ -106,11 +106,20 @@ def extrait_infos(datas):
     # Adresse - datas[2]
 
     # Geoloc - datas[3]
-    rep = datas[3].find('span', {'class':'geo-dec'})
+    rep = datas[3].find('span', {'class':'h-geo geo-dms'})
+    #rep = datas[3].find('data', {'class':'p-latitude'})
+    #print (type(rep))
     if isinstance(rep,bs4.element.Tag) :
-        geo = datas[3].find('span', {'class':'geo-dec'}).get_text().strip()
-        #lat =  geo.split(',')[0]
-        #lon =  geo.split(',')[1]
+        #print(rep['value'])
+        lat= rep.find('data',{'class':'p-latitude'})['value']
+        #print(lat)
+        lon= rep.find('data',{'class':'p-longitude'})['value']
+        #print (lon)
+        geo= lat+', '+lon
+        #print (geo)
+        #geo = datas[3].find('span', {'class':'geo-dec'}).get_text().strip()
+        #lat =  geo.split(', ')[0]
+        #lon =  geo.split(', ')[1]
     else:
         #print ("Erreur : "+nom+" à "+commune+' -> Pas de Géolocalisation\n')
         geo=""
@@ -215,7 +224,7 @@ def get_wikipedia(url_list,musee):
 
 
 if __name__ == "__main__":
-    departement = '26'
+    departement = '01'
     # dic_wp = {}
     # Nb_noMHS=0
     musee = mohist.Musee()

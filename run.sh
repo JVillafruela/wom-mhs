@@ -1,13 +1,9 @@
 #!/opt//bin/bash
 
+
 #récupérer la date/heure
 heure=$(date +%H:%M)
 jour=$(date +%Y-%m-%d)
-#LOG_FILE="../log/out_gen_"$jour"_"$heure.log
-#ERR_FILE="../log/err_gen_"$jour"_"$heure.log
-
-#exec 1>$LOG_FILE
-#exec 2>$ERR_FILE
 
 base_prod="/var/services/homes/jean/web_wom"
 base_dev="/home/jean/osm/monuments_historiques/"
@@ -22,6 +18,7 @@ cd $base
 LANG="fr_FR.utf8"
 export LANG
 
+# activer l'environnement python3
 source WOM_env/bin/activate
 
 # nettoyer les répertoires des pages web
@@ -36,19 +33,13 @@ rm -rf Wom/69_pages/*
 cd ./Mhs
 
 #lancer l'éxécution
-
 python3 gen_html.py
 
 # gitter les pages web et les pousser sur le serveur web
 if [ $? -eq 0 ]; then
 	cd ../Wom
-
 	git add -A
-
-
 	message="Pages web générées le $jour à $heure"
-#echo $message
-#echo $base
 	git commit -am "$message"
 	git push
 
