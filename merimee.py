@@ -105,7 +105,7 @@ def get_merimee(dep,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '42'
+    departement = '26'
     get_maj_base_merimee()
     musee = mohist.Musee()
     musee = get_merimee(ini.dep[departement]['code'],musee)
@@ -114,7 +114,6 @@ if __name__ == "__main__":
     #     for key,value in MH.description[mh]['mer'].items():
     #         print (key,':',value)
     print("Pour le département {}, il y a {} monuments dans la base Mérimée.".format(departement,len(musee.collection)))
-    #print(dic_merimee['PA01000038'])
     musee.maj_salle()
     print(musee)
 

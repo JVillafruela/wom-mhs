@@ -172,7 +172,7 @@ def get_osm(departement,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '01'
+    departement = '26'
     #osmWip=[]
     musee = mohist.Musee()
     # choix du dico de la clé departement

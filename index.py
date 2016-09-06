@@ -116,8 +116,9 @@ def write_bandeau(file,t,dic):
         <a href="https://wiki.openstreetmap.org/wiki/Saint-%C3%89tienne/Patrimoine" title =" St Etienne Patrimoine" target="blank">  St Etienne Patrimoine</a>.</li>
         </ul>
         </p>
-    <p>Pour le moment, et pour tester l'intérêt de cet outil, seuls les départements de l'Ain, du Rhône et de la Loire sont couverts.</p>
-    <p>Ces pages sont statiques avec un peu de jQuery. Elles sont générées automatiquement chaque nuit, par un script python sur un Nas, puis poussées sur le serveur.
+    <p>Pour le moment, et pour tester l'intérêt de cet outil, seuls les départements de l'Ain du Rhône et de la Loire sont couverts. **6 Sept 2016 : Ajout des départements de l'Allier, de la Drôme et de l'Isère</p>
+
+    <p>Ces pages sont du HTML statique avec un peu de jQuery. Elles sont générées automatiquement chaque nuit par un script python3 sur un petit Nas (~3min/département), puis poussées sur un serveur Web.
      Le code est visible et disponible sur <a href="https://jearro.noip.me/gitlist/Mhs.git" target="blank"> Mhs.git </a>.
      <a href="https://jearro.noip.me/gitlist/Wom.git" target ="blank">L'historique des pages web</a> est aussi accessible.</p>
     <p> Dernière construction des pages, le :<b> {}</b></p>

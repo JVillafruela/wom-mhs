@@ -24,11 +24,11 @@ class Musee:
 
         self.salles=[Salle("vrac", 'Monuments historiques non classés'),
                     Salle("mer", 'Monuments historiques présents seulement dans Mérimée', 'Mérimée', 'Monuments à créer dans Wikipédia et dans OpenstreetMap'),
-                    Salle("osm", 'Monuments historiques présents seulement dans OpenStreetMap', 'Osm', 'Monuments non présents dans la base Mérimée Ouverte ou Erreur de code MHS'),
+                    Salle("osm", 'Monuments historiques présents seulement dans OpenStreetMap', 'Osm', 'Monuments non présents dans la base Mérimée Ouverte ou Erreur de géolocalisation du monument dans OSM ou Erreur de code MHS'),
                     Salle("merosm", 'Monuments historiques présents dans Mérimée et OpenStreetMap', 'Mérimée, Osm', 'Monuments à créer dans Wikipédia'),
-                    Salle("wip", 'Monuments historiques présents seulement dans wikipédia','Wp ','Monuments non présents dans la base Mérimée Ouverte ou Erreur de code MHS'),
+                    Salle("wip", 'Monuments historiques présents seulement dans wikipédia','Wp ','Monuments non présents dans la base Mérimée Ouverte ou Erreur de géolocalisation du monument dans OSM ou Erreur de code MHS'),
                     Salle("merwip", 'Monuments historiques présents dans Mérimée et Wikipédia','Mérimée, Wp','Monuments à créer dans OpenStreetMap'),
-                    Salle("osmwip", 'Monuments historiques présents dans OpenStreetMap et Wikipédia', 'Osm, Wp', 'Monuments non présents dans la base Mérimée Ouverte ou Erreur de code MHS'),
+                    Salle("osmwip", 'Monuments historiques présents dans OpenStreetMap et Wikipédia', 'Osm, Wp', 'Erreur de géolocalisation du monument dans OSM ou Erreur de code MHS'),
                     Salle("merosmwip", 'Monuments historiques présents dans Mérimée, OpenStreetMap et Wikipédia', 'Mérimée, Osm, Wp', 'Monuments présents dans les trois bases.')]
         self.stats={}
 

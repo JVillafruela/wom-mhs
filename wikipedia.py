@@ -215,7 +215,7 @@ def get_wikipedia(url_list,musee):
 
 
 if __name__ == "__main__":
-    departement = '42'
+    departement = '26'
     # dic_wp = {}
     # Nb_noMHS=0
     musee = mohist.Musee()

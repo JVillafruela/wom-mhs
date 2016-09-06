@@ -24,8 +24,11 @@ export LANG
 
 source WOM_env/bin/activate
 
-# nettoyer les répertoires  des pages web
+# nettoyer les répertoires des pages web
 rm -rf Wom/01_pages/*
+rm -rf Wom/03_pages/*
+rm -rf Wom/27_pages/*
+rm -rf Wom/38_pages/*
 rm -rf Wom/42_pages/*
 rm -rf Wom/69_pages/*
 
@@ -50,7 +53,7 @@ if [ $? -eq 0 ]; then
 	git push
 
 ################# à modifier pour la prod !!
-	lftp ftp://njean:G3gPg54b@ftp.njean.fr -e "mirror -e -R -x .git /var/services/homes/jean/web_wom/Wom/. /www/wom/ ; quit"
+	lftp ftp://user:motdepasse@serveurFtp -e "mirror -e -R -x .git /var/services/homes/jean/web_wom/Wom/. /www/wom/ ; quit"
 	if [ $? -eq 0 ]; then
 		heure=$(date +%H:%M)
 		echo "Transfert vers le serveur : Ok le $jour à $heure"
