@@ -18,7 +18,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-#  
+#
 '''
     Organisation des infos MH une class Musee qui contient une collection de monuments (MoHist)
 '''
@@ -112,9 +112,6 @@ class Musee:
                 #print ("ref:mhs = {}".format(mh))
                 tag_A= "ref:mhs={}".format(mh)
                 infos+="<li>"+tag_A+"</li>"
-                # le nom probable du MH
-                tag_B="name={}".format(self.collection[mh].description[mh]['mer']['nom'])
-                infos+="<li>"+tag_B+"</li>"
                 #print ("heritage:operator= mhs")
                 tag_C="heritage:operator=mhs"
                 infos+="<li>"+tag_C+"</li>"
@@ -135,11 +132,9 @@ class Musee:
                 else:
                     #print ("Classement : {}".format(classement))+"</li>"
                     infos+="<li>Classement : {}".format(classement)
+                    tag_D="heritage="
                     tag_E="mhs:inscription_date="
                     infos+="<b>Import sans classement</b> </li>"
-                #print ("Source : Base Mérimée ouverte - avril 2016 ")
-                tag_F="source:heritage=data.gouv.fr, Ministère de la Culture - 2016"
-                infos+="<li>"+tag_F+"</li>"
                 # lien wikipedia
                 if 'infos_manquantes' in self.collection[mh].description[mh]['wip']  and "Page monument absente" not in self.collection[mh].description[mh]['wip']['infos_manquantes']:
                     texte =self.collection[mh].description[mh]['wip']['id'].replace('_',' ')
@@ -149,6 +144,13 @@ class Musee:
                 else:
                     tag_G="wikipedia="
                 infos+="<li>"+tag_G+"</li>"
+                # le nom probable du MH
+                tag_B="name={}".format(self.collection[mh].description[mh]['mer']['nom'])
+                infos+="<li>"+tag_B+"</li>"
+                #print ("Source : Base Mérimée ouverte - avril 2016 ")
+                tag_F="source:heritage=data.gouv.fr, Ministère de la Culture - 2016"
+                infos+="<li>"+tag_F+"</li>"
+                infos+="<p>"
                 if 'geoloc' in self.collection[mh].description[mh]['wip'] and self.collection[mh].description[mh]['wip']['geoloc'] != '':
                     #print ("Geolocalisation : {}".format(self.collection[mh].description[mh]['wip']['geoloc']))
                     lat= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[0]
