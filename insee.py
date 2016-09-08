@@ -18,15 +18,16 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-#  
+#
 '''
     Extraire à partir du fichier txt des N° de commune INSEE, le code insee d'une commune
 
-    source : http://www.insee.fr/fr/methodes/nomenclatures/cog/telechargement.asp?annee=2016
+    source : http://www.insee.fr/fr/methodes/nomenclatures/cog/telechargement/2016/txt/comsimp2016.zip
+    
      FIXME => les noms ne doivent pas avoir d'espace => remplacement par "-"   ---(OK)
      FIXME => le fichier source est encodé : Europe occidentale (ISO-8859-1) ou
                 Europe occidentale (Windows-1252/WinLatin1).
-                Cet encodage est donné par LO.classeur à l'ouverture du fichier .txt
+                Cet encodage est donné par LibreOffice.classeur à l'ouverture du fichier .txt
             =>  conversion manuelle par : $iconv -f ISO-8859-1 -t UTF-8 source > cible ---(OK)
                 mais pas de traitement sans conversion ?
 
