@@ -156,12 +156,12 @@ class Musee:
                     lat= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[0]
                     lon= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[1]
                     #print("Position estimée : http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}".format(lat,lon,lat,lon))
-                    infos+='<li><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Géocodage fourni par Wikipédia : à vérifier" target="blank"'.format(lat,lon,lat,lon)
-                    infos+='>Position estimée</a></li>'
+                    infos+='<li><b><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Géocodage fourni par Wikipédia : à vérifier" target="blank"'.format(lat,lon,lat,lon)
+                    infos+='>Position estimée</a></b></li>'
                     infos+="<p>"
-                    infos+='<li><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}|{}|{}|{}|{}|{}|{}"\
-                            title="Import automatique dans JOSM : Vérifier les tags !" target="blank" '.format(lon,lat,tag_A,tag_B,tag_C,tag_D,tag_E,tag_F,tag_G)
-                    infos+='>Josm import</a></li>'
+                    infos+='<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}%7C{}%7C{}%7C{}%7C{}%7C{}%7C{}"\
+                            title="Création d\'un node dans JOSM (remoteControl) : Vérifier la position et les tags !" target="blank" '.format(lon,lat,tag_A,tag_B,tag_C,tag_D,tag_E,tag_F,tag_G)
+                    infos+='>Import JOSM</a></b></li>'
                     #exemple = http://www.openstreetmap.org/?mlat=45.44024&mlon=4.38175#map=19/45.44024/4.38175
                     # autre exemple = http://localhost:8111/add_node?lon=13.3&lat=53.2&addtags=natural=tree|name=%20%20%20==Great%20Oak==
                 #print (infos)

@@ -134,7 +134,7 @@ def get_url_suivante(page):
 
 
 if __name__ == "__main__":
-    code = '68'
+    code = '12'
     nom_dep= get_nom(code)
     print(code, " : ",nom_dep)
     main_page = getData(url_base)

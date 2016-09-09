@@ -1,4 +1,4 @@
-/* bandeau */ 
+/* bandeau */
  div#bandeau {
 	width:100%;
 	height:100px;
@@ -86,7 +86,7 @@ div.dataTables_wrapper {
         width: 100%;
         margin: 0 auto;
     }
-/* info Bloc */  
+/* info Bloc */
      td.infoBloc:hover{
      cursor:pointer;
  }
