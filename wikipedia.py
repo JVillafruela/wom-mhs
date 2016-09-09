@@ -18,7 +18,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-#  
+#
 '''
     Faire une requette sur les pages wikipédia "Liste_des_monuments_historiques_de_l'Ain". chaque département semble avoir une page de ce type.
     en entrée : un code département = '01' pris dans la table des départements (ini.py)
@@ -88,23 +88,33 @@ def extrait_commune(url):
     #print (commune)
     return commune
 
+
 def extrait_infos(datas):
     global ctr_no_mhs
     infos_manquantes=[]
-
     # nom - datas[0]
     if isinstance(datas[0].find('a'),bs4.element.Tag):
         nom = datas[0].find('a').text
+        #texte du tag wikipédia
+        tag_wk = datas[0].find('a').attrs['title']
         # Rechercher si page WP du monument existe
         if "page inexistante" in datas[0].find('a').attrs['title']:
             #print(datas[0].find('a').attrs['title'])
             infos_manquantes.append("Page monument absente")
+            #enlever le texte page inexistante pour le tag wikipédia
+            tag_wk = tag_wk.split(' (')[0]
     elif datas[0].find('a') == None:
         nom = datas[0].text
+        if nom in ini.no_name:
+            nom = ''
         infos_manquantes.append("Page monument absente")
+        tag_wk = nom
+
     else :
         nom =''
+        tag_wk = ''
     #print (nom)
+    #print(tag_wk)
 
     # Commune - datas[1]
     if isinstance(datas[1].find('a'),bs4.element.Tag):
@@ -166,11 +176,11 @@ def extrait_infos(datas):
         #print(nom,"  Pas d'image")
         infos_manquantes.append("Image absente")
 
-    return [code_mhs,c_insee,commune,nom,geo,infos_manquantes]
+    return [code_mhs,c_insee,commune,nom,geo,infos_manquantes,tag_wk]
 
 def ajoute_infos(infos, musee):
-    '''infos=[code_mhs,c_insee,commune,nom,geo,infos_manquantes,url,identifiant]
-                0          1        2   3    4         5         6        7       '''
+    '''infos=[code_mhs,c_insee,commune,nom,geo,infos_manquantes,tag_wk,url,identifiant]
+                0          1        2   3    4         5            6   7    8   '''
     if (infos[0] in musee.collection) and (infos[0] in musee.collection[infos[0]].description) and (musee.collection[infos[0]].description[infos[0]]['wip'] !={}):
         # code identique sur deux/trois objets WIP :
         if 'mhs_bis' in  musee.collection[infos[0]].description[infos[0]]['wip'] :
@@ -178,23 +188,25 @@ def ajoute_infos(infos, musee):
                                                      'commune': infos[2],
                                                      'nom':infos[3],
                                                      'geoloc' : infos[4],
-                                                     'url': infos[6],
-                                                     'id': infos[7],
-                                                     'infos_manquantes':infos[5] }
+                                                     'url': infos[7],
+                                                     'id': infos[8],
+                                                     'infos_manquantes':infos[5],
+                                                     'tag_wk':infos[6]  }
         else :
             musee.collection[infos[0]].description[infos[0]]['wip']['mhs_bis']={'insee': infos[1],
                                                  'commune': infos[2],
                                                  'nom': infos[3],
                                                  'geoloc' : infos[4],
-                                                 'url': infos[6],
-                                                 'id': infos[7],
-                                                 'infos_manquantes': infos[5] }
+                                                 'url': infos[7],
+                                                 'id': infos[8],
+                                                 'infos_manquantes': infos[5],
+                                                 'tag_wk':infos[6] }
         #print (musee.collection[code].description[code]['wip'])
     else:
         #enregistrement d'un momument si le code mhs existe
         MH=musee.add_Mh(infos[0])
-        #def add_infos_wip(self, insee, commune, nom, geo, url, ident, infos_manquantes):
-        MH.add_infos_wip(infos[1],infos[2],infos[3],infos[4],infos[6],infos[7],infos[5])
+        #def add_infos_wip(self, insee, commune, nom, geo, url, ident, infos_manquantes, tag_wk):
+        MH.add_infos_wip(infos[1],infos[2],infos[3],infos[4],infos[7],infos[8],infos[5],infos[6])
     return musee
 
 def analyse(data,url,musee,commune=None):

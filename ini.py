@@ -69,3 +69,6 @@ url_dev="/home/jean/osm/monuments_historiques"
 url_prod="/var/services/homes/jean/web_wom"
 # fichier statique : style.css
 #cssFile ="style.css"
+
+#les textes qui ne doivent pas apparaitre comme name= pour OSM
+no_name = ['Immeuble','Maison','Maisons','Eglise', 'Église', 'Château','Écurie','Écuries','Presbytère','Beffroi','Cimetière','Prieuré','Remparts','Hôtel']

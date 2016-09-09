@@ -137,15 +137,19 @@ class Musee:
                     infos+="<b>Import sans classement</b> </li>"
                 # lien wikipedia
                 if 'infos_manquantes' in self.collection[mh].description[mh]['wip']  and "Page monument absente" not in self.collection[mh].description[mh]['wip']['infos_manquantes']:
-                    texte =self.collection[mh].description[mh]['wip']['id'].replace('_',' ')
+                    texte =self.collection[mh].description[mh]['wip']['tag_wk']
                     if texte=="":
                         texte=self.collection[mh].description[mh]['mer']['nom']
                     tag_G="wikipedia=fr:{}".format(texte)
                 else:
-                    tag_G="wikipedia="
+                    tag_G=""
                 infos+="<li>"+tag_G+"</li>"
                 # le nom probable du MH
-                tag_B="name={}".format(self.collection[mh].description[mh]['mer']['nom'])
+                name=self.collection[mh].description[mh]['mer']['nom']
+                if name in ini.no_name:
+                    tag_B = ''
+                else:
+                    tag_B="name={}".format(name)
                 infos+="<li>"+tag_B+"</li>"
                 #print ("Source : Base Mérimée ouverte - avril 2016 ")
                 tag_F="source:heritage=data.gouv.fr, Ministère de la Culture - 2016"
@@ -229,14 +233,15 @@ class MoHist:
                                              'mhs_bis': mhs_bis}
         self.note+=2
 
-    def add_infos_wip(self, insee, commune, nom, geo, url, ident, infos_manquantes):
+    def add_infos_wip(self, insee, commune, nom, geo, url, ident, infos_manquantes, tag_wk):
         self.description[self.mhs]['wip'] = {'insee': insee,
                                              'commune': commune,
                                              'nom': nom,
                                              'geoloc' : geo,
                                              'url': url,
                                              'id': ident,
-                                             'infos_manquantes': infos_manquantes }
+                                             'infos_manquantes': infos_manquantes,
+                                             'tag_wk':tag_wk }
         self.note+=4
 
     def corrige_note(self):
