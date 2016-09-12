@@ -131,10 +131,10 @@ class Musee:
                     infos+="<li>"+tag_E+"</li>"
                 else:
                     #print ("Classement : {}".format(classement))+"</li>"
-                    infos+="<li>Classement : {}".format(classement)
-                    tag_D="heritage="
-                    tag_E="mhs:inscription_date="
-                    infos+="<b>Import sans classement</b> </li>"
+                    infos+="<li><b>Classements multiples</b> : {}</li>".format(classement)
+                    tag_D=""
+                    tag_E=""
+                    infos+="<li><b>Import sans classement !</b> </li>"
                 # lien wikipedia
                 if 'infos_manquantes' in self.collection[mh].description[mh]['wip']  and "Page monument absente" not in self.collection[mh].description[mh]['wip']['infos_manquantes']:
                     texte =self.collection[mh].description[mh]['wip']['tag_wk']
