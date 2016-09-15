@@ -75,11 +75,19 @@ def getData(url,dic_dep):
             dic_dep[code]['code'] = code
             dic_dep[code]['name'] = name
             dic_dep[code]['text'] = text
+#########################
+# Si recherche manuelle des urls non standards des départements
+# retablir la ligne suivante
+            # dic_dep[code]['url'] = url
+
+# et commenter le block encadré ci dessous
             if code in special.special :
                 dic_dep[code]['url'] = special.special[code]['url']
             else :
-                dic_dep[code]['url'] = url
-            dic_dep[code]['nb_mh'] = nb_mh
+                dic_dep[code]['url'] = url.split('historiques_')[1]
+#########################
+            # Le Nombre de nomuments donné par cette page wikipédia est faux.
+            #dic_dep[code]['nb_mh'] = nb_mh
     return dic_dep
 
 def is_table_url(url,dep):
@@ -88,20 +96,15 @@ def is_table_url(url,dep):
     contenu = r.text
     main_page = BeautifulSoup(contenu,'html.parser')
     #print(main_page.prettify())
-    table =  main_page.find('table','wikitable')
-    #print (table)
-    if isinstance(table,bs4.element.Tag):
-        titre = table.find('th')
-        # print(type(titre))
-        # print(titre.get_text())
-        if titre.get_text() == 'Monument' :
-            #print('OK')
-            return True
-        else:
-            #print('Non OK')
-            return False
+    table =  main_page.find_all('table','wikitable sortable')
+    #print (len(table))
+    if len(table) == 1 :
+        return table[0].find('th').get_text() == 'Monument'
+    elif len(table) in [2,3]:
+        return table[0].find('th').get_text() == 'Monument' or table[1].find('th').get_text() == 'Monument'
     else:
         return False
+
 
 def get_all_url(url):
     arr=[]
@@ -121,16 +124,28 @@ if __name__ == "__main__":
     #print(len(dic_dep))
 
     ##########################
-    #       tests divers
+    # recherche non aboutie des urls non standards
     # url ="/wiki/Liste_des_monuments_historiques_de_la_Gironde"
     # get_all_url(url)
+    #
+
+    #########################
+    # ### Recherche des départements pour lesquels l'url ne renvoie pas la table des monuments
+    # et qui vont demander une recherche manuelle et une inscription dans le fichier special.py
+    # Attention : il faut commenter/décommenter des lignes de codes dans la fonction getData()
+    # Attention : Il faudra ajouter à la liste trouvée le département 69 (Métropole de Lyon non détectée dans les départements)
     # list_dep=[]
-    # #make_control(dic_dep[dep]['url1'],dep)
-    # #test si l'url renvoie la table des mh
     # for k in dic_dep.keys():
-    #     if not is_table_url(dic_dep[k]['url1'], k):
+    #     if not is_table_url(dic_dep[k]['url'], k):
     #         list_dep.append(k)
     # print (sorted(list_dep))
+    ###########################
+    # Test d'un seul département
+    # dep ="44"
+    # if not is_table_url(dic_dep[dep]['url'],dep):
+    #     print("Pas de table des monuments")
+    # else:
+    #     print("Table monuments trouvée")
     ##########################
 
     codes = list(range(96))[1:]
