@@ -20,7 +20,7 @@
 #  MA 02110-1301, USA.
 #
 '''
-    Créer une base d'url des listed de monuments historiques à partir d'une page Wikipédia:
+    Créer une base d'url des listes de monuments historiques à partir d'une page Wikipédia:
         https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_par_département_français
 
 '''
@@ -56,7 +56,8 @@ def getData(url,dic_dep):
     table =  main_page.find_all("table", "wikitable sortable")[0]
     for ligne in table.find_all('tr'):
         x = nb_mh = 0
-        cell = code = name = url1 = ''
+        cell = code = name = url=  ''
+        urls = []
         for cell in ligne.find_all('td'):
             #print(type(cell))
             if x == 0 :
@@ -78,13 +79,15 @@ def getData(url,dic_dep):
 #########################
 # Si recherche manuelle des urls non standards des départements
 # retablir la ligne suivante
-            # dic_dep[code]['url'] = url
+            # dic_dep[code]['url_d'] = url
 
 # et commenter le block encadré ci dessous
             if code in special.special :
-                dic_dep[code]['url'] = special.special[code]['url']
+                for u in special.special[code]['url']:
+                    urls.append("/wiki/Liste_des_monuments_historiques_"+u)
+                dic_dep[code]['url_d'] = urls
             else :
-                dic_dep[code]['url'] = url.split('historiques_')[1]
+                dic_dep[code]['url_d'] = url
 #########################
             # Le Nombre de nomuments donné par cette page wikipédia est faux.
             #dic_dep[code]['nb_mh'] = nb_mh
@@ -138,13 +141,13 @@ if __name__ == "__main__":
     # Attention : Il faudra ajouter à la liste trouvée le département 69 (Métropole de Lyon non détectée dans les départements)
     # list_dep=[]
     # for k in dic_dep.keys():
-    #     if not is_table_url(dic_dep[k]['url'], k):
+    #     if not is_table_url(dic_dep[k]['url_d'], k):
     #         list_dep.append(k)
     # print (sorted(list_dep))
     ###########################
     # Test d'un seul département
     # dep ="44"
-    # if not is_table_url(dic_dep[dep]['url'],dep):
+    # if not is_table_url(dic_dep[dep]['url_d'],dep):
     #     print("Pas de table des monuments")
     # else:
     #     print("Table monuments trouvée")
