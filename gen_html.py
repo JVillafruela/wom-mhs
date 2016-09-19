@@ -18,7 +18,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-#  
+#
 '''
     Génération de pages statiques directement en html - version 2
 '''
@@ -233,12 +233,6 @@ def gen_pages(dep, musee):
         # # '''fermer le fichier'''
             oF.close()
 
-def copier_css(racine):
-    #shutil.copy('./style.css',racine+"/style.css")
-    # if not os.path.exists(racine+"/js"):
-    #     shutil.copytree('./js',racine+"/js")
-    pass
-
 if __name__ == "__main__":
     stats={}
     ''' Rechercher une maj de la base Mérimée'''
@@ -251,8 +245,7 @@ if __name__ == "__main__":
     d_dep = OrderedDict(sorted(ini.dep.items(), key=lambda t: t[0]))
     ''' Générer la page index'''
     index.gen_page_index(d_dep)
-    ''' Déplacer le fichier style.css vers la racine du site web'''
-    copier_css(base_url)
+
     '''générer les pages de chaque département'''
     # d= 01, 42, 69,  etc...
     for d in d_dep:
@@ -274,7 +267,6 @@ if __name__ == "__main__":
         print("OSM :", museum.stats['osm'])
         print("Wikipedia :",museum.stats['wip'])
         print("     ---- ")
-
         #print(museum)
         ''' Générer le Html'''
         gen_pages(d_dep[d],museum)
