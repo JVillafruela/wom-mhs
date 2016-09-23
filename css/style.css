@@ -76,7 +76,9 @@ div#container {
 	padding-bottom: 5px;
 	//font-size: 0.9em;
 }
-
+#lien #texte{
+    font-size: 0.8em;
+}
 .desc{
 		text-align:left;
 		font-size: 0.9em;

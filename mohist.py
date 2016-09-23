@@ -68,6 +68,14 @@ class Musee:
             self.collection[ref]=MH
         return MH
 
+    def exist_Mh(self,ref):
+        ''' Recherche si un MH existe  '''
+        return ref in self.collection
+
+    def get_MH(self,ref):
+        ''' récupère un MH'''
+        return self.collection[ref]
+
     def maj_salle(self):
         '''Met à jour les salles après ajout des MH dans le musée '''
         # raz
@@ -112,6 +120,9 @@ class Musee:
                 #print ("ref:mhs = {}".format(mh))
                 tag_A= "ref:mhs={}".format(mh)
                 infos+="<li>"+tag_A+"</li>"
+                # tag wikidata
+                tag_Q ="wikidata={}".format(self.collection[mh].description[mh]['wkd'])
+                infos+="<li>"+tag_Q+"</li>"
                 #print ("heritage:operator= mhs")
                 tag_C="heritage:operator=mhs"
                 infos+="<li>"+tag_C+"</li>"
@@ -163,8 +174,8 @@ class Musee:
                     infos+='<li><b><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Géocodage fourni par Wikipédia : à vérifier" target="blank"'.format(lat,lon,lat,lon)
                     infos+='>Position estimée</a></b></li>'
                     infos+="<p>"
-                    infos+='<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}%7C{}%7C{}%7C{}%7C{}%7C{}%7C{}"\
-                            title="Création d\'un node dans JOSM (remoteControl) : Vérifier la position et les tags !" target="blank" '.format(lon,lat,tag_A,tag_B,tag_C,tag_D,tag_E,tag_F,tag_G)
+                    infos+='<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}%7C{}%7C{}%7C{}%7C{}%7C{}%7C{}%7C{}"\
+                            title="Création d\'un node dans JOSM (remoteControl) : Vérifier la position et les tags !" target="blank" '.format(lon,lat,tag_A,tag_Q,tag_B,tag_C,tag_D,tag_E,tag_F,tag_G)
                     infos+='>Import JOSM</a></b></li>'
                     #exemple = http://www.openstreetmap.org/?mlat=45.44024&mlon=4.38175#map=19/45.44024/4.38175
                     # autre exemple = http://localhost:8111/add_node?lon=13.3&lat=53.2&addtags=natural=tree|name=%20%20%20==Great%20Oak==
@@ -207,7 +218,7 @@ class MoHist:
 
     def __init__(self,ref_mhs):
         self.mhs=ref_mhs
-        self.description={self.mhs:{"mer":{},"osm":{},"wip":{}}}
+        self.description={self.mhs:{"mer":{},"osm":{},"wip":{},"wkd":""}}
         self.note = 0
 
         MoHist.ctr_monument+=1
@@ -243,6 +254,9 @@ class MoHist:
                                              'infos_manquantes': infos_manquantes,
                                              'tag_wk':tag_wk }
         self.note+=4
+
+    def add_infos_wkd(self,qCode):
+        self.description[self.mhs]['wkd'] = qCode
 
     def corrige_note(self):
         #correction de la note d'un MH si présence lien vers wikipédia

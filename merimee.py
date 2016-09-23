@@ -18,7 +18,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-#  
+#
 '''
     Rechercher et lire le fichier .json de la base mérimée et extraire
     les codes mhs des monuments d'un département. Un test sur la date de version est effectué et la nouvelle version est
@@ -123,7 +123,7 @@ def get_merimee(dep,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '26'
+    departement = '01'
     get_maj_base_merimee()
     musee = mohist.Musee()
     musee = get_merimee(ini.dep[departement]['code'],musee)

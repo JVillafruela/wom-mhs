@@ -24,7 +24,7 @@
 '''
 from __future__ import unicode_literals
 import os,shutil
-import index,merimee,overpass,wikipedia,ini,mohist
+import index,merimee,overpass,wikipedia,ini,mohist,wikidata
 from collections import OrderedDict
 
 def get_bandeau(dep,title,musee):
@@ -114,7 +114,14 @@ def get_table(salle,musee):
                 url_josm= 'href="http://localhost:8111/load_object?objects='+type_osm[0]+id_osm
             #les tags manquants dans OSM
             if len(MH.description[mh]['osm']['tags_manquants'])>0:
+                # Remplacer dans les tags manquants le terme wikidata (si présent) par un lien url_josm avec ajout du qCode
+                if "wikidata" in MH.description[mh]['osm']['tags_manquants']:
+                    #url_wkd="<a "+url_josm+"%7Caddtags=wikidata="+MH.description[mh]['wkd']+" target='blank' title='Import dans Josm'>"+MH.description[mh]['wkd']+ "</a>"
+                    url_wkd = '<a {}&addtags=wikidata={}" target="blank" title="Ajout code wikidata avec Josm"> {} </a>'.format(url_josm,MH.description[mh]['wkd'],MH.description[mh]['wkd'])
+                    MH.description[mh]['osm']['tags_manquants'][-1] = url_wkd
                 note_osm+=", ".join(MH.description[mh]['osm']['tags_manquants'])
+                # print(note_osm)
+                # exit()
             elif MH.description[mh]['osm']['mhs_bis'] != None :
                 note_osm+=' <a href="http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
             else :
@@ -185,7 +192,7 @@ def get_table(salle,musee):
             table+='''<td class="lien">  ---- </td>'''
         #table remarques OSM et WP
         if note_osm !="<b> Osm : </b>" and note_wp!="<b> Wp : </b>":
-            table += '''<td class="texte"> {}  </td> <td class="texte"> {} </td> '''.format(note_osm,note_wp)
+            table += '''<td class="texte"> {} </td> <td class="texte"> {} </td> '''.format(note_osm,note_wp)
         elif note_osm !="<b> Osm : </b>" and not note_wp!="<b> Wp : </b>":
             table += '''<td class="texte"> {} </td> <td class="texte"></td> '''.format(note_osm)
         elif not note_osm !="<b> Osm : </b>" and note_wp!="<b> Wp : </b>":
@@ -252,10 +259,11 @@ if __name__ == "__main__":
         print('------'+d+'------')
         ''' Acquérir les datas'''
         #print('----- Acquisition des datas ------')
-        museum= mohist.Musee()
-        museum= overpass.get_osm(d_dep[d]['name'],museum)
-        museum= merimee.get_merimee(d_dep[d]['code'],museum)
-        museum= wikipedia.get_wikipedia(d_dep[d]['url_d'],museum)
+        museum = mohist.Musee()
+        museum = overpass.get_osm(d_dep[d]['name'],museum)
+        museum = merimee.get_merimee(d_dep[d]['code'],museum)
+        museum = wikipedia.get_wikipedia(d_dep[d]['url_d'],museum)
+        museum = wikidata.get_wikidata_codes(d_dep[d]['name'][0],museum)
         ''' Trier et compter '''
         museum.maj_salle()
         #pour les salles mer et merwip

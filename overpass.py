@@ -18,7 +18,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-#  
+#
 '''
     Requette sur la base OSM pour rechercher les ref:mhs d'un département
 
@@ -71,7 +71,7 @@ def get_tags(dico):
         Détecter les tags 'Monuments Historiques' présents et absents
         dico contient tous les tags de l'objet osm
     '''
-    base_tags=['ref:mhs','name','heritage','heritage:operator','mhs:inscription_date',"wikipedia"]
+    base_tags=['ref:mhs','name','heritage','heritage:operator','mhs:inscription_date',"wikipedia","wikidata"]
     source_tags=['source','source:heritage']
     tags_mhs = {}
     tags_absents = []
@@ -190,7 +190,7 @@ def get_osm(departement,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '26'
+    departement = '01'
     #osmWip=[]
     musee = mohist.Musee()
     # choix du dico de la clé departement
