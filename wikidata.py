@@ -28,6 +28,8 @@ from __future__ import unicode_literals
 import requests
 import ini, mohist
 
+wkdCodesSansMh = {}
+
 def get_Q_departement(dep):
     url = "https://query.wikidata.org/bigdata/namespace/wdq/sparql?query={}"
     datas = '''SELECT DISTINCT ?itemLabel ?item WHERE {?item wdt:P31/wdt:P279* wd:Q6465. ?item p:P31 ?dep .
@@ -60,29 +62,37 @@ def get_dic_QMh(Q_dep):
 
 def get_wikidata_codes(dep, musee):
     wkdCodes={}
-    Q_dep = get_Q_departement(dep)
-    #print (dep, ' -> ',Q_dep)
-    wkdCodes = get_dic_QMh(Q_dep)
-    for codeMh in wkdCodes:
-        if musee.exist_Mh(codeMh):
-            MH= musee.get_MH(codeMh)
-            MH.add_infos_wkd(wkdCodes[codeMh])
-        else:
-            pass
+    for d in dep:
+        if d == "Métropole de Lyon" :
+            Q_dep="Q16665897"
+        else :
+            Q_dep = get_Q_departement(d)
+        #print (d, ' -> ',Q_dep)
+        wkdCodes = get_dic_QMh(Q_dep)
+        for codeMh in wkdCodes:
+            if musee.exist_Mh(codeMh):
+                MH = musee.get_MH(codeMh)
+                MH.add_infos_wkd(wkdCodes[codeMh])
+            else:
+                wkdCodesSansMh[codeMh] = wkdCodes[codeMh]
+                #print(codeMh, ' -> ',wkdCodes[codeMh])
     return musee
 
 if __name__ == "__main__":
 
-    departement = '01'
+    departement = '69'
     musee = mohist.Musee()
-    musee = get_wikidata_codes(ini.dep[departement]['name'][0],musee)
-    #FIXME : attention pour le département du rhône -> la métropole de Lyon n'a pas de code wikidata
+    musee = get_wikidata_codes(ini.dep[departement]['name'],musee)
+    if musee.get_nb_MH('wkd') > 0 :
+        print("Pour le département {}, il y a {} monuments dans la base wikiData.".format(departement,len(musee.collection)))
+        print(musee)
 
-    print("Pour le département {}, il y a {} monuments dans la base wikiData.".format(departement,len(musee.collection)))
-    print(musee)
-
-    nb=musee.get_nb_MH('wkd')
-    print(nb)
+        nb=musee.get_nb_MH('wkd')
+        print(nb)
+        
+    for code in wkdCodesSansMh:
+        print (code, '-> ', wkdCodesSansMh[code])
+    print (len(wkdCodesSansMh))
 
 
 ###################################

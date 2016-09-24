@@ -113,19 +113,18 @@ def get_table(salle,musee):
                 url_osm_id ='href="http://www.openstreetmap.org/edit?editor=id&'+type_osm+'='+id_osm
                 url_josm= 'href="http://localhost:8111/load_object?objects='+type_osm[0]+id_osm
             #les tags manquants dans OSM
-            if len(MH.description[mh]['osm']['tags_manquants'])>0:
+            if len(MH.description[mh]['osm']['tags_manquants']) > 0:
                 # Remplacer dans les tags manquants le terme wikidata (si présent) par un lien url_josm avec ajout du qCode
-                if "wikidata" in MH.description[mh]['osm']['tags_manquants']:
-                    #url_wkd="<a "+url_josm+"%7Caddtags=wikidata="+MH.description[mh]['wkd']+" target='blank' title='Import dans Josm'>"+MH.description[mh]['wkd']+ "</a>"
+                if "wikidata" in MH.description[mh]['osm']['tags_manquants'] and MH.description[mh]['wkd'] != "":
+                    #print (MH.description[mh]['wkd'])
                     url_wkd = '<a {}&addtags=wikidata={}" target="blank" title="Ajout code wikidata avec Josm"> {} </a>'.format(url_josm,MH.description[mh]['wkd'],MH.description[mh]['wkd'])
                     MH.description[mh]['osm']['tags_manquants'][-1] = url_wkd
                 note_osm+=", ".join(MH.description[mh]['osm']['tags_manquants'])
-                # print(note_osm)
-                # exit()
             elif MH.description[mh]['osm']['mhs_bis'] != None :
                 note_osm+=' <a href="http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
             else :
                 note_osm =""
+            #print(note_osm)
             # recherche des urls WP
             if 'wikipedia' in MH.description[mh]['osm']['tags_mhs']:
                 url_osmwp = 'href="https://fr.wikipedia.org/wiki/'+MH.description[mh]['osm']['tags_mhs']['wikipedia']
@@ -263,7 +262,11 @@ if __name__ == "__main__":
         museum = overpass.get_osm(d_dep[d]['name'],museum)
         museum = merimee.get_merimee(d_dep[d]['code'],museum)
         museum = wikipedia.get_wikipedia(d_dep[d]['url_d'],museum)
-        museum = wikidata.get_wikidata_codes(d_dep[d]['name'][0],museum)
+        museum = wikidata.get_wikidata_codes(d_dep[d]['name'],museum)
+        print(" Nb codes wikidata sans Mh = ",(len(wikidata.wkdCodesSansMh)))
+        if len(wikidata.wkdCodesSansMh) > 0 :
+            for code in wikidata.wkdCodesSansMh:
+                print (code, '-> ', wikidata.wkdCodesSansMh[code])
         ''' Trier et compter '''
         museum.maj_salle()
         #pour les salles mer et merwip
