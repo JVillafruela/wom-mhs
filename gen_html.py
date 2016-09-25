@@ -24,7 +24,7 @@
 '''
 from __future__ import unicode_literals
 import os,shutil
-import index,merimee,overpass,wikipedia,ini,mohist,wikidata
+import index,merimee,overpass,wikipedia,ini,mohist,wkdcodes
 from collections import OrderedDict
 
 def get_bandeau(dep,title,musee):
@@ -241,6 +241,9 @@ def gen_pages(dep, musee):
 
 if __name__ == "__main__":
     stats={}
+    wkdCodes = {}
+    ''' Rechercher les Qcodes sur wikidata'''
+    wkdCodes = wkdcodes.get_Q_codes()
     ''' Rechercher une maj de la base Mérimée'''
     merimee.get_maj_base_merimee()
     ''' Définir les variables d'entrée'''
@@ -262,11 +265,8 @@ if __name__ == "__main__":
         museum = overpass.get_osm(d_dep[d]['name'],museum)
         museum = merimee.get_merimee(d_dep[d]['code'],museum)
         museum = wikipedia.get_wikipedia(d_dep[d]['url_d'],museum)
-        museum = wikidata.get_wikidata_codes(d_dep[d]['name'],museum)
-        print(" Nb codes wikidata sans Mh = ",(len(wikidata.wkdCodesSansMh)))
-        if len(wikidata.wkdCodesSansMh) > 0 :
-            for code in wikidata.wkdCodesSansMh:
-                print (code, '-> ', wikidata.wkdCodesSansMh[code])
+        '''Associer les qcodes de wikidata à chaque MH'''
+        museum.maj_Qcodes(wkdCodes)
         ''' Trier et compter '''
         museum.maj_salle()
         #pour les salles mer et merwip

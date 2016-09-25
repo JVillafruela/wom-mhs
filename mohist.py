@@ -90,6 +90,12 @@ class Musee:
 
             self.salles[MH.note].s_collection.append(ref)
 
+    def maj_Qcodes(self,dic_Qcodes):
+        ''' Associer les Qcodes de wikidata à chaque MH'''
+        for codeMh in self.collection :
+            if ("ERR" not in codeMh) and (codeMh in dic_Qcodes):
+                self.collection[codeMh].description[codeMh]['wkd'] = dic_Qcodes[codeMh]
+
     def maj_stats(self):
         ''' Compter les MH '''
         base = ['mer','osm','wip']
@@ -254,9 +260,6 @@ class MoHist:
                                              'infos_manquantes': infos_manquantes,
                                              'tag_wk':tag_wk }
         self.note+=4
-
-    def add_infos_wkd(self,qCode):
-        self.description[self.mhs]['wkd'] = qCode
 
     def corrige_note(self):
         #correction de la note d'un MH si présence lien vers wikipédia
