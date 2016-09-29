@@ -18,7 +18,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-#  
+#
 '''
     Génération de pages statiques directement en html - version 2
 '''
@@ -233,12 +233,6 @@ def gen_pages(dep, musee):
         # # '''fermer le fichier'''
             oF.close()
 
-def copier_css(racine):
-    #shutil.copy('./style.css',racine+"/style.css")
-    # if not os.path.exists(racine+"/js"):
-    #     shutil.copytree('./js',racine+"/js")
-    pass
-
 if __name__ == "__main__":
     stats={}
     ''' Rechercher une maj de la base Mérimée'''
@@ -250,10 +244,14 @@ if __name__ == "__main__":
         base_url=ini.url_dev+"/Wom"
     d_dep = OrderedDict(sorted(ini.dep.items(), key=lambda t: t[0]))
     ''' Générer la page index'''
+    '''FIXME = changer le menu de choix du département'''
     index.gen_page_index(d_dep)
-    ''' Déplacer le fichier style.css vers la racine du site web'''
-    copier_css(base_url)
-    '''générer les pages de chaque département'''
+
+    '''Créer la liste des départements à mettre à jour'''
+    ''' rechercher les départements vus sur le web aujourd'hui '''
+    list_dep = ovh.get_log()
+    ''' ajouter N départements parmi les 101'''
+    '''Mettre à jour les pages des départements de la liste'''
     # d= 01, 42, 69,  etc...
     for d in d_dep:
         print('------'+d+'------')
@@ -265,7 +263,8 @@ if __name__ == "__main__":
         museum= wikipedia.get_wikipedia(d_dep[d]['url_d'],museum)
         ''' Trier et compter '''
         museum.maj_salle()
-        #pour les salles mer et merwip
+        # pour les salles mer et merwip générer les infos à faire apparaitre dans la popup
+        # Infos à ajouter dans OSM
         for x in [1,5]:
             museum.gen_infos_osm(x)
         museum.maj_stats()

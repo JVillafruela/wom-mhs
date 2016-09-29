@@ -21,10 +21,14 @@
 #
 '''
     Créer une base d'url des listes de monuments historiques à partir d'une page Wikipédia:
-        https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_par_département_français
+    https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_par_département_français
 
+    Attention : toutes les urls de cette liste ne renvoient pas vers la page liste des monuments historiques
+            Il faut donc d'abord faire une recherche de ces url et puis rechercher la bonne url et
+             complèter manuellement dans le fichier special.py
 '''
 from __future__ import unicode_literals
+import begin
 import requests,bs4
 import urllib.parse
 from bs4 import BeautifulSoup
@@ -48,7 +52,7 @@ cache = CacheManager(**parse_cache_config_options(cache_opts))
 def makeQuery(url):
     return requests.get(url)
 
-def getData(url,dic_dep):
+def getData(url,dic_dep,gen_param):
     r = makeQuery(url)
     contenu = r.text
     main_page = BeautifulSoup(contenu,'html.parser')
@@ -76,25 +80,22 @@ def getData(url,dic_dep):
             dic_dep[code]['code'] = code
             dic_dep[code]['name'] = name
             dic_dep[code]['text'] = text
-#########################
-# Si recherche manuelle des urls non standards des départements
-# retablir la ligne suivante
-            # dic_dep[code]['url_d'] = url
-
-# et commenter le block encadré ci dessous
-            if code in special.special :
-                for u in special.special[code]['url']:
-                    urls.append("/wiki/Liste_des_monuments_historiques_"+u)
-                dic_dep[code]['url_d'] = urls
-            else :
+        #########################
+        # Si recherche manuelle des urls non standards des départements
+            if not gen_param :
                 dic_dep[code]['url_d'] = url
-#########################
-            # Le Nombre de nomuments donné par cette page wikipédia est faux.
-            #dic_dep[code]['nb_mh'] = nb_mh
+        #Correction des urls à partir du fichier special.py
+            else :
+                if code in special.special :
+                    for u in special.special[code]['url']:
+                        urls.append("/wiki/Liste_des_monuments_historiques_"+u)
+                    dic_dep[code]['url_d'] = urls
+                else :
+                    dic_dep[code]['url_d'] = url
     return dic_dep
 
 def is_table_url(url,dep):
-    print(url)
+    print("Test de la page :", url)
     r = makeQuery('https://fr.wikipedia.org'+url)
     contenu = r.text
     main_page = BeautifulSoup(contenu,'html.parser')
@@ -108,53 +109,57 @@ def is_table_url(url,dep):
     else:
         return False
 
-
-def get_all_url(url):
-    arr=[]
-    r = makeQuery('https://fr.wikipedia.org'+url)
-    contenu = r.text
-    page = BeautifulSoup(contenu,'html.parser')
-    for link in page.find_all('a'):
-        if isinstance(link.get('title'),str) and "Liste des monuments historiques de l'arrondissement de" in link.get('title') :
-            arr.append(link.get('title'))
-    print(arr)
-
-def save_dic(filename,dic):
-    pass
-
-if __name__ == "__main__":
-    dic_dep = getData(url_base,dic_dep)
-    #dep='67'
-    #print(dic_dep[dep])
-    #print(len(dic_dep))
-
-    ##########################
-    # recherche non aboutie des urls non standards
-    # url ="/wiki/Liste_des_monuments_historiques_de_la_Gironde"
-    # get_all_url(url)
-    #
-
-    #########################
+@begin.subcommand
+def get_urls():
+    ''' Recherche les urls non conformes'''
     # ### Recherche des départements pour lesquels l'url ne renvoie pas la table des monuments
     # et qui vont demander une recherche manuelle et une inscription dans le fichier special.py
     # Attention : il faut commenter/décommenter des lignes de codes dans la fonction getData()
     # Attention : Il faudra ajouter à la liste trouvée le département 69 (Métropole de Lyon non détectée dans les départements)
-    # list_dep=[]
-    # for k in dic_dep.keys():
-    #     if not is_table_url(dic_dep[k]['url_d'], k):
-    #         list_dep.append(k)
-    # print (sorted(list_dep))
-    ###########################
-    # Test d'un seul département
-    # dep ="44"
-    # if not is_table_url(dic_dep[dep]['url_d'],dep):
-    #     print("Pas de table des monuments")
-    # else:
-    #     print("Table monuments trouvée")
-    ##########################
+    dic_dep = {}
+    dic_dep = getData(url_base,dic_dep,gen_param = False)
 
+    list_dep = []
+    for k in dic_dep.keys():
+        if not is_table_url(dic_dep[k]['url_d'], k):
+            list_dep.append(k)
+    print ("Liste des départements non conformes :", sorted(list_dep))
+
+
+@begin.subcommand
+def gen_param():
+    ''' Genérer le fichier Param.py'''
+    dic_dep = {}
+    dic_dep = getData(url_base,dic_dep,gen_param = True)
+    #Génération du fichier param.py
     filename="param.py"
     oF = open(filename,'w')
+    oF.write('''#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+#  Copyright 2016 JeaRRo <jean.navarro@laposte.net>
+#  http://wiki.openstreetmap.org/wiki/User:JeaRRo
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#
+# dictionnaire des départements
+#
+#     Ce fichier est généré par le programme param_gen.py après que le fichier special.py est été complété manuellement.
+#
+''')
     oF.write('dic_dep = {')
     codes = list(range(96))[1:]
     codes.extend([971,972,973,974,975])
@@ -168,6 +173,19 @@ if __name__ == "__main__":
             d='2B'
         oF.write("'" + d + "' :" +str(dic_dep[d]) +",\n")
         print(dic_dep[d])
-
     oF.write("}")
     oF.close()
+
+
+@begin.start
+def main():
+    '''
+        Attention : il faut d'abord rechercher les url non conformes !
+        puis rechercher les urls correctes sur le web
+        et complèter manuellement le fcihier special.py
+
+        Après seulement on peut lancer la génération du fichier param.py
+    '''
+    print("Attention : Taper -h pour avoir les infos de la ligne de commande")
+
+    pass

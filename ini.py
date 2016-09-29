@@ -19,7 +19,7 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-# dictionnaire des départements à analyser
+# Les paramètres généraux
 dep = {
            '01' : {
                 "name": ["Ain"],
@@ -72,3 +72,8 @@ url_prod="/var/services/homes/jean/web_wom"
 
 #les textes qui ne doivent pas apparaitre comme name= pour OSM
 no_name = ['Immeuble','Maison','Maisons','Eglise', 'Église', 'Château','Ecurie','Ecuries','Écurie','Écuries','Presbytère','Beffroi','Cimetière','Prieuré','Remparts','Hôtel']
+
+# Paramètres de connexion pour accéder aux logs du serveur web sur ovh
+login = 'utilisateur'
+mdp = 'mot de passe'
+domain = "domaine ovh"
