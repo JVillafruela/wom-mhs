@@ -20,7 +20,7 @@
 #  MA 02110-1301, USA.
 #
 '''
-    Génération de pages statiques directement en html - version 2
+    Génération de pages statiques directement en html - version 3
 '''
 from __future__ import unicode_literals
 import os,shutil
@@ -49,7 +49,7 @@ def get_menu(dep, musee):
             titre_onglet=salle.salle['titre_onglet']
             nb_MH='<span class="emphase">{}</span>'.format(str(len(salle.s_collection)))
             menu += '<li><a href="{}" title="{}" >{} {}</a></li>'.format(link, titre_onglet, nb_MH, onglet)
-    menu+='<li class="retour"><a href="../index.html" title="Autres départements" > Menu général </a></li>'
+    menu+='<li class="retour"><a href="../../index.html" title="Autres départements" > Menu général </a></li>'
     menu+= '''</ul>
         </div>'''
     return menu
@@ -245,11 +245,11 @@ if __name__ == "__main__":
     d_dep = OrderedDict(sorted(ini.dep.items(), key=lambda t: t[0]))
     ''' Générer la page index'''
     '''FIXME = changer le menu de choix du département'''
-    index.gen_page_index(d_dep)
+    index.gen_page_index()
 
     '''Créer la liste des départements à mettre à jour'''
     ''' rechercher les départements vus sur le web aujourd'hui '''
-    list_dep = ovh.get_log()
+    #list_dep = ovh.get_log()
     ''' ajouter N départements parmi les 101'''
     '''Mettre à jour les pages des départements de la liste'''
     # d= 01, 42, 69,  etc...
