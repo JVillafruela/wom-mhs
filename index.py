@@ -233,3 +233,4 @@ if __name__ == "__main__":
 # les étoiles sont remplacées automatiquement par le N° du département choisi
 # à revoir quand on passe en prod
 # l'url sera alors : http://jearro.fr/wom/D/**_pages/**_merosmwip.html
+# Régler le 1/10/2016 par commutation des fichiers select.js/selectLocal.js

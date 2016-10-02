@@ -18,7 +18,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-#  
+#
 '''
     Rechercher et lire le fichier .json de la base mérimée et extraire
     les codes mhs des monuments d'un département. Un test sur la date de version est effectué et la nouvelle version est
@@ -31,7 +31,7 @@
 from __future__ import unicode_literals
 import requests,json
 from bs4 import BeautifulSoup
-import mohist,ini
+import mohist,ini,param
 
 new_date=''
 datafile='merimee-MH.json'
@@ -61,7 +61,7 @@ def conv_date(d):
 		en sortie une date dans une chaine AAMMJJ '20160524' (permetre une comparaison)
 	'''
 	mois = ["Janvier", u"Février", "Mars", "Avril", "Mai", "Juin", "Juillet", u"Août",
-		"Septembtre", "Octobre", "Novembre", u"Décembre"]
+		"Septembre", "Octobre", "Novembre", u"Décembre"]
 	return d[2]+str(mois.index(d[1].capitalize())+1).zfill(2)+d[0]
 
 def existe_nouvelle_version():
@@ -123,10 +123,10 @@ def get_merimee(dep,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '26'
+    departement = '53'
     get_maj_base_merimee()
     musee = mohist.Musee()
-    musee = get_merimee(ini.dep[departement]['code'],musee)
+    musee = get_merimee(param.dic_dep[departement]['code'],musee)
     # for mh,MH in musee.collection.items():
     #     print(mh, MH)
     #     for key,value in MH.description[mh]['mer'].items():

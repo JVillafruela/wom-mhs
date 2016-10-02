@@ -78,7 +78,10 @@ def getData(url,dic_dep,gen_param):
         if code != '':
             dic_dep[code]={}
             dic_dep[code]['code'] = code
-            dic_dep[code]['name'] = name
+            if name == "Rhône" :
+                dic_dep[code]['name'] = ["Rhône", "Métropole de Lyon"]
+            else :
+                dic_dep[code]['name'] = [name]
             dic_dep[code]['text'] = text
         #########################
         # Si recherche manuelle des urls non standards des départements

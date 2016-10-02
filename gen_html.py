@@ -24,7 +24,7 @@
 '''
 from __future__ import unicode_literals
 import os,shutil
-import index,merimee,overpass,wikipedia,ini,mohist
+import index,merimee,overpass,wikipedia,ini,mohist,schedule,param
 from collections import OrderedDict
 
 def get_bandeau(dep,title,musee):
@@ -235,32 +235,31 @@ def gen_pages(dep, musee):
 
 if __name__ == "__main__":
     stats={}
+
     ''' Rechercher une maj de la base Mérimée'''
     merimee.get_maj_base_merimee()
+
     ''' Définir les variables d'entrée'''
     if ini.prod :
         base_url=ini.url_prod+"/Wom"
     else:
         base_url=ini.url_dev+"/Wom"
-    d_dep = OrderedDict(sorted(ini.dep.items(), key=lambda t: t[0]))
+
     ''' Générer la page index'''
-    '''FIXME = changer le menu de choix du département'''
     index.gen_page_index()
 
     '''Créer la liste des départements à mettre à jour'''
-    ''' rechercher les départements vus sur le web aujourd'hui '''
-    #list_dep = ovh.get_log()
-    ''' ajouter N départements parmi les 101'''
-    '''Mettre à jour les pages des départements de la liste'''
-    # d= 01, 42, 69,  etc...
-    for d in d_dep:
+    #listDep = schedule.get_depToMaj()
+    listDep = ["75"]
+    for d in listDep :
+        '''Mettre à jour les pages des départements de la liste'''
         print('------'+d+'------')
         ''' Acquérir les datas'''
         #print('----- Acquisition des datas ------')
         museum= mohist.Musee()
-        museum= overpass.get_osm(d_dep[d]['name'],museum)
-        museum= merimee.get_merimee(d_dep[d]['code'],museum)
-        museum= wikipedia.get_wikipedia(d_dep[d]['url_d'],museum)
+        museum= overpass.get_osm(param.dic_dep[d]['name'],museum)
+        museum= merimee.get_merimee(param.dic_dep[d]['code'],museum)
+        museum= wikipedia.get_wikipedia(param.dic_dep[d]['url_d'],museum)
         ''' Trier et compter '''
         museum.maj_salle()
         # pour les salles mer et merwip générer les infos à faire apparaitre dans la popup
@@ -276,4 +275,4 @@ if __name__ == "__main__":
 
         #print(museum)
         ''' Générer le Html'''
-        gen_pages(d_dep[d],museum)
+        gen_pages(param.dic_dep[d],museum)
