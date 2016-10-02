@@ -86,7 +86,7 @@ def getData(url,dic_dep,gen_param):
         #########################
         # Si recherche manuelle des urls non standards des départements
             if not gen_param :
-                dic_dep[code]['url_d'] = url
+                dic_dep[code]['url_d'] = [url]
         #Correction des urls à partir du fichier special.py
             else :
                 if code in special.special :
@@ -94,7 +94,7 @@ def getData(url,dic_dep,gen_param):
                         urls.append("/wiki/Liste_des_monuments_historiques_"+u)
                     dic_dep[code]['url_d'] = urls
                 else :
-                    dic_dep[code]['url_d'] = url
+                    dic_dep[code]['url_d'] = [url]
     return dic_dep
 
 def is_table_url(url,dep):

@@ -37,16 +37,23 @@ new_date=''
 datafile='merimee-MH.json'
 
 def get_commune(code):
-	'''
-    faire une requette sur http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1=IA01000159
-    pour récupérer le nom de la commune d'un monument s'il ne fait pas partie de la base ouverte
-	'''
-	url= "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
-	r = requests.get(url+code)
-	contenu = r.text
-	page= BeautifulSoup(contenu,'html.parser')
-	tableau=  page.find_all("td", attrs={"class":u"champ"})[2].text
-	return tableau.split("; ")[-1]
+    '''
+        Faire une requette sur http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1=IA01000159
+        pour récupérer le nom de la commune d'un monument s'il ne fait pas partie de la base ouverte
+        FIXME pour la commune de Paris problème !!
+    '''
+    url = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1={}".format(code)
+    #print(url)
+    r = requests.get(url)
+    #print(r.status)
+    if r.status_code == 200 :
+        contenu = r.text
+        page = BeautifulSoup(contenu,'html.parser')
+        tableau =  page.find_all("td", attrs={"class":u"champ"})[2].text
+        return tableau.split("; ")[-1]
+    else :
+        print ("ref:mhs inconnu : ", code)
+        return
 
 def get_url():
     if ini.prod:
@@ -66,11 +73,11 @@ def conv_date(d):
 
 def existe_nouvelle_version():
 	'''
-    	La base Mérimée est récupérable sur data.gouv.fr sur la page
-    	http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
-    	rechercher la date de la version du dataset.json
-    	et le comparer à la dernière version enregistrée
-    	télécharger : http://data.culture.fr/entrepot/MERIMEE/
+		La base Mérimée est récupérable sur data.gouv.fr sur la page
+		http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
+		rechercher la date de la version du dataset.json
+		et le comparer à la dernière version enregistrée
+		télécharger : http://data.culture.fr/entrepot/MERIMEE/
 	'''
 	global new_date
 	url ="http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/"

@@ -203,7 +203,7 @@ def get_table(salle,musee):
 
 def gen_pages(dep, musee):
     '''Définir le bandeau '''
-    titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
+    titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(dep['text'])
     bandeau = get_bandeau(dep, titre, musee)
     '''Définir le menu '''
     menu = get_menu(dep, musee)
@@ -249,8 +249,9 @@ if __name__ == "__main__":
     index.gen_page_index()
 
     '''Créer la liste des départements à mettre à jour'''
-    #listDep = schedule.get_depToMaj()
-    listDep = ["75"]
+    listDep = schedule.get_depToMaj()
+    print(listDep)
+    #listDep = ["90"]
     for d in listDep :
         '''Mettre à jour les pages des départements de la liste'''
         print('------'+d+'------')

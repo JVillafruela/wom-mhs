@@ -62,7 +62,7 @@ def get_data(query):
         print ('TooManyRequests : Trop de requêtes pour le serveur Overpass.eu. Patienter et ré-essayer plus tard.')
         result=None
     except overpy.exception.OverpassGatewayTimeout:
-        print ('TimeOut : Le serveur Overpass.eu ne réponds pas.')
+        #print ('TimeOut : Le serveur Overpass.eu ne réponds pas.')
         result=None
     # else :
     #print (type(result))
@@ -170,7 +170,7 @@ def get_osm(departement,musee):
         query += query_part1.format(d)
     query+=query_end
     query = ' '.join(query.replace("\n","").split())
-    print("Query : ", query)
+    #print("Query : ", query)
     result = get_data(query)
     ''' tester si le résulat est OK (!=None)
         sinon attendre puis refaire

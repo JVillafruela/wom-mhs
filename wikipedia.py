@@ -215,8 +215,8 @@ def ajoute_infos(infos, musee):
     return musee
 
 def analyse(data,url,musee,commune=None):
-    #print("Commune = ", commune)
-    #print("Url = ", url)
+    # print("Commune = ", commune)
+    # print("Url = ", url)
     tableau =  data.find_all("table", "wikitable sortable")[0]
     for i, tr in enumerate(tableau):
         #print (i, type(tr), tr)
@@ -262,7 +262,7 @@ def get_wikipedia(url_list,musee):
 
 
 if __name__ == "__main__":
-    departement = '75'
+    departement = '90'
     # dic_wp = {}
     # Nb_noMHS=0
     musee = mohist.Musee()
