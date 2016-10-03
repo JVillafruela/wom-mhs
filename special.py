@@ -59,10 +59,10 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
             '29':{'url':["du_Finistère_(A-O)",
                         "du_Finistère_(P-Z)"]
                  },
-            '31':{'url':["de_la_Haute_Garonne_(A-L)",
-                        "de_la_Haute_Garonne_(M-Z)"]
+            '31':{'url':["de_la_Haute-Garonne_(A-L)",
+                        "de_la_Haute-Garonne_(M-Z)"]
                  },
-            '33':{'url':["de_l'arrondissement_de_Arcachon",
+            '33':{'url':["de_l'arrondissement_d'Arcachon",
                         "de_l'arrondissement_de_Blaye",
                         "de_l'arrondissement_de_Bordeaux",
                         "de_l'arrondissement_de_Langon",
@@ -75,8 +75,8 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
             '37':{'url':["d'Indre-et-Loire_(A-J)",
                         "d'Indre-et-Loire_(K-Z)"]
                  },
-            '43':{'url':["de_la_Haute_Loire_(ouest)",
-                        "de_la_Haute_Loire_(est)"]
+            '43':{'url':["de_la_Haute-Loire_(ouest)",
+                        "de_la_Haute-Loire_(est)"]
                  },
             '46':{'url':["du_Lot_(A-K)",
                         "du_Lot_(L-Z)"]
@@ -85,8 +85,8 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
                         "du_Lot-et-Garonne_(M-Z)"]
                  },
             # FIXME : les villes d'Angers et de Saumur ne sont pas dans les listes générales
-            '49':{'url':["du_Maine-et-Loire_(nord)",
-                        "du_Maine-et-Loire_(sud)"]
+            '49':{'url':["de_Maine-et-Loire_(nord)",
+                        "de_Maine-et-Loire_(sud)"]
                  },
             '56':{'url':["de_l'arrondissement_de_Lorient",
                         "de_l'arrondissement_de_Pontivy",
@@ -118,8 +118,8 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
                         "de_la_Haute-Saône_(Luxeuil_-_Jussey)"]
                  },
 
-            '71':{'url':["de_la_Saône-et-Loire_(A-L)",
-                        "de_la_Saône-et-Loire_(M-Z)"]
+            '71':{'url':["de_Saône-et-Loire_(A-L)",
+                        "de_Saône-et-Loire_(M-Z)"]
                  },
             # FIXME : La ville du Mans n'est pas intégrée à son arrondissement
             '72':{'url':["de_l'arrondissement_de_Mamers",
@@ -152,8 +152,8 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
                         "de_l'arrondissement_de_Rouen"]
                  },
             # FIXME : Villes de Fontainbleau et de Provins non intégrée
-            '77':{'url':["de_la_Seine-Maritime_(ouest)",
-                        "de_la_Seine-Maritime_(est)"]
+            '77':{'url':["de_Seine-et-Marne_(ouest)",
+                        "de_Seine-et-Marne_(est)"]
                  },
             # FIXME : Versailles non intégré
             '78':{'url':["des_Yvelines_(nord)",

@@ -158,19 +158,17 @@ def get_osm(departement,musee):
         pour un département = '01' par exemple
     '''
     dic_elements={}
-    query=""
-    query_part1 = '''[timeout:900];area[admin_level=6]["name"="{}"]->.boundaryarea;
+    query = "[timeout:900];"
+    query_part1 = '''area[admin_level=6]["name"="{}"]->.boundaryarea;
     ( node(area.boundaryarea)["ref:mhs"];
     way(area.boundaryarea)["ref:mhs"];
     relation(area.boundaryarea)["ref:mhs"]);'''
-
     query_end='''out meta;>;out meta;'''
-
     for d in departement :
         query += query_part1.format(d)
     query+=query_end
     query = ' '.join(query.replace("\n","").split())
-    #print("Query : ", query)
+    print("Query : ", query)
     result = get_data(query)
     ''' tester si le résulat est OK (!=None)
         sinon attendre puis refaire
@@ -195,7 +193,7 @@ def get_osm(departement,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '75'
+    departement = '69'
     #osmWip=[]
     musee = mohist.Musee()
     #print("avant =",mohist.MoHist.ctr_monument)

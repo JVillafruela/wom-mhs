@@ -30,7 +30,7 @@
 
     '''
 from __future__ import unicode_literals
-import requests,bs4
+import requests,bs4,re
 from bs4 import BeautifulSoup
 import ini,insee,mohist,param
 from beaker.cache import CacheManager
@@ -96,8 +96,8 @@ def extrait_infos(datas):
     global ctr_no_mhs
     infos_manquantes=[]
     # nom - datas[0]
-    #print(datas[0].find('a'))
-    if isinstance(datas[0].find('a'),bs4.element.Tag) and datas[0].find('a').text != '[1]':
+    #print(datas[0].find('a',href=re.compile('^#cite_note')))
+    if isinstance(datas[0].find('a'),bs4.element.Tag) and datas[0].find('a',href=re.compile('^#cite_note')) == None:
         nom = datas[0].find('a').text
         #print(nom)
         #texte du tag wikipédia
@@ -108,7 +108,7 @@ def extrait_infos(datas):
             infos_manquantes.append("Page monument absente")
             #enlever le texte page inexistante pour le tag wikipédia
             tag_wk = tag_wk.split(' (')[0]
-    elif datas[0].find('a') == None or datas[0].find('a').text == '[1]':
+    elif datas[0].find('a') == None or datas[0].find('a',href=re.compile('^#cite_note')) != None:
         nom = datas[0].text
         if nom in ini.no_name:
             nom = ''
@@ -216,8 +216,8 @@ def ajoute_infos(infos, musee):
 
 def analyse(data,url,musee,commune=None):
     # print("Commune = ", commune)
-    # print("Url = ", url)
-    tableau =  data.find_all("table", "wikitable sortable")[0]
+    print("Url = ", url)
+    tableau =  data.find_all("table", "wikitable sortable",style = re.compile('^width:100%;'))[0]
     for i, tr in enumerate(tableau):
         #print (i, type(tr), tr)
 
@@ -262,7 +262,7 @@ def get_wikipedia(url_list,musee):
 
 
 if __name__ == "__main__":
-    departement = '90'
+    departement = '61'
     # dic_wp = {}
     # Nb_noMHS=0
     musee = mohist.Musee()

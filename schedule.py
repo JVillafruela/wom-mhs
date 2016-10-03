@@ -33,7 +33,7 @@
 '''
 from __future__ import unicode_literals
 import datetime
-import requests,re,ini
+import requests,re,ini_mdp
 
 
 def get_date(separateur):
@@ -52,9 +52,9 @@ def get_log():
     '''
     dep_vus=[]
     date = get_date('-')
-    url = 'https://logs.ovh.net/{}/osl/{}-{}.log'.format(ini.domain,ini.domain,date)
+    url = 'https://logs.ovh.net/{}/osl/{}-{}.log'.format(ini_mdp.domain,ini_mdp.domain,date)
     try :
-        r = requests.get(url, auth=(ini.login,ini.mdp))
+        r = requests.get(url, auth=(ini_mdp.login,ini_mdp.mdp))
         lines = r.text.split('\n')
         reg1 = re.compile('"GET /wom/[0-9]*_pages')
         reg2 = re.compile('"GET /wom/')
@@ -100,10 +100,10 @@ def get_depToMaj():
     '''
     depToMaj = []
     sequences = [[1,15],[16,29],[30,44],[45,59],[60,74],[75,89],[90,101]]
-    aujourdhui = get_date('/')
-    #date_test ="09/10/2016"
-    #N = numjoursem(date_test)
-    N = numjoursem(aujourdhui)
+    #aujourdhui = get_date('/')
+    date_test ="09/10/2016"
+    N = numjoursem(date_test)
+    #N = numjoursem(aujourdhui)
     #print (aujourdhui, ' ', N)
     #print(sequences[N])
     if N == 7 :
@@ -118,7 +118,8 @@ def get_depToMaj():
         for i in range(sequences[N-1][0], sequences[N-1][1]+1):
             depToMaj.append(str(i).zfill(2))
     #print (len(depToMaj), depToMaj)
-    vus_web = get_log()
+    #vus_web = get_log()
+    vus_web =[]
     #print ("Départements web vus", vus_web)
     for d in vus_web:
         if d not in depToMaj:
@@ -126,5 +127,6 @@ def get_depToMaj():
     return depToMaj
 
 if __name__ == "__main__":
+    print(get_log())
     depToMaj = get_depToMaj()
     print(" {} Départements à mettre à jour : {}".format(len(depToMaj),depToMaj))
