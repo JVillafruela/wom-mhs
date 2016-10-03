@@ -49,9 +49,12 @@ cache = CacheManager(**parse_cache_config_options(cache_opts))
 #@cache.cache('query-osm-cache', expire=7200)
 def get_data(query):
     '''
-        Obtenir la selection géographique sur overpass.api
+        Obtenir la selection géographique
     '''
+    # Obtenir la selection géographique sur oapi serveur français
+    urlFR = u"http://api.openstreetmap.fr/oapi/interpreter"
     api = overpy.Overpass()
+    api.url = urlFR
     try :
         result = api.query(query)
         #raise overpy.exception.OverpassTooManyRequests()
