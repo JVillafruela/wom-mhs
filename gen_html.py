@@ -95,6 +95,9 @@ def get_table(salle,musee):
             #print (mh)
             if 'IA' not in mh:
                 commune= merimee.get_commune(mh)
+                if commune == '' :
+                    print("Le ref:mh {} est inconnu dans Mérimée ouverte : Patrimoine Architectural".format(mh))
+                    print('http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['url'])
             else:
                 commune= ''
             if 'name' in MH.description[mh]['osm']['tags_mhs'] :
@@ -251,7 +254,7 @@ if __name__ == "__main__":
     '''Créer la liste des départements à mettre à jour'''
     listDep = schedule.get_depToMaj()
     print(listDep)
-    #listDep = ["90"]
+    #listDep = ["07"]
     for d in listDep :
         '''Mettre à jour les pages des départements de la liste'''
         print('------'+d+'------')

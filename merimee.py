@@ -45,15 +45,20 @@ def get_commune(code):
     url = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1={}".format(code)
     #print(url)
     r = requests.get(url)
-    #print(r.status)
+    #print(r.status_code)
     if r.status_code == 200 :
         contenu = r.text
         page = BeautifulSoup(contenu,'html.parser')
-        tableau =  page.find_all("td", attrs={"class":u"champ"})[2].text
-        return tableau.split("; ")[-1]
+        error = (page.find("h2"))
+        if error != None and "Aucun" in str(error) :
+            #print ("ref:mhs inconnu : ", code)
+            return ""
+        else :
+            tableau =  page.find_all("td", attrs={"class":u"champ"})[2].text
+            return tableau.split("; ")[-1]
     else :
         print ("ref:mhs inconnu : ", code)
-        return
+        return ""
 
 def get_url():
     if ini.prod:

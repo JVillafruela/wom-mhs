@@ -113,10 +113,10 @@ def get_depToMaj():
             if i == 20 :
                 depToMaj.extend(['2A','2B'])
             else:
-                depToMaj.append(str(i))
+                depToMaj.append(str(i).zfill(2))
     else:
         for i in range(sequences[N-1][0], sequences[N-1][1]+1):
-            depToMaj.append(str(i))
+            depToMaj.append(str(i).zfill(2))
     #print (len(depToMaj), depToMaj)
     vus_web = get_log()
     #print ("Départements web vus", vus_web)
