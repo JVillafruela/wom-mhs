@@ -100,10 +100,10 @@ def get_depToMaj():
     '''
     depToMaj = []
     sequences = [[1,15],[16,29],[30,44],[45,59],[60,74],[75,89],[90,101]]
-    #aujourdhui = get_date('/')
-    date_test ="09/10/2016"
-    N = numjoursem(date_test)
-    #N = numjoursem(aujourdhui)
+    # date_test ="09/10/2016"
+    # N = numjoursem(date_test)
+    aujourdhui = get_date('/')
+    N = numjoursem(aujourdhui)
     #print (aujourdhui, ' ', N)
     #print(sequences[N])
     if N == 7 :

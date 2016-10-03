@@ -23,7 +23,7 @@
     Génération de pages statiques directement en html
 
 '''
-import os,ini,time
+import os,ini,time,param
 from collections import OrderedDict
 
 def write_entete_index(file, title):
@@ -183,11 +183,25 @@ def creer_fichier(name,d=None):
         rep=ini.url_prod+"/Wom/"+s_rep
     else :
         rep=ini.url_dev+"/Wom/"+s_rep
-    # FIXME !! Le répertoire racine n'est pas créer et ne doit pas être effacé
+    # FIXME !! Le répertoire racine /Wom n'est pas créé et ne doit pas être effacé
     if not os.path.exists(rep):
         os.mkdir(rep)
     if os.path.isdir(rep):
         return open(rep+'/'+name,"w")
+
+def del_files(d):
+    ''' Effacer les fichiers du répertoire du département (supprime les fichiers anciens inutiles'''
+    #print (d)
+    s_rep="D/"+str(d['code'])+"_pages"
+    if ini.prod :
+        rep=ini.url_prod+"/Wom/"+s_rep
+    else :
+        rep=ini.url_dev+"/Wom/"+s_rep
+    filelist = [ f for f in os.listdir(rep) if f.endswith(".html") ]
+    for f in filelist:
+        f = rep+"/"+f
+        #print(f)
+        os.remove(f)
 
 def gen_page_index():
     '''
@@ -225,7 +239,10 @@ def gen_page_index():
 if __name__ == "__main__":
 
     ''' générer la page index'''
-    gen_page_index()
+    #gen_page_index()
+    '''  Netoyer le répertoire d'un département'''
+    d = '01'
+    del_files(param.dic_dep[d])
 
 
 # ATTENTION dans le code js-> select.js : il y a en dur l'url vers les pages sur web

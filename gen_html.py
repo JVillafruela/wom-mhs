@@ -205,6 +205,8 @@ def get_table(salle,musee):
     return table
 
 def gen_pages(dep, musee):
+    ''' Effacer les fichiers du répertoire du département (supprime les fichiers anciens inutiles)'''
+    index.del_files(dep)
     '''Définir le bandeau '''
     titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(dep['text'])
     bandeau = get_bandeau(dep, titre, musee)
