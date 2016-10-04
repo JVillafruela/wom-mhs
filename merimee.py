@@ -29,7 +29,7 @@
 
 '''
 from __future__ import unicode_literals
-import requests,json
+import requests,json,logging
 from bs4 import BeautifulSoup
 import mohist,ini,param
 
@@ -58,6 +58,7 @@ def get_commune(code):
             return tableau.split("; ")[-1]
     else :
         print ("ref:mhs inconnu : ", code)
+        logging.debug("ref:mhs inconnu : {}".format(code))
         return ""
 
 def get_url():
@@ -109,7 +110,7 @@ def get_maj_base_merimee():
         open(url_locale+'last_date.txt','w').write(new_date)
     else :
         print('Base Mérimée : Version {}, à jour.'.format(new_date))
-
+        logging.info('log : Base Mérimée : Version {}, à jour.'.format(new_date))
 
 def get_merimee(dep,musee):
     '''

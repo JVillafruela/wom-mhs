@@ -33,6 +33,8 @@ from __future__ import unicode_literals
 import requests,bs4,re
 from bs4 import BeautifulSoup
 import ini,insee,mohist,param
+import logging
+import urllib.parse
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 
@@ -216,7 +218,8 @@ def ajoute_infos(infos, musee):
 
 def analyse(data,url,musee,commune=None):
     # print("Commune = ", commune)
-    print("Url = ", url)
+    print("Url = ", urllib.parse.unquote(url))
+    logging.debug("log : Url : {}".format(urllib.parse.unquote(url)))
     tableau =  data.find_all("table", "wikitable sortable",style = re.compile('^width:100%;'))[0]
     for i, tr in enumerate(tableau):
         #print (i, type(tr), tr)

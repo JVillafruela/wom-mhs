@@ -35,6 +35,8 @@ from __future__ import unicode_literals
 import datetime
 import requests,re,ini_mdp
 
+def get_log_date():
+    return datetime.datetime.now().strftime('%Y%m%d')
 
 def get_date(separateur):
     return datetime.datetime.now().strftime('%d{}%m{}%Y'.format(separateur,separateur))

@@ -35,6 +35,7 @@ old_exemple =>   PA00116550 : ['way/391391471', {'mhs:inscription_date': '1981',
 
 from __future__ import unicode_literals
 import overpy,ini,mohist,time,param
+import logging
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 
@@ -172,6 +173,7 @@ def get_osm(departement,musee):
     query+=query_end
     query = ' '.join(query.replace("\n","").split())
     print("Query : ", query)
+    logging.debug("log : Osm Query : {}".format(query))
     result = get_data(query)
     ''' tester si le résulat est OK (!=None)
         sinon attendre puis refaire
