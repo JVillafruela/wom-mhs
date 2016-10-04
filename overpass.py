@@ -133,13 +133,16 @@ def get_elements(data,tt,musee):
     for d in data:
         tags_mhs,tags_manquants = get_tags(d.tags)
         if 'ref:mhs' in tags_mhs:
+            # teste si le tags mhs contient un espace
+            if " " in tags_mhs["ref:mhs"] :
+                print ("Erreur : espace dans ref:mhs sur Osm : -{}-".format(tags_mhs["ref:mhs"]))
             # Si le tag mhs contient deux refs ref:mhs=PA01000012;PA01000013
             if ';' in tags_mhs["ref:mhs"]:
                 #print(tags_mhs["ref:mhs"])
                 mhs= tags_mhs["ref:mhs"].split(';')[0]
                 #mhs2=tags_mhs["ref:mhs"].split(';')[1] --> NON TRAITE
             else:
-                mhs = tags_mhs["ref:mhs"]
+                mhs = tags_mhs["ref:mhs"].strip()
             #tag mhs déjà présent dans le dico
             if mhs in musee.collection :
                 if mhs in musee.collection[mhs].description:
@@ -193,7 +196,7 @@ def get_osm(departement,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '69'
+    departement = '77'
     #osmWip=[]
     musee = mohist.Musee()
     #print("avant =",mohist.MoHist.ctr_monument)
@@ -208,6 +211,9 @@ if __name__ == "__main__":
     musee.maj_salle()
     print(musee)
 
-
     nb=musee.get_nb_MH('osm')
     print(nb)
+
+    # affichier le contenu d'un MH
+    # mh = "PA00087044"
+    # print (musee.collection[mh])

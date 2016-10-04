@@ -262,7 +262,8 @@ def get_wikipedia(url_list,musee):
 
 
 if __name__ == "__main__":
-    departement = '61'
+    #import pprint
+    departement = '77'
     # dic_wp = {}
     # Nb_noMHS=0
     musee = mohist.Musee()
@@ -279,7 +280,10 @@ if __name__ == "__main__":
     nb=musee.get_nb_MH('wip')
     print(nb)
 
-    #print (musee.collection["PA00116593"].description["PA00116593"])
     print(ctr_no_mhs)
     # print ("il y a {} Monuments du département {} dans Wikipédia.".format(len(dic_wp),ini.dep[departement]['text']))
     # print ("Monuments du département {} sans code MH : {}".format(ini.dep[departement][('text')],Nb_noMHS))
+
+    # affichier le contenu d'un MH
+    # mh = "PA00087044"
+    # print (musee.collection[mh])

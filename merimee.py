@@ -135,7 +135,7 @@ def get_merimee(dep,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '53'
+    departement = '77'
     get_maj_base_merimee()
     musee = mohist.Musee()
     musee = get_merimee(param.dic_dep[departement]['code'],musee)
@@ -149,3 +149,7 @@ if __name__ == "__main__":
 
     nb=musee.get_nb_MH('mer')
     print(nb)
+
+    # affichier le contenu d'un MH
+    # mh = "PA00087044"
+    # print (musee.collection[mh])
