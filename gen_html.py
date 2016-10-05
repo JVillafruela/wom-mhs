@@ -122,7 +122,7 @@ def get_table(salle,musee):
                 # Remplacer dans les tags manquants le terme wikidata (si présent) par un lien url_josm avec ajout du qCode
                 if "wikidata" in MH.description[mh]['osm']['tags_manquants'] and MH.description[mh]['wkd'] != "":
                     #print (MH.description[mh]['wkd'])
-                    url_wkd = '<a {}&addtags=wikidata={}" target="blank" title="Ajout code wikidata avec Josm"> {} </a>'.format(url_josm,MH.description[mh]['wkd'],MH.description[mh]['wkd'])
+                    url_wkd = '<a {}&addtags=wikidata={}" target="blank" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm,MH.description[mh]['wkd'],MH.description[mh]['wkd'])
                     MH.description[mh]['osm']['tags_manquants'][-1] = url_wkd
                 note_osm+=", ".join(MH.description[mh]['osm']['tags_manquants'])
             elif MH.description[mh]['osm']['mhs_bis'] != None :

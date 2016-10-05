@@ -38,10 +38,9 @@ def write_entete_index(file, title):
     <title>{}</title>\n\t'''.format(title)
     header+='''<link rel="stylesheet" type="text/css" href="css/style.css" />
                <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
-               <link rel="stylesheet" type="text/css" href="css/style.css">
                '''
     header+='''<script src="js/jquery.js"></script>
-    <script src="js/jquery-ui.min.js"></script>'''
+            <script src="js/jquery-ui.min.js"></script>'''
     # Commuter l'url du serveur pour le test de présence des pages web
     if ini.prod :
         # serveur de Prod
@@ -123,8 +122,8 @@ def write_entete(file, title) :
 				title: "Pour créer le monument dans OSM",
                 draggable: false,
                 resizable: false,
-                width:400,
-                height:270,
+                width:550,
+                height:350,
                 modal: true,
                 overlay: {
                     backgroundColor: '#000',
@@ -163,7 +162,6 @@ def write_entete(file, title) :
     </head>'''
     file.write(header)
 
-     Le code est visible et disponible sur <a href="https://framagit.org/JeaRRo/Mhs" target="blank"> Mhs </a>.
 def write_footer(file):
     footer='''<div id="footer"> Page proposée par <a href="http://wiki.openstreetmap.org/wiki/User:JeaRRo">JeaRRo</a>, contributeur OSM </div>
         </body
