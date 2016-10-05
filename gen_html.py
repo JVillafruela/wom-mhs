@@ -24,8 +24,12 @@
 '''
 from __future__ import unicode_literals
 import os,shutil,logging
-import index,merimee,overpass,wikipedia,ini,mohist,wkdcodes,schedule,param
+import datetime
+import index,merimee,overpass,wikipedia,ini,mohist,wkdcodes,param
 from collections import OrderedDict
+
+def get_log_date():
+    return datetime.datetime.now().strftime('%Y%m%d')
 
 def get_bandeau(dep,title,musee):
     ''' définir le bandeau de la page'''
@@ -261,7 +265,7 @@ if __name__ == "__main__":
         log_url = ini.url_dev+"/Mhs/log"
 
     ''' Mise en place du fichier de log  '''
-    fname = log_url+"/wom_"+schedule.get_log_date()+".log"
+    fname = log_url+"/wom_"+get_log_date()+".log"
     #print (fname)
     logging.basicConfig(filename=fname,format='%(asctime)s %(levelname)s: %(message)s',level=logging.DEBUG,datefmt='%m/%d/%Y %H:%M')
 
