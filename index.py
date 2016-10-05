@@ -24,6 +24,7 @@
 
 '''
 import os,ini,time,param
+import os.path
 from collections import OrderedDict
 
 def write_entete_index(file, title):
@@ -196,11 +197,13 @@ def del_files(d):
         rep=ini.url_prod+"/Wom/"+s_rep
     else :
         rep=ini.url_dev+"/Wom/"+s_rep
-    filelist = [ f for f in os.listdir(rep) if f.endswith(".html") ]
-    for f in filelist:
-        f = rep+"/"+f
-        #print(f)
-        os.remove(f)
+    if os.path.exists(rep):
+        filelist = [ f for f in os.listdir(rep) if f.endswith(".html") ]
+        for f in filelist:
+            f = rep+"/"+f
+            #print(f)
+            if os.path.exists(f) :
+                os.remove(f)
 
 def gen_page_index():
     '''

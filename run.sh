@@ -43,7 +43,7 @@ source WOM_env/bin/activate
 cd ./Mhs
 
 #lancer l'éxécution
-python3 gen_html.py
+python3 gen_html.py > /dev/null 2>&1
 
 # gitter les pages web et les pousser sur le serveur web
 if [ $? -eq 0 ]; then
