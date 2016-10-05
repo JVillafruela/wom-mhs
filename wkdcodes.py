@@ -29,6 +29,8 @@
 from __future__ import unicode_literals
 import requests, json, os
 import ini, mohist
+import logging
+from collections import OrderedDict
 
 def charger_Q_codes(fichier):
     with open(fichier, 'r',encoding='utf-8') as file:
@@ -36,7 +38,7 @@ def charger_Q_codes(fichier):
 
 def sauvegarder_Q_codes(filename, dico):
     with open(filename, 'w',encoding='utf-8') as file:
-        json.dump(dico, file)
+        json.dump(dico, file, indent=4)
 
 def get_Q_codes():
     filename="wkdcodes.json"
@@ -61,12 +63,16 @@ def get_Q_codes():
             Q_Mh = dico['item']['value'].split('entity/')[1]
             #print(codeMh, '->', Q_Mh)
             wCodes[codeMh] = Q_Mh
-        sauvegarder_Q_codes(filename,wCodes)
+        OwCodes = OrderedDict(sorted(wCodes.items(), key=lambda t: t[0]))
+        sauvegarder_Q_codes(filename,OwCodes)
+        logging.info(" {} Codes Wikidata téléchargés.".format(len(OwCodes)))
     else :
         print("Réponse du serveur non valide : Code réponse = ", r.status_code)
+        logging.debug("Réponse du serveur non valide : Code réponse = {}".format(r.status_code))
         if os.path.isfile(filename):
-            wCodes = charger_Q_codes(filename)
-    return wCodes
+            OwCodes = charger_Q_codes(filename)
+            logging.info(" {} Codes Wikidata chargés.".format(len(OwCodes)))
+    return OwCodes
 
 if __name__ == "__main__":
 
@@ -75,4 +81,4 @@ if __name__ == "__main__":
     print("Nombre de codes :", len(wkdCodes))
 
     # for codeMh in wkdCodes:
-    #      print(codeMh, '->', wkdCodes[codeMh])
+    #     print(codeMh, '->', wkdCodes[codeMh])
