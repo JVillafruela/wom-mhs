@@ -23,6 +23,7 @@
     Organisation des infos MH une class Musee qui contient une collection de monuments (MoHist)
 '''
 import ini,merimee,overpass,wikipedia
+import pprint
 from collections import OrderedDict
 
 class Musee:
@@ -229,8 +230,9 @@ class MoHist:
 
         MoHist.ctr_monument+=1
 
-    # def __repr__(self):
-    #     return "ref: "+self.mhs+' classé dans : '+ str(self.note)
+    def __repr__(self):
+        pprint.pprint(self.description)
+        return "ref: "+self.mhs+' noté : '+ str(self.note)
 
     def add_infos_mer(self, insee, commune, adresse, nom, classement):
         '''Ajouter les informations issues de la base Mérimée à un monument'''

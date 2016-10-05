@@ -19,22 +19,25 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-# Les paramètres généraux
+'''
+    Lire le dico param.py et en faire une liste pour le menu principal
+    copier le résultat dans le fichier js/select.js
+'''
 
-# Attention ce répertoire doit être créer avant le lancement du programme !
-# racine des pages web
-prod=False
-# en local
-url_dev="/home/jean/osm/monuments_historiques"
-# sur Syno
-url_prod="/var/services/homes/jean/web_wom"
-# fichier statique : style.css
-#cssFile ="style.css"
+from __future__ import unicode_literals
+import param
+from collections import OrderedDict
 
-#les textes qui ne doivent pas apparaitre comme name= pour OSM
-no_name = ['Immeuble','Maison','Maisons','Eglise', 'Église', 'Château','Ecurie','Ecuries','Écurie','Écuries','Presbytère','Beffroi','Cimetière','Prieuré','Remparts','Hôtel']
+def gen_list_dep():
+    listDep = []
+    dic = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
+    for code in dic :
+        #print (code)
+        name = param.dic_dep[code]['name']
+        listDep.append(code+' - '+name)
+    return listDep
 
-# Paramètres de connexion pour accéder aux logs du serveur web sur ovh
-login = 'utilisateur'
-mdp = 'mot de passe'
-domain = "domaine ovh"
+if __name__ == "__main__":
+
+    liste = gen_list_dep()
+    print(liste)

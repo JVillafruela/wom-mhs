@@ -20,11 +20,11 @@
 #  MA 02110-1301, USA.
 #
 '''
-    Génération de pages statiques directement en html - version 2
+    Génération de pages statiques directement en html - version 3
 '''
 from __future__ import unicode_literals
-import os,shutil
-import index,merimee,overpass,wikipedia,ini,mohist,wkdcodes
+import os,shutil,logging
+import index,merimee,overpass,wikipedia,ini,mohist,wkdcodes,schedule,param
 from collections import OrderedDict
 
 def get_bandeau(dep,title,musee):
@@ -49,7 +49,7 @@ def get_menu(dep, musee):
             titre_onglet=salle.salle['titre_onglet']
             nb_MH='<span class="emphase">{}</span>'.format(str(len(salle.s_collection)))
             menu += '<li><a href="{}" title="{}" >{} {}</a></li>'.format(link, titre_onglet, nb_MH, onglet)
-    menu+='<li class="retour"><a href="../index.html" title="Autres départements" > Menu général </a></li>'
+    menu+='<li class="retour"><a href="../../index.html" title="Autres départements" > Menu général </a></li>'
     menu+= '''</ul>
         </div>'''
     return menu
@@ -95,6 +95,11 @@ def get_table(salle,musee):
             #print (mh)
             if 'IA' not in mh:
                 commune= merimee.get_commune(mh)
+                if commune == '' :
+                    print("Le ref:mh {} est inconnu dans Mérimée ouverte : Patrimoine Architectural".format(mh))
+                    print('http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['url'])
+                    logging.debug("log : Le ref:mh {} est inconnu dans Mérimée ouverte : Patrimoine Architectural".format(mh))
+                    logging.debug("log : Voir url : http://www.openstreetmap.org/browse/{}".format(MH.description[mh]['osm']['url']))
             else:
                 commune= ''
             if 'name' in MH.description[mh]['osm']['tags_mhs'] :
@@ -208,8 +213,10 @@ def get_table(salle,musee):
     return table
 
 def gen_pages(dep, musee):
+    ''' Effacer les fichiers du répertoire du département (supprime les fichiers anciens inutiles)'''
+    index.del_files(dep)
     '''Définir le bandeau '''
-    titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(d_dep[d]['text'])
+    titre="Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(dep['text'])
     bandeau = get_bandeau(dep, titre, musee)
     '''Définir le menu '''
     menu = get_menu(dep, musee)
@@ -218,6 +225,7 @@ def gen_pages(dep, musee):
             page_name=str(dep['code'])+'_'+page.salle['nom']+'.html'
             #print("Construction de la page  {}.".format(page_name))
             print(page)
+            logging.info("log : {}".format(page))
             oF = index.creer_fichier(page_name, dep)
             titre=" Wom : Mérimée, OpenStreetMap, Wikipédia"
             index.write_entete(oF, titre)
@@ -244,40 +252,58 @@ if __name__ == "__main__":
     wkdCodes = {}
     ''' Rechercher les Qcodes sur wikidata'''
     wkdCodes = wkdcodes.get_Q_codes()
-    ''' Rechercher une maj de la base Mérimée'''
-    merimee.get_maj_base_merimee()
     ''' Définir les variables d'entrée'''
     if ini.prod :
-        base_url=ini.url_prod+"/Wom"
+        base_url = ini.url_prod+"/Wom"
+        log_url = ini.url_prod+"/Mhs/log"
     else:
         base_url=ini.url_dev+"/Wom"
-    d_dep = OrderedDict(sorted(ini.dep.items(), key=lambda t: t[0]))
-    ''' Générer la page index'''
-    index.gen_page_index(d_dep)
+        log_url = ini.url_dev+"/Mhs/log"
 
-    '''générer les pages de chaque département'''
-    # d= 01, 42, 69,  etc...
-    for d in d_dep:
+    ''' Mise en place du fichier de log  '''
+    fname = log_url+"/wom_"+schedule.get_log_date()+".log"
+    #print (fname)
+    logging.basicConfig(filename=fname,format='%(asctime)s %(levelname)s: %(message)s',level=logging.DEBUG,datefmt='%m/%d/%Y %H:%M')
+
+    ''' Rechercher une maj de la base Mérimée'''
+    merimee.get_maj_base_merimee()
+
+    ''' Générer la page index'''
+    index.gen_page_index()
+
+    '''Créer la liste des départements à mettre à jour'''
+    listDep = schedule.get_depToMaj()
+    print(listDep)
+    #listDep = ["74"]
+    logging.info("log : {}".format(listDep))
+    for d in listDep :
+        '''Mettre à jour les pages des départements de la liste'''
         print('------'+d+'------')
+        logging.info('log : ------ {} ------'.format(d))
         ''' Acquérir les datas'''
         #print('----- Acquisition des datas ------')
         museum = mohist.Musee()
-        museum = overpass.get_osm(d_dep[d]['name'],museum)
-        museum = merimee.get_merimee(d_dep[d]['code'],museum)
-        museum = wikipedia.get_wikipedia(d_dep[d]['url_d'],museum)
+        museum= overpass.get_osm(param.dic_dep[d]['name'],museum)
+        museum= merimee.get_merimee(param.dic_dep[d]['code'],museum)
+        museum= wikipedia.get_wikipedia(param.dic_dep[d]['url_d'],museum)
         '''Associer les qcodes de wikidata à chaque MH'''
         museum.maj_Qcodes(wkdCodes)
         ''' Trier et compter '''
         museum.maj_salle()
-        #pour les salles mer et merwip
+        # pour les salles mer et merwip générer les infos à faire apparaitre dans la popup
+        # Infos à ajouter dans OSM
         for x in [1,5]:
             museum.gen_infos_osm(x)
         museum.maj_stats()
         #print('----- Statistiques globales ------')
         print("Merimée :",museum.stats['mer'])
-        print("OSM :", museum.stats['osm'])
+        logging.info("log : Merimée : {}".format(museum.stats['mer']))
+        print("OSM :",museum.stats['osm'])
+        logging.info("log : OSM : {}".format(museum.stats['osm']))
         print("Wikipedia :",museum.stats['wip'])
+        logging.info("log : Wikipedia : {}".format(museum.stats['wip']))
         print("     ---- ")
+        logging.info("log : ----------------")
         #print(museum)
         ''' Générer le Html'''
-        gen_pages(d_dep[d],museum)
+        gen_pages(param.dic_dep[d],museum)

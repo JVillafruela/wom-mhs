@@ -17,7 +17,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-#  
+#
 
 #récupérer la date/heure
 heure=$(date +%H:%M)
@@ -38,14 +38,6 @@ export LANG
 
 # activer l'environnement python3
 source WOM_env/bin/activate
-
-# nettoyer les répertoires des pages web
-rm -rf Wom/01_pages/*
-rm -rf Wom/03_pages/*
-rm -rf Wom/27_pages/*
-rm -rf Wom/38_pages/*
-rm -rf Wom/42_pages/*
-rm -rf Wom/69_pages/*
 
 #git pull
 cd ./Mhs

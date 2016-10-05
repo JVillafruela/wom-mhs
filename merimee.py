@@ -29,24 +29,37 @@
 
 '''
 from __future__ import unicode_literals
-import requests,json
+import requests,json,logging
 from bs4 import BeautifulSoup
-import mohist,ini
+import mohist,ini,param
 
 new_date=''
 datafile='merimee-MH.json'
 
 def get_commune(code):
-	'''
-    faire une requette sur http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1=IA01000159
-    pour récupérer le nom de la commune d'un monument s'il ne fait pas partie de la base ouverte
-	'''
-	url= "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1="
-	r = requests.get(url+code)
-	contenu = r.text
-	page= BeautifulSoup(contenu,'html.parser')
-	tableau=  page.find_all("td", attrs={"class":u"champ"})[2].text
-	return tableau.split("; ")[-1]
+    '''
+        Faire une requette sur http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1=IA01000159
+        pour récupérer le nom de la commune d'un monument s'il ne fait pas partie de la base ouverte
+        FIXME pour la commune de Paris problème !!
+    '''
+    url = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1={}".format(code)
+    #print(url)
+    r = requests.get(url)
+    #print(r.status_code)
+    if r.status_code == 200 :
+        contenu = r.text
+        page = BeautifulSoup(contenu,'html.parser')
+        error = (page.find("h2"))
+        if error != None and "Aucun" in str(error) :
+            #print ("ref:mhs inconnu : ", code)
+            return ""
+        else :
+            tableau =  page.find_all("td", attrs={"class":u"champ"})[2].text
+            return tableau.split("; ")[-1]
+    else :
+        print ("ref:mhs inconnu : ", code)
+        logging.debug("ref:mhs inconnu : {}".format(code))
+        return ""
 
 def get_url():
     if ini.prod:
@@ -61,16 +74,16 @@ def conv_date(d):
 		en sortie une date dans une chaine AAMMJJ '20160524' (permetre une comparaison)
 	'''
 	mois = ["Janvier", u"Février", "Mars", "Avril", "Mai", "Juin", "Juillet", u"Août",
-		"Septembtre", "Octobre", "Novembre", u"Décembre"]
+		"Septembre", "Octobre", "Novembre", u"Décembre"]
 	return d[2]+str(mois.index(d[1].capitalize())+1).zfill(2)+d[0]
 
 def existe_nouvelle_version():
 	'''
-    	La base Mérimée est récupérable sur data.gouv.fr sur la page
-    	http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
-    	rechercher la date de la version du dataset.json
-    	et le comparer à la dernière version enregistrée
-    	télécharger : http://data.culture.fr/entrepot/MERIMEE/
+		La base Mérimée est récupérable sur data.gouv.fr sur la page
+		http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
+		rechercher la date de la version du dataset.json
+		et le comparer à la dernière version enregistrée
+		télécharger : http://data.culture.fr/entrepot/MERIMEE/
 	'''
 	global new_date
 	url ="http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/"
@@ -97,7 +110,7 @@ def get_maj_base_merimee():
         open(url_locale+'last_date.txt','w').write(new_date)
     else :
         print('Base Mérimée : Version {}, à jour.'.format(new_date))
-
+        logging.info('log : Base Mérimée : Version {}, à jour.'.format(new_date))
 
 def get_merimee(dep,musee):
     '''
@@ -123,10 +136,10 @@ def get_merimee(dep,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '01'
+    departement = '77'
     get_maj_base_merimee()
     musee = mohist.Musee()
-    musee = get_merimee(ini.dep[departement]['code'],musee)
+    musee = get_merimee(param.dic_dep[departement]['code'],musee)
     # for mh,MH in musee.collection.items():
     #     print(mh, MH)
     #     for key,value in MH.description[mh]['mer'].items():
@@ -137,3 +150,7 @@ if __name__ == "__main__":
 
     nb=musee.get_nb_MH('mer')
     print(nb)
+
+    # affichier le contenu d'un MH
+    # mh = "PA00087044"
+    # print (musee.collection[mh])

@@ -30,9 +30,11 @@
 
     '''
 from __future__ import unicode_literals
-import requests,bs4
+import requests,bs4,re
 from bs4 import BeautifulSoup
-import ini,insee,mohist
+import ini,insee,mohist,param
+import logging
+import urllib.parse
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 
@@ -72,12 +74,15 @@ def normalise(td, commune=None):
         list_champs.append(commune)
         for n in [1,2,3,6] :
             list_champs.append(td[n])
-    #print(len(list_champs))
+    #print(len(list_champs), list_champs)
     return list_champs
 
 def extrait_commune(url):
     ''' Récupère le nom de la commune dans une Url '''
-    commune = url.split('_')[-1]
+    if "Paris" in url :
+        commune = url.split('_')[-4]
+    else:
+        commune = url.split('_')[-1]
     #correction encodage nom de commune
     if "%C3%A9" in commune:
         commune=commune.replace("%C3%A9","é")
@@ -93,17 +98,19 @@ def extrait_infos(datas):
     global ctr_no_mhs
     infos_manquantes=[]
     # nom - datas[0]
-    if isinstance(datas[0].find('a'),bs4.element.Tag):
+    #print(datas[0].find('a',href=re.compile('^#cite_note')))
+    if isinstance(datas[0].find('a'),bs4.element.Tag) and datas[0].find('a',href=re.compile('^#cite_note')) == None:
         nom = datas[0].find('a').text
+        #print(nom)
         #texte du tag wikipédia
         tag_wk = datas[0].find('a').attrs['title']
         # Rechercher si page WP du monument existe
-        if "page inexistante" in datas[0].find('a').attrs['title']:
+        if "page inexistante" in tag_wk:
             #print(datas[0].find('a').attrs['title'])
             infos_manquantes.append("Page monument absente")
             #enlever le texte page inexistante pour le tag wikipédia
             tag_wk = tag_wk.split(' (')[0]
-    elif datas[0].find('a') == None:
+    elif datas[0].find('a') == None or datas[0].find('a',href=re.compile('^#cite_note')) != None:
         nom = datas[0].text
         if nom in ini.no_name:
             nom = ''
@@ -210,8 +217,10 @@ def ajoute_infos(infos, musee):
     return musee
 
 def analyse(data,url,musee,commune=None):
-
-    tableau =  data.find_all("table", "wikitable sortable")[0]
+    # print("Commune = ", commune)
+    print("Url = ", urllib.parse.unquote(url))
+    logging.debug("log : Url : {}".format(urllib.parse.unquote(url)))
+    tableau =  data.find_all("table", "wikitable sortable",style = re.compile('^width:100%;'))[0]
     for i, tr in enumerate(tableau):
         #print (i, type(tr), tr)
 
@@ -224,8 +233,10 @@ def analyse(data,url,musee,commune=None):
                 identifiant= ''
             td = tr.find_all('td')
             #print(len(td))
-            # pages des départements et ville de Lyon (8), grandes communes (7)
+            # pages des départements et ville de Lyon (8colonnes), grandes communes (7colonnes)
             if len(td) in [7,8]:
+                if "Paris" in url:
+                    commune = extrait_commune(url)
                 datas=normalise(td,commune)
                 # obtenir les infos utilisables dans le musée
                 infos= extrait_infos(datas)
@@ -234,7 +245,7 @@ def analyse(data,url,musee,commune=None):
                 #print(infos)
                 # Créer le musée
                 musee= ajoute_infos(infos, musee)
-            # lien vers pages des grandes communes
+            # lien vers pages des grandes communes dans une page département
             elif len(td) == 3 :
                 url_gc = td[2].find('a')['href']
                 url_gc = url_base+url_gc
@@ -254,11 +265,12 @@ def get_wikipedia(url_list,musee):
 
 
 if __name__ == "__main__":
-    departement = '01'
+    #import pprint
+    departement = '77'
     # dic_wp = {}
     # Nb_noMHS=0
     musee = mohist.Musee()
-    musee = get_wikipedia(ini.dep[departement]['url_d'],musee)
+    musee = get_wikipedia(param.dic_dep[departement]['url_d'],musee)
     # for mh,MH in musee.collection.items():
     #     print(mh, MH)
     #     for key,value in MH.description[mh]['wip'].items():
@@ -271,7 +283,10 @@ if __name__ == "__main__":
     nb=musee.get_nb_MH('wip')
     print(nb)
 
-    #print (musee.collection["PA00116593"].description["PA00116593"])
     print(ctr_no_mhs)
     # print ("il y a {} Monuments du département {} dans Wikipédia.".format(len(dic_wp),ini.dep[departement]['text']))
     # print ("Monuments du département {} sans code MH : {}".format(ini.dep[departement][('text')],Nb_noMHS))
+
+    # affichier le contenu d'un MH
+    # mh = "PA00087044"
+    # print (musee.collection[mh])

@@ -19,22 +19,16 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-# Les paramètres généraux
+'''
+    Tester l'import du fichier param.py
+'''
+from __future__ import unicode_literals
+import param
 
-# Attention ce répertoire doit être créer avant le lancement du programme !
-# racine des pages web
-prod=False
-# en local
-url_dev="/home/jean/osm/monuments_historiques"
-# sur Syno
-url_prod="/var/services/homes/jean/web_wom"
-# fichier statique : style.css
-#cssFile ="style.css"
 
-#les textes qui ne doivent pas apparaitre comme name= pour OSM
-no_name = ['Immeuble','Maison','Maisons','Eglise', 'Église', 'Château','Ecurie','Ecuries','Écurie','Écuries','Presbytère','Beffroi','Cimetière','Prieuré','Remparts','Hôtel']
 
-# Paramètres de connexion pour accéder aux logs du serveur web sur ovh
-login = 'utilisateur'
-mdp = 'mot de passe'
-domain = "domaine ovh"
+
+
+if __name__ == "__main__":
+    dep=("75")
+    print(param.dic_dep[dep])
