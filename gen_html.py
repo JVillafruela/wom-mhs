@@ -272,17 +272,10 @@ if __name__ == "__main__":
     index.gen_page_index()
 
     '''Créer la liste des départements à mettre à jour'''
-    # listDep = schedule.get_depToMaj()
-    # print(listDep)
-    # #listDep = ["74"]
-    # logging.info("log : {}".format(listDep))
     listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
-    # print(listDep)
-    # for d in listDep :
-    #     print(d)
-    # exit(0)
+    #listDep = ['07','56']
+    '''Mettre à jour les pages des départements de la liste'''
     for d in listDep :
-        '''Mettre à jour les pages des départements de la liste'''
         print('------'+d+'------')
         logging.info('log : ------ {} ------'.format(d))
         ''' Acquérir les datas'''

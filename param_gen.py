@@ -34,7 +34,7 @@ import urllib.parse
 from bs4 import BeautifulSoup
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
-import special
+import paramSpecial
 
 
 url_base ="https://fr.wikipedia.org/wiki/Liste_des_monuments_historiques_par_département_français"
@@ -89,8 +89,8 @@ def getData(url,dic_dep,gen_param):
                 dic_dep[code]['url_d'] = [url]
         #Correction des urls à partir du fichier special.py
             else :
-                if code in special.special :
-                    for u in special.special[code]['url']:
+                if code in paramSpecial.special :
+                    for u in paramSpecial.special[code]['url']:
                         urls.append("/wiki/Liste_des_monuments_historiques_"+u)
                     dic_dep[code]['url_d'] = urls
                 else :
@@ -116,7 +116,7 @@ def is_table_url(url,dep):
 def get_urls():
     ''' Recherche les urls non conformes'''
     # ### Recherche des départements pour lesquels l'url ne renvoie pas la table des monuments
-    # et qui vont demander une recherche manuelle et une inscription dans le fichier special.py
+    # et qui vont demander une recherche manuelle et une inscription dans le fichier paramSpecial.py
     # Attention : il faut commenter/décommenter des lignes de codes dans la fonction getData()
     # Attention : Il faudra ajouter à la liste trouvée le département 69 (Métropole de Lyon non détectée dans les départements)
     dic_dep = {}
@@ -160,7 +160,7 @@ def gen_param():
 #
 # dictionnaire des départements
 #
-#     Ce fichier est généré par le programme param_gen.py après que le fichier special.py est été complété manuellement.
+#     Ce fichier est généré par le programme param_gen.py après que le fichier paramSpecial.py est été complété manuellement.
 #
 ''')
     oF.write('dic_dep = {')
@@ -185,7 +185,7 @@ def main():
     '''
         Attention : il faut d'abord rechercher les url non conformes !
         puis rechercher les urls correctes sur le web
-        et complèter manuellement le fcihier special.py
+        et complèter manuellement le fichier paramSpecial.py
 
         Après seulement on peut lancer la génération du fichier param.py
     '''

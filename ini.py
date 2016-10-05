@@ -33,8 +33,3 @@ url_prod="/var/services/homes/jean/web_wom"
 
 #les textes qui ne doivent pas apparaitre comme name= pour OSM
 no_name = ['Immeuble','Maison','Maisons','Eglise', 'Église', 'Château','Ecurie','Ecuries','Écurie','Écuries','Presbytère','Beffroi','Cimetière','Prieuré','Remparts','Hôtel']
-
-# Paramètres de connexion pour accéder aux logs du serveur web sur ovh
-login = 'utilisateur'
-mdp = 'mot de passe'
-domain = "domaine ovh"
