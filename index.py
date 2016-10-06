@@ -42,13 +42,7 @@ def write_entete_index(file, title):
                '''
     header+='''<script src="js/jquery.js"></script>
             <script src="js/jquery-ui.min.js"></script>'''
-    # Commuter l'url du serveur pour le test de présence des pages web
-    if ini.prod :
-        # serveur de Prod
-        header+= '''<script src="js/select.js"></script>'''
-    else :
-        # serveur de test en local : python -m SimpleHTTPServer
-        header+='''<script src="js/selectLocal.js"></script>'''
+    header+= '''<script src="js/select.js"></script>'''
     header+='''   </head>'''
     file.write(header)
 
