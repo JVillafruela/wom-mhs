@@ -4,13 +4,13 @@ Génération de pages web de comparaison de l'intégration des monuments histori
 
 - Le script gen_html.py génère les pages web après avoir recherché les monuments dans chaque base et établi des tableaux comparatifs.
 
-- Le site web résultat est visible sur http://jearro.fr/wom
+- Le site web résultat est visible sur http://wom.jearro.fr
 
-- Chaque nuit, un cron lance la génération, puis pousse les fichiers html sur le serveur web (éxécution du script run.sh)
+- Chaque nuit, un cron lance la génération des pages, qui sont "gittés" sur https://github.com/JeaRRo/Wom (éxécution du script run.sh)
 
 Install
 ------
-    $ virtualenv mhs_env
+    $ virtualenv mhs_env --no-site-packages -p /usr/bin/python3
     $ source ./mhs_env/bin/activate
     $ pip install -r requirements.txt
 
@@ -24,4 +24,5 @@ Use
 
 ToDo
 ------
-	- Traiter la France entière -> en cours dans la branche devFR
+	 - Certaines villes de France ont des pages Wikipédia qui ne sont pas liées à leur pages départementales et donc non traitées par le script. Voir le fichier paramSpecial.py
+     - Certains monuments ont une référence unique dans Mérimée mais plusieurs codes wikidata et donc plusieurs pages wikipédia. OSm ne propose qu'un seul code wikidata par ref mérimée. A corriger. 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Copyright 2016 JeaRRo <jean.navarro@laposte.net>
+#  Copyright 2016 JeaRRo <jean.ph.navarro@gmail.com>
 #  http://wiki.openstreetmap.org/wiki/User:JeaRRo
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -68,8 +68,8 @@ def write_bandeau_index(file,title):
 
 
     <p>Ces pages sont du HTML statique avec un peu de jQuery. Elles sont générées automatiquement chaque nuit par un script python3, puis poussées sur un serveur Web.
-     Le code est visible et disponible sur <a href="https://framagit.org/JeaRRo/Mhs" target="blank"> Mhs </a>.<br>
-     <a href="https://jearro.noip.me/gitlist/Wom.git" target ="blank">L'historique des pages web</a> est aussi accessible.</p>
+     Le code est visible et disponible sur Framagit.org <a href="https://framagit.org/JeaRRo/Mhs" target="blank"> Mhs.git </a>.<br>
+     <a href="https://github.com/JeaRRo/Wom" target ="blank">L'historique des pages web</a> est aussi accessible.</p>
     <p> Dernière construction des pages, le :<b> {}</b></p>
     '''.format(time.strftime('%d-%m-%Y %H:%M',time.localtime()))
 

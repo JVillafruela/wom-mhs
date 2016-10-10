@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Copyright 2016 JeaRRo <jean.navarro@laposte.net>
+#  Copyright 2016 JeaRRo <jean.ph.navarro@gmail.com>
 #  http://wiki.openstreetmap.org/wiki/User:JeaRRo
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
     Extraire à partir du fichier txt des N° de commune INSEE, le code insee d'une commune
 
     source : http://www.insee.fr/fr/methodes/nomenclatures/cog/telechargement/2016/txt/comsimp2016.zip
-    
+
      FIXME => les noms ne doivent pas avoir d'espace => remplacement par "-"   ---(OK)
      FIXME => le fichier source est encodé : Europe occidentale (ISO-8859-1) ou
                 Europe occidentale (Windows-1252/WinLatin1).

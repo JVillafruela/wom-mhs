@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Copyright 2016 JeaRRo <jean.navarro@laposte.net>
+#  Copyright 2016 JeaRRo <jean.ph.navarro@gmail.com>
 #  http://wiki.openstreetmap.org/wiki/User:JeaRRo
 #
 #  This program is free software; you can redistribute it and/or modify

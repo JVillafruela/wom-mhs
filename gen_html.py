@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Copyright 2016 JeaRRo <jean.navarro@laposte.net>
+#  Copyright 2016 JeaRRo <jean.ph.navarro@gmail.com>
 #  http://wiki.openstreetmap.org/wiki/User:JeaRRo
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -254,8 +254,7 @@ def gen_pages(dep, musee):
 if __name__ == "__main__":
     stats={}
     wkdCodes = {}
-    ''' Rechercher les Qcodes sur wikidata'''
-    wkdCodes = wkdcodes.get_Q_codes()
+
     ''' Définir les variables d'entrée'''
     if ini.prod :
         base_url = ini.url_prod+"/Wom"
@@ -268,6 +267,9 @@ if __name__ == "__main__":
     fname = log_url+"/wom_"+get_log_date()+".log"
     #print (fname)
     logging.basicConfig(filename=fname,format='%(asctime)s %(levelname)s: %(message)s',level=logging.DEBUG,datefmt='%m/%d/%Y %H:%M')
+
+    ''' Rechercher les Qcodes sur wikidata'''
+    wkdCodes = wkdcodes.get_Q_codes()
 
     ''' Rechercher une maj de la base Mérimée'''
     merimee.get_maj_base_merimee()
