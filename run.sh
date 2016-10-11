@@ -18,17 +18,20 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
+# Script bash de lancement de la génération des pages html.
 
 #récupérer la date/heure
 heure=$(date +%H:%M)
 jour=$(date +%Y-%m-%d)
 
-base_prod="/var/services/homes/jean/web_wom"
-base_dev="/home/jean/osm/monuments_historiques/"
+base_prod="/home/jearro/osm"
+base_dev="/home/jean/osm/monuments_historiques"
 PROD=true
-if [ $PROD = true ]; then
-     base=$base_prod
-else base=$base_dev
+if [ $PROD = true ];
+    then
+        base=$base_prod
+    else
+        base=$base_dev
 fi
 
 cd $base
@@ -38,14 +41,12 @@ export LANG
 
 # activer l'environnement python3
 source WOM_env/bin/activate
-
-#git pull
 cd ./Mhs
 
-#lancer l'éxécution
+#lancer la génération des fichiers html
 python3 gen_html.py > /dev/null 2>&1
 
-# gitter les pages web et les pousser sur le serveur web
+# gitter les pages html sur github.com (génération web automatique)
 if [ $? -eq 0 ]; then
 	cd ../Wom
 	git add -A
@@ -53,13 +54,6 @@ if [ $? -eq 0 ]; then
 	git commit -am "$message"
 	git push
 
-################# à modifier pour la prod !!
-	lftp ftp://user:motdepasse@serveurFtp -e "mirror -e -R -x .git /var/services/homes/jean/web_wom/Wom/. /www/wom/ ; quit"
-	if [ $? -eq 0 ]; then
-		heure=$(date +%H:%M)
-		echo "Transfert vers le serveur : Ok le $jour à $heure"
-	fi
-#
 # # finir
 	deactivate
 fi
