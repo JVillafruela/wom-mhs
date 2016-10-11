@@ -25,6 +25,8 @@
     charger un dump json
     associer à chaque code mérimée un code wkd
 
+    FIXME : si multiple Q pour un code mérimée : faire une liste pour ajout manuel (pas de lien josm)
+
 '''
 from __future__ import unicode_literals
 import requests, json, os
@@ -42,6 +44,7 @@ def sauvegarder_Q_codes(filename, dico):
 
 def get_Q_codes():
     filename="wkdcodes.json"
+    # dictionnaire des "wikidata codes contient pour chaque code Mhs (mérimée) une liste de code wikidata (Qxxxx)"
     wCodes = {}
     url = "https://query.wikidata.org/bigdata/namespace/wdq/sparql?query={}"
     query = '''SELECT DISTINCT ?item ?codeMh WHERE {
@@ -62,7 +65,12 @@ def get_Q_codes():
             codeMh = dico['codeMh']['value']
             Q_Mh = dico['item']['value'].split('entity/')[1]
             #print(codeMh, '->', Q_Mh)
-            wCodes[codeMh] = Q_Mh
+            if codeMh in wCodes:
+                wCodes[codeMh].append(Q_Mh)
+            else :
+                wCodes[codeMh] = [Q_Mh]
+
+
         OwCodes = OrderedDict(sorted(wCodes.items(), key=lambda t: t[0]))
         sauvegarder_Q_codes(filename,OwCodes)
         logging.info(" {} Codes Wikidata téléchargés.".format(len(OwCodes)))

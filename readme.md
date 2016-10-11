@@ -24,7 +24,5 @@ Use
 
 ToDo
 ------
-	 - Certaines villes de France ont des pages Wikipédia qui ne sont pas liées à leur pages départementales et donc non traitées par le script.
+	 - Certaines villes de France ont des pages Wikipédia qui ne sont pas liées à leur page départementale et donc non traitées par le script.
                 Voir le fichier paramSpecial.py
-     - Certains monuments ont une référence unique dans Mérimée mais plusieurs codes wikidata et donc plusieurs pages wikipédia.
-                OSM ne propose qu'un seul code wikidata par ref Mérimée. A corriger.

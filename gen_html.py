@@ -126,8 +126,13 @@ def get_table(salle,musee):
                 # Remplacer dans les tags manquants le terme wikidata (si présent) par un lien url_josm avec ajout du qCode
                 if "wikidata" in MH.description[mh]['osm']['tags_manquants'] and MH.description[mh]['wkd'] != "":
                     #print (MH.description[mh]['wkd'])
-                    url_wkd = '<a {}&addtags=wikidata={}" target="blank" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm,MH.description[mh]['wkd'],MH.description[mh]['wkd'])
-                    MH.description[mh]['osm']['tags_manquants'][-1] = url_wkd
+                    if len(MH.description[mh]['wkd']) == 1 :
+                        url_wkd = '<a {}&addtags=wikidata={}" target="blank" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm,MH.description[mh]['wkd'][0],MH.description[mh]['wkd'][0])
+                        MH.description[mh]['osm']['tags_manquants'][-1] = url_wkd
+                    else:
+                        # Multiples codes Wikidata
+                        MH.description[mh]['osm']['tags_manquants'][-1]= ', '.join(MH.description[mh]['wkd'])
+
                 note_osm+=", ".join(MH.description[mh]['osm']['tags_manquants'])
             elif MH.description[mh]['osm']['mhs_bis'] != None :
                 note_osm+=' <a href="http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
@@ -279,7 +284,7 @@ if __name__ == "__main__":
 
     '''Créer la liste des départements à mettre à jour'''
     listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
-    #listDep = ['07','56']
+    #listDep = ['88','75']
     '''Mettre à jour les pages des départements de la liste'''
     for d in listDep :
         print('------'+d+'------')

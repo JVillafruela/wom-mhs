@@ -127,9 +127,13 @@ class Musee:
                 #print ("ref:mhs = {}".format(mh))
                 tag_A= "ref:mhs={}".format(mh)
                 infos+="<li>"+tag_A+"</li>"
-                # tag wikidata
-                tag_Q ="wikidata={}".format(self.collection[mh].description[mh]['wkd'])
-                infos+="<li>"+tag_Q+"</li>"
+                # tags wikidata
+                if len(self.collection[mh].description[mh]['wkd']) == 1 :
+                    tag_Q ="wikidata={}".format(self.collection[mh].description[mh]['wkd'][0])
+                    infos+="<li>"+tag_Q+"</li>"
+                else :
+                    infos+= "<li><b>Wikidata multiples :</b> {}</li>".format(', '.join(self.collection[mh].description[mh]['wkd']))
+                    tag_Q = ""
                 #print ("heritage:operator= mhs")
                 tag_C="heritage:operator=mhs"
                 infos+="<li>"+tag_C+"</li>"
@@ -181,8 +185,11 @@ class Musee:
                     infos+='<li><b><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Géocodage fourni par Wikipédia : à vérifier" target="blank"'.format(lat,lon,lat,lon)
                     infos+='>Position estimée</a></b></li>'
                     infos+="<p>"
-                    infos+='<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}%7C{}%7C{}%7C{}%7C{}%7C{}%7C{}%7C{}"\
-                            title="Création d\'un node dans JOSM (remoteControl) : Vérifier la position et les tags !" target="blank" '.format(lon,lat,tag_A,tag_Q,tag_B,tag_C,tag_D,tag_E,tag_F,tag_G)
+                    infos_tags = [tag_A,tag_Q,tag_B,tag_C,tag_D,tag_E,tag_F,tag_G]
+                    tags = [ t for t in infos_tags if t != "" ]
+                    infos+='<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}"\
+                            title="Création d\'un node dans JOSM (remoteControl) : Vérifier la position et les tags !" \
+                            target="blank" '.format(lon,lat,'%7C'.join(tags))
                     infos+='>Import JOSM</a></b></li>'
                     #exemple = http://www.openstreetmap.org/?mlat=45.44024&mlon=4.38175#map=19/45.44024/4.38175
                     # autre exemple = http://localhost:8111/add_node?lon=13.3&lat=53.2&addtags=natural=tree|name=%20%20%20==Great%20Oak==
