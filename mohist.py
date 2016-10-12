@@ -103,6 +103,14 @@ class Musee:
         for bs in base:
             self.stats[bs]=self.get_nb_MH(bs)
 
+    def statsSalles(self):
+        ''' renvoie une liste des nombres de ref dans chaque salle dans l'ordre des objets salle'''
+        listeStatsSalles = []
+        for s in self.salles:
+            #print(s.getNbRef())
+            listeStatsSalles.append(s.getNbRef())
+        return listeStatsSalles[1:]
+
     def trier(self):
         '''Renvoie la collection triée'''
         return OrderedDict(sorted(self.collection.items(), key=lambda t: t[0]))
@@ -209,6 +217,10 @@ class Salle:
     def __repr__(self):
         return("Page "+self.salle['nom']+" : "+str(len(self.s_collection)))+" Monuments"
 
+    def getNbRef(self):
+        ''' Renvoie le nombre de ref:mhs dans une salle '''
+        return len(self.s_collection)
+
 class MoHist:
     '''
         Un monument historique est décrit par :
@@ -280,8 +292,7 @@ if __name__ == "__main__":
 
         mhs='AP123456'
         m=musee.add_Mh(mhs)
-        m.add_infos_mer('01004','ambérieu en Bugey','9 rue truchon','Maison Navarro', 'classé : 1928')
-
+        m.add_infos_mer('01004','ambérieu en Bugey','259 rue Praujan','Maison Natoche', 'classé : 1928')
         #print(musee)
         musee.maj_salle()
         print(musee)

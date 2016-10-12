@@ -25,6 +25,7 @@
 from __future__ import unicode_literals
 import os,shutil,logging
 import datetime
+import statistiques
 import index,merimee,overpass,wikipedia,ini,mohist,wkdcodes,param
 from collections import OrderedDict
 
@@ -274,7 +275,7 @@ if __name__ == "__main__":
     logging.basicConfig(filename=fname,format='%(asctime)s %(levelname)s: %(message)s',level=logging.DEBUG,datefmt='%m/%d/%Y %H:%M')
 
     ''' Rechercher les Qcodes sur wikidata'''
-    wkdCodes = wkdcodes.get_Q_codes()
+    #wkdCodes = wkdcodes.get_Q_codes()
 
     ''' Rechercher une maj de la base Mérimée'''
     merimee.get_maj_base_merimee()
@@ -282,16 +283,21 @@ if __name__ == "__main__":
     ''' Générer la page index'''
     index.gen_page_index()
 
+    ''' Créer l'objet de statistique  et son fichier ./stats.json'''
+    st = statistiques.Statistiques()
+    st.fname = './stats.json'
+
     '''Créer la liste des départements à mettre à jour'''
     listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
-    #listDep = ['88','75']
+    #listDep = ['88','25','48', '52']
+
     '''Mettre à jour les pages des départements de la liste'''
     for d in listDep :
         print('------'+d+'------')
         logging.info('log : ------ {} ------'.format(d))
         ''' Acquérir les datas'''
         #print('----- Acquisition des datas ------')
-        museum = mohist.Musee()
+        museum= mohist.Musee()
         museum= overpass.get_osm(param.dic_dep[d]['name'],museum)
         museum= merimee.get_merimee(param.dic_dep[d]['code'],museum)
         museum= wikipedia.get_wikipedia(param.dic_dep[d]['url_d'],museum)
@@ -304,6 +310,12 @@ if __name__ == "__main__":
         for x in [1,5]:
             museum.gen_infos_osm(x)
         museum.maj_stats()
+
+        # enregistrer les stats du département et des salles
+        st.addStats(d,museum.stats,museum.statsSalles())
+        # listStatSalles = museum.statsSalles()
+        # print(listStatSalles)
+        #st.addStatsSalles(d, museum.statsSalles())
         #print('----- Statistiques globales ------')
         print("Merimée :",museum.stats['mer'])
         logging.info("log : Merimée : {}".format(museum.stats['mer']))
@@ -315,4 +327,9 @@ if __name__ == "__main__":
         logging.info("log : ----------------")
         #print(museum)
         ''' Générer le Html'''
-        gen_pages(param.dic_dep[d],museum)
+        #gen_pages(param.dic_dep[d],museum)
+
+    # faire le total des stats et afficher
+    st.totalStats()
+    print (st)
+    st.saveStats()

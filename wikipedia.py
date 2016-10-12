@@ -52,15 +52,27 @@ cache = CacheManager(**parse_cache_config_options(cache_opts))
 
 @cache.cache('query-wip-cache', expire=7200)
 def makeQuery(url):
-    return requests.get(url)
+    try:
+        #rep = requests.get(url)
+        return requests.get(url)
+    except requests.exceptions.ConnectionError as e:
+        message = 'Connection to {0} failed. \n {1}'
+        print (message.format(url, e.args[0].args[1].args[1]))
+        logging.debug(message.format(url, e.args[0].args[1].args[1]))
+        #sys.exit(0)
+        return url
 
 def getData(url):
+    #print(makeQuery(url).status_code)
     r = makeQuery(url)
-    contenu = r.text
-    #contenu = open("wiki.html", "r").read()
-    main_page = BeautifulSoup(contenu,'html.parser')
-    #print(main_page.prettify())
-    return main_page
+    if r.status_code == 200 and r != url:
+        contenu = r.text
+        #contenu = open("wiki.html", "r").read()
+        main_page = BeautifulSoup(contenu,'html.parser')
+        #print(main_page.prettify())
+        return  main_page
+    else :
+        return url
 
 def normalise(td, commune=None):
     ''' Normalise les champs de wikipédia pour faciliter l'analyse '''
@@ -252,7 +264,10 @@ def analyse(data,url,musee,commune=None):
                 commune = extrait_commune(url_gc)
                 #print ('url_grande_commune = ',url_gc)
                 dat = getData(url_gc)
-                analyse(dat,url_gc,musee,commune)
+                if dat != url_gc:
+                    analyse(dat,url_gc,musee,commune)
+                else:
+                    logging.debug("log : Url non accessible : {}".format(url_gc))
 
     return musee
 
@@ -260,7 +275,10 @@ def get_wikipedia(url_list,musee):
     ''' Faire la requette puis l'analyse du résultat '''
     for url in url_list:
         main_page = getData(url_base+url)
-        musee = analyse(main_page,url_base+url,musee)
+        if main_page != url_base+url :
+            musee = analyse(main_page,url_base+url,musee)
+        else:
+            logging.debug("log : Url non accessible : {}".format(url_base+url))
     return musee
 
 
