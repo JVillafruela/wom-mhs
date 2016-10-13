@@ -69,8 +69,8 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
                         "de_l'arrondissement_de_Lesparre-Médoc",
                         "de_l'arrondissement_de_Libourne"]
                  },
-            '34':{'url':["de_l'Eure_(A-I)",
-                        "de_l'Eure_(J-Z)"]
+            '34':{'url':["de_l'Hérault_(A-L)",
+                        "de_l'Hérault_(M-Z)"]
                  },
             '37':{'url':["d'Indre-et-Loire_(A-J)",
                         "d'Indre-et-Loire_(K-Z)"]
