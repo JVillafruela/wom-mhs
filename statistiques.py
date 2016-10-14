@@ -83,7 +83,9 @@ class Statistiques:
             json.dump(self.stats, file, indent=4)
 
     def __repr__(self):
-        pprint.pprint(self.stats)
+        #pprint.pprint(self.stats)
+        for date in self.stats:
+            print ("Mer, Osm, Wp : {}, {}".format(date,self.stats[date]['total'][1][6]))
         return "Nombre de jours de stats : {}".format( len(self.stats))
 
 # def total(dic_stat[date]):

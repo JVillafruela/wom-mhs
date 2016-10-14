@@ -275,7 +275,7 @@ if __name__ == "__main__":
     logging.basicConfig(filename=fname,format='%(asctime)s %(levelname)s: %(message)s',level=logging.DEBUG,datefmt='%m/%d/%Y %H:%M')
 
     ''' Rechercher les Qcodes sur wikidata'''
-    #wkdCodes = wkdcodes.get_Q_codes()
+    wkdCodes = wkdcodes.get_Q_codes()
 
     ''' Rechercher une maj de la base Mérimée'''
     merimee.get_maj_base_merimee()
@@ -327,7 +327,7 @@ if __name__ == "__main__":
         logging.info("log : ----------------")
         #print(museum)
         ''' Générer le Html'''
-        #gen_pages(param.dic_dep[d],museum)
+        gen_pages(param.dic_dep[d],museum)
 
     # faire le total des stats et afficher
     st.totalStats()
