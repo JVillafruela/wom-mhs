@@ -55,7 +55,8 @@ def get_data(query):
     # Obtenir la selection géographique sur oapi serveur français
     urlFR = u"http://api.openstreetmap.fr/oapi/interpreter"
     api = overpy.Overpass()
-    api.url = urlFR
+    #FIXME pour le département de l'Aisne l'url FR ne réponds un result vide !?
+    #api.url = urlFR
     try :
         result = api.query(query)
         #raise overpy.exception.OverpassTooManyRequests()
@@ -63,7 +64,7 @@ def get_data(query):
         print ('TooManyRequests : Trop de requêtes pour le serveur Overpass.eu. Patienter et ré-essayer plus tard.')
         result=None
     except overpy.exception.OverpassGatewayTimeout:
-        #print ('TimeOut : Le serveur Overpass.eu ne réponds pas.')
+        print ('TimeOut : Le serveur Overpass.eu ne réponds pas.')
         result=None
     # else :
     #print (type(result))
@@ -186,7 +187,7 @@ def get_osm(departement,musee):
         x+=1
     if result == None:
         raise overpy.exception.OverPyException('Le serveur Overpass ne réponds pas.')
-    #print (result.relations)
+    #print (result.ways)
     ensemble ={'r':result.relations,'w':result.ways,'n':result.nodes}
     dic_typ = {'r':'relation','w':'way','n':'node'}
     for key in ensemble:
@@ -198,7 +199,7 @@ def get_osm(departement,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '77'
+    departement = '02'
     #osmWip=[]
     musee = mohist.Musee()
     #print("avant =",mohist.MoHist.ctr_monument)

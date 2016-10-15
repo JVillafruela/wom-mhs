@@ -28,7 +28,10 @@
 
 
 special = { '02':{'url':["de_l'Aisne_(nord)",
-                        "de_l'Aisne_(sud)"]
+                        "de_l'Aisne_(sud)",
+                        "de_Château-Thierry",
+                        "de_Laon",
+                        "de_Soissons"]
                  },
             '03':{'url':["de_l'Allier_(A-H)",
                         "de_l'Allier_(I-Z)"]

@@ -284,7 +284,7 @@ def get_wikipedia(url_list,musee):
 
 if __name__ == "__main__":
     #import pprint
-    departement = '59'
+    departement = '02'
     # dic_wp = {}
     # Nb_noMHS=0
     musee = mohist.Musee()

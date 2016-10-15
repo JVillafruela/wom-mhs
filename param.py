@@ -24,7 +24,11 @@
 #     Ce fichier est généré par le programme param_gen.py après que le fichier special.py est été complété manuellement.
 #
 dic_dep = {'01' :{'code': '01', 'name': ['Ain'], 'url_d': ["/wiki/Liste_des_monuments_historiques_de_l'Ain"], 'text': "de l'Ain"},
-'02' :{'code': '02', 'name': ['Aisne'], 'url_d': ["/wiki/Liste_des_monuments_historiques_de_l'Aisne_(nord)", "/wiki/Liste_des_monuments_historiques_de_l'Aisne_(sud)"], 'text': "de l'Aisne"},
+'02' :{'code': '02', 'name': ['Aisne'], 'url_d': ["/wiki/Liste_des_monuments_historiques_de_l'Aisne_(nord)",
+                            "/wiki/Liste_des_monuments_historiques_de_l'Aisne_(sud)",
+                            "/wiki/Liste_des_monuments_historiques_de_Château-Thierry",
+                            "/wiki/Liste_des_monuments_historiques_de_Laon",
+                            "/wiki/Liste_des_monuments_historiques_de_Soissons"], 'text': "de l'Aisne"},
 '03' :{'code': '03', 'name': ['Allier'], 'url_d': ["/wiki/Liste_des_monuments_historiques_de_l'Allier_(A-H)", "/wiki/Liste_des_monuments_historiques_de_l'Allier_(I-Z)"], 'text': "de l'Allier"},
 '04' :{'code': '04', 'name': ['Alpes-de-Haute-Provence'], 'url_d': ['/wiki/Liste_des_monuments_historiques_des_Alpes-de-Haute-Provence'], 'text': 'des Alpes-de-Haute-Provence'},
 '05' :{'code': '05', 'name': ['Hautes-Alpes'], 'url_d': ['/wiki/Liste_des_monuments_historiques_des_Hautes-Alpes'], 'text': 'des Hautes-Alpes'},
