@@ -26,7 +26,6 @@
 # '59', '60', '62', '63', '64', '67', '70', '71', '72', '75',
 # '76', '77', '78', '86', '89']
 
-# FIXME : le ville de Nantes n'est pas intégré à son département 44
 
 special = { '02':{'url':["de_l'Aisne_(nord)",
                         "de_l'Aisne_(sud)"]
@@ -42,6 +41,12 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
             '17':{'url':["de_la_Charente-Maritime_(A-N)",
                         "de_la_Charente-Maritime_(O-Z)"]
                  },
+            '18':{'url':["du_Cher",
+                        "de_Bourges"]
+                 },
+            '2A':{'url':["de_la_Corse-du-Sud",
+                        "d'Ajaccio"]
+                 },
             '21':{'url':["de_la_Côte-d'Or_(A-L)",
                         "de_la_Côte-d'Or_(M-Z)"]
                  },
@@ -53,11 +58,25 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
                         "de_l'arrondissement_de_Périgueux",
                         "de_l'arrondissement_de_Sarlat-la-Canéda"]
                  },
+            '25':{'url':["du_Doubs",
+                        "de_Montbéliard",
+                        "de_Besançon"]
+                 },
             '27':{'url':["de_l'Eure_(A-I)",
                         "de_l'Eure_(J-Z)"]
                  },
+            #FIXME les pages sont découpés suivants les lettre de l'alphabet
+            #    -> l'analyse ne prend que le premier tableau
             '29':{'url':["du_Finistère_(A-O)",
-                        "du_Finistère_(P-Z)"]
+                        "du_Finistère_(P-Z)",
+                        "du_Faou",
+                        "de_Landerneau",
+                        "de_Locronan",
+                        "de_Morlaix",
+                        "de_Penmarc'h",
+                        "de_Quimper",
+                        "de Quimperlé",
+                        "de_Saint-Pol-de-Léon"]
                  },
             '31':{'url':["de_la_Haute-Garonne_(A-L)",
                         "de_la_Haute-Garonne_(M-Z)"]
@@ -75,8 +94,24 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
             '37':{'url':["d'Indre-et-Loire_(A-J)",
                         "d'Indre-et-Loire_(K-Z)"]
                  },
+            '39':{'url':["du_département_du_Jura",
+                        "d'Arbois",
+                        "de_Dole",
+                        "de_Lons-le-Saunier",
+                        "de_Salins-les-Bains"]
+                 },
+            '41':{'url':["de_Loir-et-Cher",
+                        "de_Blois",
+                        "de_Vendôme"]
+            },
             '43':{'url':["de_la_Haute-Loire_(ouest)",
                         "de_la_Haute-Loire_(est)"]
+                 },
+            '44':{'url':['de_la_Loire-Atlantique',
+                        "de_Nantes"]
+                 },
+            '45':{'url':['du_Loiret',
+                        "d'Orléans"]
                  },
             '46':{'url':["du_Lot_(A-K)",
                         "du_Lot_(L-Z)"]
@@ -84,9 +119,27 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
             '47':{'url':["du_Lot-et-Garonne_(A-L)",
                         "du_Lot-et-Garonne_(M-Z)"]
                  },
-            # FIXME : les villes d'Angers et de Saumur ne sont pas dans les listes générales
+            '48':{'url':["de_la_Lozère",
+                        "de_Mende"]
+                 },
+            # FIXMEOK : les villes d'Angers et de Saumur ne sont pas dans les listes générales
             '49':{'url':["de_Maine-et-Loire_(nord)",
-                        "de_Maine-et-Loire_(sud)"]
+                        "de_Maine-et-Loire_(sud)",
+                        "d'Angers",
+                        "de_Saumur"]
+                 },
+            '50':{'url':["de_l'arrondissement_de_Saint-Lô",
+                        "de_l'arrondissement_de_Coutances",
+                        "de_l'arrondissement_de_Cherbourg",
+                        "de_l'arrondissement_d'Avranches"]
+                 },
+            '51':{'url':["de_la_Marne",
+                        "de_Reims",
+                        "de_Châlons-en-Champagne"]
+                 },
+            '55':{'url':["de_la_Meuse",
+                        "de_Bar-le-Duc",
+                        "de_Verdun"]
                  },
             '56':{'url':["de_l'arrondissement_de_Lorient",
                         "de_l'arrondissement_de_Pontivy",
@@ -96,8 +149,12 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
                         "du_Nord_(M-Z)"]
                  },
             '60':{'url':["de_l'Oise_(ouest)",
-                        "de_l'Oise_(est)"]
+                        "de_l'Oise_(est)",
+                        "de_Beauvais",
+                        "de_Compiègne",
+                        "de_Senlis"]
                  },
+            #FIXME pour le département 61 -> voir Mortagne du perche url répétée une 40aine de fois
             '62':{'url':["du_Pas-de-Calais_(A-H)",
                         "du_Pas-de-Calais_(I-Z)"]
                  },
@@ -106,6 +163,10 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
                  },
             '64':{'url':["des_Pyrénées-Atlantiques_(A-L)",
                         "des_Pyrénées-Atlantiques_(M-Z)"]
+                 },
+            '66':{'url':["des_Pyrénées-Orientales",
+                        "de_Perpignan",
+                        "de_Villefranche-de-Conflent"]
                  },
             '67':{'url':["du_Bas-Rhin_(A-L)",
                         "du_Bas-Rhin_(M-Z)"]
@@ -121,10 +182,14 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
             '71':{'url':["de_Saône-et-Loire_(A-L)",
                         "de_Saône-et-Loire_(M-Z)"]
                  },
-            # FIXME : La ville du Mans n'est pas intégrée à son arrondissement
+            # FIXMEOK : La ville du Mans n'est pas intégrée à son arrondissement
             '72':{'url':["de_l'arrondissement_de_Mamers",
                         "de_l'arrondissement_du_Mans",
-                        "de_l'arrondissement_de_la_Flèche"]
+                        "de_l'arrondissement_de_la_Flèche",
+                        "du_Mans"]
+                 },
+            '74':{'url':["de_la_Haute-Savoie",
+                        "d'Annecy"]
                  },
             '75':{'url':["du_1er_arrondissement_de_Paris",
                         "du_2e_arrondissement_de_Paris",
@@ -151,20 +216,35 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
                         "de_l'arrondissement_du_Havre",
                         "de_l'arrondissement_de_Rouen"]
                  },
-            # FIXME : Villes de Fontainbleau et de Provins non intégrée
+            # FIXMEOK : Villes de Fontainbleau et de Provins non intégrée
             '77':{'url':["de_Seine-et-Marne_(ouest)",
-                        "de_Seine-et-Marne_(est)"]
+                        "de_Seine-et-Marne_(est)",
+                        "de_Fontainebleau",
+                        "de_Provins"]
                  },
-            # FIXME : Versailles non intégré
+            # FIXMEOK : Versailles non intégré
             '78':{'url':["des_Yvelines_(nord)",
-                        "des_Yvelines_(sud)"]
+                        "des_Yvelines_(sud)",
+                        "de_Versailles",
+                        "de_Saint-Germain-en-Laye"]
                  },
             '86':{'url':["de_la_Vienne_(A-L)",
                         "de_la_Vienne_(M-Z)",]
                  },
-            # FIXME : Villes non intégrées
+            # FIXMEOK : Villes non intégrées
             '89':{'url':["de_l'Yonne_(A-M)",
-                        "de_l'Yonne_(N-Z)"]
+                        "de_l'Yonne_(N-Z)",
+                        "de_sens",
+                        "d'Auxerre",
+                        "de_Tonnerre",
+                        "de_Joigny"]
+                 },
+            '972':{'url':["de_la_Martinique",
+                        "de_Fort-de-France",
+                        "de_Saint-Pierre_(Martinique)"]
+                 },
+            '973':{'url':["de_la_Guyane",
+                        "de_Cayenne"]
                  },
           }
 ""

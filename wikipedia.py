@@ -247,7 +247,7 @@ def analyse(data,url,musee,commune=None):
             #print(len(td))
             # pages des départements et ville de Lyon (8colonnes), grandes communes (7colonnes)
             if len(td) in [7,8]:
-                if "Paris" in url:
+                if len(td) == 7:
                     commune = extrait_commune(url)
                 datas=normalise(td,commune)
                 # obtenir les infos utilisables dans le musée
@@ -284,7 +284,7 @@ def get_wikipedia(url_list,musee):
 
 if __name__ == "__main__":
     #import pprint
-    departement = '77'
+    departement = '59'
     # dic_wp = {}
     # Nb_noMHS=0
     musee = mohist.Musee()
