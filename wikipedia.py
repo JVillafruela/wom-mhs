@@ -232,42 +232,45 @@ def analyse(data,url,musee,commune=None):
     # print("Commune = ", commune)
     print("Url = ", urllib.parse.unquote(url))
     logging.debug("log : Url : {}".format(urllib.parse.unquote(url)))
-    tableau =  data.find_all("table", "wikitable sortable",style = re.compile('^width:100%;'))[0]
-    for i, tr in enumerate(tableau):
-        #print (i, type(tr), tr)
+    '''Attention : pour le finistère il y a plusieurs tableau !! '''
+    #print(len(data.find_all("table", "wikitable sortable",style = re.compile('^width:100%;'))))
+    table =  data.find_all("table", "wikitable sortable",style = re.compile('^width:100%;'))
+    for tableau in table:
+        for i, tr in enumerate(tableau):
+            #print (i, type(tr), tr)
 
-        if isinstance(tr,bs4.element.Tag):
-            #l'id du monument permet de le retrouver dans la page
-            if 'id' in tr.attrs:
-                identifiant = tr.attrs['id']
-                #print('Id = ',tr.attrs['id'])
-            else:
-                identifiant= ''
-            td = tr.find_all('td')
-            #print(len(td))
-            # pages des départements et ville de Lyon (8colonnes), grandes communes (7colonnes)
-            if len(td) in [7,8]:
-                if len(td) == 7:
-                    commune = extrait_commune(url)
-                datas=normalise(td,commune)
-                # obtenir les infos utilisables dans le musée
-                infos= extrait_infos(datas)
-                #Ajout de l'url et de l'identifiant dans les infos
-                infos.extend([url,identifiant])
-                #print(infos)
-                # Créer le musée
-                musee= ajoute_infos(infos, musee)
-            # lien vers pages des grandes communes dans une page département
-            elif len(td) == 3 :
-                url_gc = td[2].find('a')['href']
-                url_gc = url_base+url_gc
-                commune = extrait_commune(url_gc)
-                #print ('url_grande_commune = ',url_gc)
-                dat = getData(url_gc)
-                if dat != url_gc:
-                    analyse(dat,url_gc,musee,commune)
+            if isinstance(tr,bs4.element.Tag):
+                #l'id du monument permet de le retrouver dans la page
+                if 'id' in tr.attrs:
+                    identifiant = tr.attrs['id']
+                    #print('Id = ',tr.attrs['id'])
                 else:
-                    logging.debug("log : Url non accessible : {}".format(url_gc))
+                    identifiant= ''
+                td = tr.find_all('td')
+                #print(len(td))
+                # pages des départements et ville de Lyon (8colonnes), grandes communes (7colonnes)
+                if len(td) in [7,8]:
+                    if len(td) == 7:
+                        commune = extrait_commune(url)
+                    datas=normalise(td,commune)
+                    # obtenir les infos utilisables dans le musée
+                    infos= extrait_infos(datas)
+                    #Ajout de l'url et de l'identifiant dans les infos
+                    infos.extend([url,identifiant])
+                    #print(infos)
+                    # Créer le musée
+                    musee= ajoute_infos(infos, musee)
+                # lien vers pages des grandes communes dans une page département
+                elif len(td) == 3 :
+                    url_gc = td[2].find('a')['href']
+                    url_gc = url_base+url_gc
+                    commune = extrait_commune(url_gc)
+                    #print ('url_grande_commune = ',url_gc)
+                    dat = getData(url_gc)
+                    if dat != url_gc:
+                        analyse(dat,url_gc,musee,commune)
+                    else:
+                        logging.debug("log : Url non accessible : {}".format(url_gc))
 
     return musee
 
@@ -284,7 +287,7 @@ def get_wikipedia(url_list,musee):
 
 if __name__ == "__main__":
     #import pprint
-    departement = '02'
+    departement = '12'
     # dic_wp = {}
     # Nb_noMHS=0
     musee = mohist.Musee()
