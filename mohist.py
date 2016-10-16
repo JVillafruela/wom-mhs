@@ -136,12 +136,13 @@ class Musee:
                 tag_A= "ref:mhs={}".format(mh)
                 infos+="<li>"+tag_A+"</li>"
                 # tags wikidata
-                if len(self.collection[mh].description[mh]['wkd']) == 1 :
-                    tag_Q ="wikidata={}".format(self.collection[mh].description[mh]['wkd'][0])
-                    infos+="<li>"+tag_Q+"</li>"
-                else :
-                    infos+= "<li><b>Wikidata multiples :</b> {}</li>".format(', '.join(self.collection[mh].description[mh]['wkd']))
-                    tag_Q = ""
+                # if len(self.collection[mh].description[mh]['wkd']) == 1 :
+                #     tag_Q ="wikidata={}".format(self.collection[mh].description[mh]['wkd'][0])
+                #     infos+="<li>"+tag_Q+"</li>"
+                # else :
+                #     infos+= "<li><b>Wikidata multiples :</b> {}</li>".format(', '.join(self.collection[mh].description[mh]['wkd']))
+                #     tag_Q = ""
+                tag_Q=""
                 #print ("heritage:operator= mhs")
                 tag_C="heritage:operator=mhs"
                 infos+="<li>"+tag_C+"</li>"
