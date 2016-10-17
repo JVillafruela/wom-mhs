@@ -127,8 +127,9 @@ def extrait_infos(datas):
         if nom in ini.no_name:
             nom = ''
         infos_manquantes.append("Page monument absente")
-        tag_wk = nom
-
+        ''' Suppression proposition de nom pour un tag wikipédia:fr vers une page qui n'existe pas '''
+        #tag_wk = nom
+        tag_wk = ''
     else :
         nom =''
         tag_wk = ''

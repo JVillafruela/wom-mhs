@@ -64,7 +64,7 @@ dic_dep = {'01' :{'code': '01', 'name': ['Ain'], 'url_d': ["/wiki/Liste_des_monu
     '/wiki/Liste_des_monuments_historiques_de_Morlaix',
     "/wiki/Liste_des_monuments_historiques_de_Penmarc'h",
     '/wiki/Liste_des_monuments_historiques_de_Quimper',
-    '/wiki/Liste_des_monuments_historiques_de Quimperlé',
+    '/wiki/Liste_des_monuments_historiques_de_Quimperlé',
     '/wiki/Liste_des_monuments_historiques_de_Saint-Pol-de-Léon'], 'text': 'du Finistère'},
 '30' :{'code': '30', 'name': ['Gard'], 'url_d': ['/wiki/Liste_des_monuments_historiques_du_Gard'], 'text': 'du Gard'},
 '31' :{'code': '31', 'name': ['Haute-Garonne'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Haute-Garonne_(A-L)', '/wiki/Liste_des_monuments_historiques_de_la_Haute-Garonne_(M-Z)'], 'text': 'de la Haute-Garonne'},

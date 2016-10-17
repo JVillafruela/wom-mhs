@@ -169,9 +169,12 @@ class Musee:
                 # lien wikipedia
                 if 'infos_manquantes' in self.collection[mh].description[mh]['wip']  and "Page monument absente" not in self.collection[mh].description[mh]['wip']['infos_manquantes']:
                     texte =self.collection[mh].description[mh]['wip']['tag_wk']
+                    ''' Suppression proposition de nom pour un tag wikipédia:fr vers une page qui n'existe pas '''
                     if texte=="":
-                        texte=self.collection[mh].description[mh]['mer']['nom']
-                    tag_G="wikipedia=fr:{}".format(texte)
+                        tag_G = ''
+                        #texte=self.collection[mh].description[mh]['mer']['nom']
+                    else :
+                        tag_G="wikipedia=fr:{}".format(texte)
                 else:
                     tag_G=""
                 infos+="<li>"+tag_G+"</li>"
