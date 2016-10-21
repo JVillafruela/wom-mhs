@@ -123,6 +123,15 @@ class Musee:
                 x+=1
         return x
 
+    def get_nb_pageToCreate(self) :
+        ''' Renvoie le nombre de page Wp à créer'''
+        x=0
+        for m,v in self.collection.items() :
+            #print(v)
+            if (v.description[m]['wip'] != {}) and (v.description[m]['wip']['toCreateWp']) :
+                x+=1
+        return x
+
     def gen_infos_osm(self,n):
         ''' Produire des infos d'aide pour la création du MH dans OSM
             n est le rang de la salle dans la liste des salles (voir plus haut)
@@ -264,7 +273,6 @@ class MoHist:
                                              'adresse': adresse,
                                              'nom': nom,
                                              'classement': classement }
-
         # if not 'osm' in self.description[self.mhs]:
         self.note+=1
 
@@ -275,7 +283,7 @@ class MoHist:
                                              'mhs_bis': mhs_bis}
         self.note+=2
 
-    def add_infos_wip(self, insee, commune, nom, geo, url, ident, infos_manquantes, tag_wk):
+    def add_infos_wip(self, insee, commune, nom, geo, url, ident, infos_manquantes, tag_wk, toCreateWp):
         self.description[self.mhs]['wip'] = {'insee': insee,
                                              'commune': commune,
                                              'nom': nom,
@@ -283,7 +291,8 @@ class MoHist:
                                              'url': url,
                                              'id': ident,
                                              'infos_manquantes': infos_manquantes,
-                                             'tag_wk':tag_wk }
+                                             'tag_wk':tag_wk,
+                                             'toCreateWp':toCreateWp}
         self.note+=4
 
     def corrige_note(self):

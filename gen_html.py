@@ -34,12 +34,13 @@ def get_log_date():
 
 def get_bandeau(dep,title,musee):
     ''' définir le bandeau de la page'''
-
+    toCreateWp = museum.get_nb_pageToCreate()
     bandeau= '''<body>
      <div id="bandeau"> <h4 class='Titre'>{}'''.format(title)
     #bandeau+=''' <p id="msg">&nbsp;</p> '''
-    bandeau+= '''</h4> <p><b>Pour le département {}</b>, la base Mérimée Ouverte décrit {} monuments historiques.</p>
-         <p>Ils sont {} dans wikipédia (pages départementales), et OSM en connait {}.</p>'''.format(dep['text'],musee.stats['mer'],musee.stats['wip'],musee.stats['osm'])
+    bandeau+= '''</h4> <p><b>Pour le département {}</b>, la base Mérimée Ouverte décrit {} monuments historiques.
+         Ils sont {} dans wikipédia (pages départementales et grandes villes). {} n'ont pas de page dédiée.'''.format(dep['text'],musee.stats['mer'],musee.stats['wip'],toCreateWp)
+    bandeau+= '''<p> OpenStreetMap connait {} de ces monuments.'''.format(musee.stats['osm'])
     bandeau+= '''\n</div>'''
     return bandeau
 
@@ -151,7 +152,14 @@ def get_table(salle,musee):
             if 'infos_manquantes' in MH.description[mh]['wip']:
                 #print(MH.description[mh]['wip'])
                 if len(MH.description[mh]['wip']['infos_manquantes'])>0:
-                    note_wp+=", ".join(MH.description[mh]['wip']['infos_manquantes'])
+                    #print(MH.description[mh]['wip']['infos_manquantes'])
+                    if "redlink" in MH.description[mh]['wip']['infos_manquantes'][0] :
+                        # Page à créer
+                        MH.description[mh]['wip']['infos_manquantes'][0] = '<a href="http://fr.wikipedia.org'+  MH.description[mh]['wip']['infos_manquantes'][0] + '" target="blank" title = "Page wikipédia à créer">A créer</a>'
+                        note_wp+=", ".join(MH.description[mh]['wip']['infos_manquantes'])
+                        #print (note_wp)
+                    else:
+                        note_wp+=", ".join(MH.description[mh]['wip']['infos_manquantes'])
                 else:
                     note_wp+=""
             if 'mhs_ter' in MH.description[mh]['wip'] :
@@ -290,6 +298,7 @@ if __name__ == "__main__":
     '''Créer la liste des départements à mettre à jour'''
     listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
     #listDep = ['88','25','48', '52']
+    #listDep = ['26']
 
     '''Mettre à jour les pages des départements de la liste'''
     for d in listDep :
@@ -326,6 +335,8 @@ if __name__ == "__main__":
         print("     ---- ")
         logging.info("log : ----------------")
         #print(museum)
+
+        print (" A ajouter dans Wp : {} pages".format (museum.get_nb_pageToCreate()))
         ''' Générer le Html'''
         gen_pages(param.dic_dep[d],museum)
 
