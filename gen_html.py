@@ -320,8 +320,9 @@ if __name__ == "__main__":
             museum.gen_infos_osm(x)
         museum.maj_stats()
 
+        pagesToCreate = museum.get_nb_pageToCreate()
         # enregistrer les stats du département et des salles
-        st.addStats(d,museum.stats,museum.statsSalles())
+        st.addStats(d,museum.stats,pagesToCreate,museum.statsSalles())
         # listStatSalles = museum.statsSalles()
         # print(listStatSalles)
         #st.addStatsSalles(d, museum.statsSalles())
@@ -336,11 +337,15 @@ if __name__ == "__main__":
         logging.info("log : ----------------")
         #print(museum)
 
-        print (" A ajouter dans Wp : {} pages".format (museum.get_nb_pageToCreate()))
+        print (" A ajouter dans Wp : {} pages".format (pagesToCreate))
         ''' Générer le Html'''
         gen_pages(param.dic_dep[d],museum)
 
     # faire le total des stats et afficher
     st.totalStats()
     print (st)
+
+    #générer la page html de stat
+    statistiques.gen_graphe(st.get_series())
+    #sauvegarde stats du jour
     st.saveStats()

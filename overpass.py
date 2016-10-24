@@ -173,7 +173,7 @@ def get_osm(departement,musee):
         query += query_part1.format(d)
     query+=query_end
     query = ' '.join(query.replace("\n","").split())
-    print("Query : ", query)
+    #print("Query : ", query)
     logging.debug("log : Osm Query : {}".format(query))
     result = get_data(query)
     ''' tester si le résulat est OK (!=None)

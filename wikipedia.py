@@ -240,7 +240,7 @@ def ajoute_infos(infos, musee):
 
 def analyse(data,url,musee,commune=None):
     # print("Commune = ", commune)
-    print("Url = ", urllib.parse.unquote(url))
+    #print("Url = ", urllib.parse.unquote(url))
     logging.debug("log : Url : {}".format(urllib.parse.unquote(url)))
     '''Attention : pour le finistère il y a plusieurs tableau !! '''
     #print(len(data.find_all("table", "wikitable sortable",style = re.compile('^width:100%;'))))

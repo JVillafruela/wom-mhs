@@ -31,12 +31,31 @@ import json
 import os
 import datetime
 import pprint
+from collections import OrderedDict
+import ini
 
 
 class Statistiques:
     '''
         Un objet qui enregistre les comptages des musées par département et par salle
         qui est sauvegardé dans un fichier et rechargé à chaque fois que l'on lance la maj des pages Wom
+
+        Stats =  { date1:{'01':[[0,0,0,0],[0,0,0,0,0,0]],
+                          '02':[[0,0,0,0],[0,0,0,0,0,0]],
+                            ,
+                            ,
+                         'total':[[0,0,0,0],[0,0,0,0,0,0]]
+                            },
+                  date2:{'01':[[[0,0,0,0],[0,0,0,0,0,0]],
+                         '02':[[0,0,0,0],[0,0,0,0,0,0]],
+                         ,
+                         ,
+                         'total':[[0,0,0,0],[0,0,0,0,0,0]]
+                         },
+                  date3:{ 'departement': [[nbMer,nbOsm,NbWip,PageACreer],[NbMer,NbOsm,NbMerOsm,NbWip,NbMerWip,NbOsmwip,NbMerOsmWip]]}
+
+                }
+
     '''
     def __init__(self, fname = None):
         ''' la date du jour '''
@@ -52,24 +71,40 @@ class Statistiques:
             self.stats = self.loadStats()
         else :
             self.saveStats()
-        self.stats[self.date] = {}
+        #self.stats[self.date] = {}
+        # ordonnées par date
+        self.data = OrderedDict(sorted(self.stats.items(), key=lambda t: t[0]))
+
+    def __repr__(self):
+        #pprint.pprint(self.stats)
+        #pprint.pprint(self.data)
+        for date in self.data:
+            print (" {} - Nb OSM : {}".format(date,self.data[date]['total'][1][6]))
+        return "Nombre de jours de stats : {}".format( len(self.stats))
 
     def totalStats(self):
         ''' totalise les colonnes de stats d'un jour'''
-        self.stats[self.date]['total'] = [[0,0,0],[0,0,0,0,0,0,0]]
+        self.stats[self.date]['total'] = [[0,0,0,0],[0,0,0,0,0,0,0]]
         #print(self.stats[self.date])
         for k in self.stats[self.date]:
             if k != 'total':
-                for i in range(0,3):
+                for i in range(0,4):
                     self.stats[self.date]['total'][0][i] += self.stats[self.date][k][0][i]
                 for i in range(0,7):
                     self.stats[self.date]['total'][1][i] += self.stats[self.date][k][1][i]
                 #self.stats[self.date]['total'][0][1] += self.stats[self.date][k][0][1]
                 #self.stats[self.date]['total'][0][2] += self.stats[self.date][k][0][2]
 
-    def addStats(self, D, stats, statsSalles):
+
+    def addzero(self) :
+        ''' nécéssaire pour changement de format des stats déjà existantes (ajout d'une colonne)'''
+        for date in self.data:
+            for key in self.data[date]:
+                self.data[date][key][0].append(0)
+
+    def addStats(self, D, stats, pageToCreate, statsSalles):
         ''' ajoute les stats d'un département base et salles (liste de liste)'''
-        self.stats[self.date][D] =  [ [stats['mer'], stats['osm'], stats['wip']] ]
+        self.stats[self.date][D] =  [ [stats['mer'], stats['osm'], stats['wip'], pageToCreate] ]
         self.stats[self.date][D].append(statsSalles)
 
     def loadStats(self):
@@ -82,72 +117,103 @@ class Statistiques:
         with open(self.fname, 'w',encoding='utf-8') as file:
             json.dump(self.stats, file, indent=4)
 
-    def __repr__(self):
-        #pprint.pprint(self.stats)
-        for date in self.stats:
-            print ("Mer, Osm, Wp : {}, {}".format(date,self.stats[date]['total'][1][6]))
-        return "Nombre de jours de stats : {}".format( len(self.stats))
+    def get_series(self):
+        ''' renvoie les valeurs de stats en serie pour permettre le graphe'''
+        serieDate = []
+        serieMerosmwip = []
+        serieMerwip = []
+        serieOsm = []
+        #print (self.data['20161020']['total'])
+        for dat in self.data :
+            #print (dat)
+            ''' liste des dates'''
+            grapheDate = "{}-{}-{}".format(dat[6:8],dat[4:6],dat[0:4])
+            serieDate.append(grapheDate)
+            ''' liste du nombre de monuments OSM'''
+            serieOsm.append(str(self.data[dat]['total'][0][1]))
+            ''' liste des monuments Merimée wikipédia'''
+            serieMerwip.append(str(self.data[dat]['total'][1][4]))
+            ''' liste des monumenst présents dans les trois bases'''
+            serieMerosmwip.append(str(self.data[dat]['total'][1][6]))
+            #print (dat,self.data[dat]['total'])
+        return [serieDate,serieOsm,serieMerwip,serieMerosmwip]
 
-# def total(dic_stat[date]):
-#     nbMer = NbOsm = nbWip = 0
-#     for k,v in dic_stat[date].items():
-#         nbMer +=  v[0]
-#         nbOsm +=  v[1]
-#         nbWip +=  v[2]
-#     dic_stat[date]['tout'] = [nbMer, nbOsm, nbWip]
-#     return dic_stat[date]
-#
-# def composeStat(date, D, museeStats, dic_stat):
-#     for k,v in museeStats:
-#         dic_stat[date][D].append(v)
-#     return dic_stat
+
+def gen_graphe(series):
+    ''' Génère la page html avec le graphe de stats'''
+    #Créer le fichier Wom/graphe.html
+    if ini.prod :
+        filename=ini.url_prod+"/Wom/D/graphe.html"
+    else :
+        filename=ini.url_dev+"/Wom/D/graphe.html"
+    #print(filename)
+    oF = open(filename,"w")
+
+    # écrire l'entête
+    content =''' <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title> Statistiques de Wom </title>
+    <script src="../js/jquery.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    '''
+    content +='''<script type="text/javascript">
+        $(document).ready ( function() {
+            $('#container').highcharts({
+                title: {
+                    text: 'Statistiques de Wom',
+                    x: -20 //center
+                        },
+                subtitle: {
+                    text: 'Source: Mérimée, Wikipédia, OpenStreetMap',
+                    x: -20
+                        },
+                xAxis: {
+                    categories: ['''+','.join(series[0])
+    #print(series[1])
+    content +=''']
+                        },
+                yAxis: {
+                    title: { text: 'Nombre de monuments historiques'},
+                    plotLines: [{value: 0,width: 1,color: '#808080'}]
+                        },
+                legend: {layout: 'vertical',align: 'right',verticalAlign: 'middle', borderWidth: 0},
+                series: [{
+                    name: 'Osm',
+                    data: [''' + ','.join(series[1])
+
+    content += ''']},{
+                    name: 'Mer Osm Wp',
+                    data: ['''+ ','.join(series[3])
+    content +=''' ]}
+                ]
+                })
+            });
+    </script>'''
+
+    content += '''</head>
+    <body>
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </body>
+    </html>
+    '''
+    oF.write(content)
+    oF.close()
+
 
 if __name__ == "__main__":
 
     #print(get_date())
-
+    #return OrderedDict(sorted(self.collection.items(), key=lambda t: t[0]))
     stats = Statistiques()
     stats.fname = './stats.json'
-    stat_01 = { 'mer':145, 'osm':25, 'wip':56}
-    stat_02 = { 'mer':545, 'osm':125, 'wip':256}
-    stat_03 = {'mer':55, 'osm':15, 'wip':26}
-    stat_04 = {'mer':553, 'osm':155, 'wip':426}
-    stats.addStats('01', stat_01)
-    stats.addStats('02', stat_02)
-    stats.addStats('03', stat_03)
-    stats.addStats('04', stat_04)
-    stats.totalStats()
-    print(stats)
-    stats.saveStats()
-
-'''
-pour chaque département (musee) il faut récupérer les stats
-Faire une série par date du jour
-    dans la série
-        - par base ['mer','osm','wip'] -> 'DText':[nbMer,nbOsm,NbWip],
-    stats=  { date1:{'01':[0,0,0],
-                    '02':[0,0,0],
-                            ,
-                            ,
-                            'tout':[0,0,0]
-                            },
-                  date2:{'01':[0,0,0],
-                         '02':[0,0,0],
-                         ,
-                         ,
-                         'tout':[0,0,0]
-                         },
-                }
-
-            un total par departement
-            un total général
-        - par salle         ->              {'01':{'merosmwip':0},{'merosm':0},{'merwip':0},
-                                            '02':{'mer':0},{'osm':0},{'wip':0},
-                                            '03':{'mer':0},{'osm':0},{'wip':0},
-                                            '04':{'mer':0},{'osm':0},{'wip':0},
-                                            'tout':{'mer':0},{'osm':0},{'wip':0} }
-            total par departement
-            total général
-
-
-'''
+    #print (stats)
+    #print (stats.data)
+    series = stats.get_series()
+    print (series)
+    #
+    # gen_graphe(series)
+    #stats.addzero()
+    #print (stats.data)
