@@ -98,9 +98,10 @@ class Statistiques:
 
     def addzero(self) :
         ''' nécéssaire pour changement de format des stats déjà existantes (ajout d'une colonne)'''
-        for date in self.data:
-            for key in self.data[date]:
-                self.data[date][key][0].append(0)
+        for date in self.stats:
+            for key in self.stats[date]:
+                self.stats[date][key][0].append(0)
+        self.saveStats()
 
     def addStats(self, D, stats, pageToCreate, statsSalles):
         ''' ajoute les stats d'un département base et salles (liste de liste)'''
@@ -216,4 +217,4 @@ if __name__ == "__main__":
     #
     # gen_graphe(series)
     #stats.addzero()
-    #print (stats.data)
+    #pprint.pprint (stats.data)
