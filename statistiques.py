@@ -105,6 +105,8 @@ class Statistiques:
 
     def addStats(self, D, stats, pageToCreate, statsSalles):
         ''' ajoute les stats d'un département base et salles (liste de liste)'''
+        if self.date not in self.stats.keys() :
+            self.stats[self.date] = {}
         self.stats[self.date][D] =  [ [stats['mer'], stats['osm'], stats['wip'], pageToCreate] ]
         self.stats[self.date][D].append(statsSalles)
 
@@ -216,5 +218,4 @@ if __name__ == "__main__":
     print (series)
     #
     # gen_graphe(series)
-    #stats.addzero()
     #pprint.pprint (stats.data)
