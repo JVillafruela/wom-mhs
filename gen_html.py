@@ -38,9 +38,12 @@ def get_bandeau(dep,title,musee):
     bandeau= '''<body>
      <div id="bandeau"> <h4 class='Titre'>{}'''.format(title)
     #bandeau+=''' <p id="msg">&nbsp;</p> '''
-    bandeau+= '''</h4> <p><b>Pour le département {}</b>, la base Mérimée Ouverte décrit {} monuments historiques.
-         Ils sont {} dans wikipédia (pages départementales et grandes villes). {} n'ont pas de page dédiée.'''.format(dep['text'],musee.stats['mer'],musee.stats['wip'],toCreateWp)
-    bandeau+= '''<p> OpenStreetMap connait {} de ces monuments.'''.format(musee.stats['osm'])
+    # Ils sont {} dans wikipédia (pages départementales et grandes villes). {} n'ont pas de page dédiée.'''.format(dep['text'],musee.stats['mer'],musee.stats['wip'],toCreateWp)
+    pagesWp = int(musee.stats['wip']) - int(toCreateWp)
+    bandeau+= '''</h4> <p><b>Pour le département {}</b>, la base Mérimée Ouverte décrit <b>{} </b>monuments historiques.
+         <b>{} </b> d'entre eux ont une page dédiée dans Wikipédia.'''.format(dep['text'],musee.stats['mer'],str(pagesWp))
+
+    bandeau+= '''<p> OpenStreetMap connait <b>{} </b> de ces monuments.'''.format(musee.stats['osm'])
     bandeau+= '''\n</div>'''
     return bandeau
 
@@ -296,9 +299,9 @@ if __name__ == "__main__":
     st.fname = './stats.json'
 
     '''Créer la liste des départements à mettre à jour'''
-    listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
+    #listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
     #listDep = ['88','25','48', '52']
-    #listDep = ['26']
+    listDep = ['26']
 
     '''Mettre à jour les pages des départements de la liste'''
     for d in listDep :
