@@ -130,7 +130,7 @@ class Statistiques:
         for dat in self.data :
             #print (dat)
             ''' liste des dates'''
-            grapheDate = "{}-{}-{}".format(dat[6:8],dat[4:6],dat[0:4])
+            grapheDate = "'{}-{}-{}'".format(dat[6:8],dat[4:6],dat[0:4])
             serieDate.append(grapheDate)
             ''' liste du nombre de monuments OSM'''
             serieOsm.append(str(self.data[dat]['total'][0][1]))
@@ -174,7 +174,7 @@ def gen_graphe(series):
                     x: -20
                         },
                 xAxis: {
-                    categories: ['''+','.join(series[0])
+                    categories: ['''+ ','.join(series[0])
     #print(series[1])
     content +=''']
                         },
