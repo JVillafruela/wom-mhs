@@ -129,14 +129,14 @@ def get_table(salle,musee):
             #les tags manquants dans OSM
             if len(MH.description[mh]['osm']['tags_manquants']) > 0:
                 # Remplacer dans les tags manquants le terme wikidata (si présent) par un lien url_josm avec ajout du qCode
-                # if "wikidata" in MH.description[mh]['osm']['tags_manquants'] and MH.description[mh]['wkd'] != "":
-                #     #print (MH.description[mh]['wkd'])
-                #     if len(MH.description[mh]['wkd']) == 1 :
-                #         url_wkd = '<a {}&addtags=wikidata={}" target="blank" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm,MH.description[mh]['wkd'][0],MH.description[mh]['wkd'][0])
-                #         MH.description[mh]['osm']['tags_manquants'][-1] = url_wkd
-                #     else:
-                #         # Multiples codes Wikidata
-                #         MH.description[mh]['osm']['tags_manquants'][-1]= ', '.join(MH.description[mh]['wkd'])
+                if "wikidata" in MH.description[mh]['osm']['tags_manquants'] and MH.description[mh]['wkd'] != "":
+                    #print (MH.description[mh]['wkd'])
+                    if len(MH.description[mh]['wkd']) == 1 :
+                        url_wkd = '<a {}&addtags=wikidata={}" target="blank" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm,MH.description[mh]['wkd'][0],MH.description[mh]['wkd'][0])
+                        MH.description[mh]['osm']['tags_manquants'][-1] = url_wkd
+                    else:
+                        # Multiples codes Wikidata
+                        MH.description[mh]['osm']['tags_manquants'][-1]= ', '.join(MH.description[mh]['wkd'])
 
                 note_osm+=", ".join(MH.description[mh]['osm']['tags_manquants'])
             elif MH.description[mh]['osm']['mhs_bis'] != None :
@@ -299,9 +299,9 @@ if __name__ == "__main__":
     st.fname = './stats.json'
 
     '''Créer la liste des départements à mettre à jour'''
-    #listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
+    listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
     #listDep = ['88','25','48', '52']
-    listDep = ['26']
+    #listDep = ['01']
 
     '''Mettre à jour les pages des départements de la liste'''
     for d in listDep :
@@ -346,7 +346,7 @@ if __name__ == "__main__":
 
     # faire le total des stats et afficher
     st.totalStats()
-    print (st)
+    #print (st)
 
     #générer la page html de stat
     statistiques.gen_graphe(st.get_series())

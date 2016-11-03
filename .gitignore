@@ -6,3 +6,4 @@ ini_*.py
 schedule.py
 log
 stats.json
+wkdcodes.json

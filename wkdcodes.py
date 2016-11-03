@@ -48,9 +48,9 @@ def get_Q_codes():
     wCodes = {}
     url = "https://query.wikidata.org/bigdata/namespace/wdq/sparql?query={}"
     query = '''SELECT DISTINCT ?item ?codeMh WHERE {
+      ?item wdt:P380 ?codeMh.
       ?item (wdt:P1435/wdt:P279*) wd:Q916475.
       ?item p:P1435 ?heritage_statement.
-      ?item wdt:P380 ?codeMh.
       FILTER(NOT EXISTS { ?heritage_statement pq:P582 ?end. })
     }
     '''

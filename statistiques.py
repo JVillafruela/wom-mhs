@@ -97,7 +97,7 @@ class Statistiques:
 
 
     def addzero(self) :
-        ''' nécéssaire pour changement de format des stats déjà existantes (ajout d'une colonne)'''
+        ''' Attention : nécéssaire pour changement de format des stats déjà existantes (ajout d'une colonne  - nov 2016)'''
         for date in self.stats:
             for key in self.stats[date]:
                 self.stats[date][key][0].append(0)
@@ -134,6 +134,8 @@ class Statistiques:
             serieDate.append(grapheDate)
             ''' liste du nombre de monuments OSM'''
             serieOsm.append(str(self.data[dat]['total'][0][1]))
+            ''' liste des monuments ayant une page sur WP '''
+            #serieWp.append(str(self.data[dat]['total'][0][3]))
             ''' liste des monuments Merimée wikipédia'''
             serieMerwip.append(str(self.data[dat]['total'][1][4]))
             ''' liste des monumenst présents dans les trois bases'''

@@ -239,11 +239,3 @@ if __name__ == "__main__":
     '''  Netoyer le répertoire d'un département'''
     d = '01'
     del_files(param.dic_dep[d])
-
-
-# ATTENTION dans le code js-> select.js : il y a en dur l'url vers les pages sur web
-# http://localhost:8000/D/**_pages/**_merosmwip.html
-# les étoiles sont remplacées automatiquement par le N° du département choisi
-# à revoir quand on passe en prod
-# l'url sera alors : http://jearro.fr/wom/D/**_pages/**_merosmwip.html
-# Régler le 1/10/2016 par commutation des fichiers select.js/selectLocal.js
