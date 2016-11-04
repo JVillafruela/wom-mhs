@@ -301,7 +301,7 @@ if __name__ == "__main__":
     '''Créer la liste des départements à mettre à jour'''
     listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
     #listDep = ['88','25','48', '52']
-    #listDep = ['01']
+    #listDep = ['14']
 
     '''Mettre à jour les pages des départements de la liste'''
     for d in listDep :

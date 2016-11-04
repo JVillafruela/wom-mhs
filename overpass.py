@@ -136,29 +136,32 @@ def get_elements(data,tt,musee):
         tags_mhs,tags_manquants = get_tags(d.tags)
         if 'ref:mhs' in tags_mhs:
             # teste si le tags mhs contient un espace
-            if " " in tags_mhs["ref:mhs"] :
-                print ("ERR : espace dans ref:mhs sur Osm : -{}-".format(tags_mhs["ref:mhs"]))
+            # if " " in tags_mhs["ref:mhs"] :
+            #     print ("ERR : espace dans ref:mhs sur Osm : -{}-".format(tags_mhs["ref:mhs"]))
             # Si le tag mhs contient deux refs ref:mhs=PA01000012;PA01000013
             # cas des monuments sur plusieurs communes
             if ';' in tags_mhs["ref:mhs"]:
-                #print(tags_mhs["ref:mhs"])
-                mhs= tags_mhs["ref:mhs"].split(';')[0]
+                print(tags_mhs["ref:mhs"])
+                list_mhs= [tags_mhs["ref:mhs"].split(';')[0].strip(),tags_mhs["ref:mhs"].split(';')[1].strip()]
+                #mhs= tags_mhs["ref:mhs"].split(';')[0].strip()
                 #mhs2=tags_mhs["ref:mhs"].split(';')[1] --> TRAITE
                 #Créer un mhs avec les mêmes infos que pour la première référence
-                MH=musee.add_Mh(tags_mhs["ref:mhs"].split(';')[1])
-                MH.add_infos_osm(tt+'/'+str(d.id),tags_mhs,tags_manquants)
+                # if 'IA' not in tags_mhs["ref:mhs"].split(';')[1] :
+                #     MH=musee.add_Mh(tags_mhs["ref:mhs"].split(';')[1])
+                #     MH.add_infos_osm(tt+'/'+str(d.id),tags_mhs,tags_manquants)
             else:
-                mhs = tags_mhs["ref:mhs"].strip()
-            #tag mhs déjà présent dans le dico
-            if mhs in musee.collection :
-                if mhs in musee.collection[mhs].description:
-                    if 'osm' in  musee.collection[mhs].description[mhs]:
-                        # code ref:mhs identique sur deux objets OSM : ajouter le texte 'Bis' au code
-                        musee.collection[mhs].description[mhs]['osm']['mhs_bis']=[tt+'/'+str(d.id),tags_mhs,tags_manquants]
-                        #print(tags_mhs["ref:mhs"])
-            else:
-                MH=musee.add_Mh(mhs)
-                MH.add_infos_osm(tt+'/'+str(d.id),tags_mhs,tags_manquants)
+                list_mhs = [tags_mhs["ref:mhs"].strip()]
+            for mhs in list_mhs:
+                #tag mhs déjà présent dans le dico
+                if mhs in musee.collection :
+                    if mhs in musee.collection[mhs].description:
+                        if 'osm' in  musee.collection[mhs].description[mhs]:
+                            # code ref:mhs identique sur deux objets OSM : ajouter le texte 'Bis' au code
+                            musee.collection[mhs].description[mhs]['osm']['mhs_bis']=[tt+'/'+str(d.id),tags_mhs,tags_manquants]
+                            #print(tags_mhs["ref:mhs"])
+                else:
+                    MH=musee.add_Mh(mhs)
+                    MH.add_infos_osm(tt+'/'+str(d.id),tags_mhs,tags_manquants)
     return musee
 
 def get_osm(departement,musee):
@@ -203,7 +206,7 @@ def get_osm(departement,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '01'
+    departement = '38'
     #osmWip=[]
     musee = mohist.Musee()
     #print("avant =",mohist.MoHist.ctr_monument)

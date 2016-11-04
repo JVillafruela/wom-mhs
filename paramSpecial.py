@@ -36,10 +36,13 @@ special = { '02':{'url':["de_l'Aisne_(nord)",
             '03':{'url':["de_l'Allier_(A-H)",
                         "de_l'Allier_(I-Z)"]
                  },
-            '14':{'url':["de_l'arrondissement_de_Bayeux",
-                        "de_l'arrondissement_de_Caen",
-                        "de_l'arrondissement_de_Lisieux",
-                        "de_l'arrondissement_de_Vire"]
+            # '14':{'url':["de_l'arrondissement_de_Bayeux",
+            #             "de_l'arrondissement_de_Caen",
+            #             "de_l'arrondissement_de_Lisieux",
+            #             "de_l'arrondissement_de_Vire"]
+            #      },
+            '14':{'url':["du_Calvados_(A-F)",
+                        "du_Calvados_(G-O)",
                  },
             '17':{'url':["de_la_Charente-Maritime_(A-N)",
                         "de_la_Charente-Maritime_(O-Z)"]

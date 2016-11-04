@@ -5,5 +5,4 @@ notes.txt
 ini_*.py
 schedule.py
 log
-stats.json
-wkdcodes.json
+*.json
