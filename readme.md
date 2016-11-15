@@ -24,5 +24,4 @@ Use
 
 ToDo
 ------
-	 - Certaines villes de France ont des pages Wikipédia qui ne sont pas liées à leur page départementale et donc non traitées par le script.
-                Voir le fichier paramSpecial.py
+ 

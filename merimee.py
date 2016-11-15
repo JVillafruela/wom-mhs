@@ -135,8 +135,25 @@ def get_merimee(dep,musee):
             MH.add_infos_mer(mh['INSEE'],mh['COM'],mh['ADRS'],mh['TICO'],mh['DPRO'])
     return musee
 
+def get_mh(ref):
+    ''' rechercher un mh par son code mérimée dans la base ouverte '''
+
+    global datafile
+    url_locale=get_url()
+
+    with open(url_locale+datafile) as data_file:
+	       data = json.load(data_file)
+    trouve = False
+    for mh in data[:-1] :
+        if mh['REF'] == ref :
+            print (mh['REF'], mh['DPT'], mh['TICO'])
+            trouve = True
+    if not trouve :
+        print("Le monument {} ne fait pas partie de la base mérimée.".format(ref))
+
+
 if __name__ == "__main__":
-    departement = '77'
+    departement = '01'
     get_maj_base_merimee()
     musee = mohist.Musee()
     musee = get_merimee(param.dic_dep[departement]['code'],musee)
@@ -152,5 +169,7 @@ if __name__ == "__main__":
     print(nb)
 
     # affichier le contenu d'un MH
-    # mh = "PA00087044"
-    # print (musee.collection[mh])
+    ref = "PA00116375"
+    #ref = "PA00116287"
+    get_mh(ref)
+    #print (musee.collection[ref])
