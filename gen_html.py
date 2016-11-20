@@ -352,6 +352,6 @@ if __name__ == "__main__":
     statistiques.gen_graphe(st.get_series())
     # générer la page de stats par departement
     statistiques.gen_graphe2(st.getSeriePourCent(st.getLastDate()))
-
+    statistiques.gen_graphe3(stats.getPcSeries())
     #sauvegarde stats du jour
     st.saveStats()
