@@ -350,5 +350,8 @@ if __name__ == "__main__":
 
     #générer la page html de stat
     statistiques.gen_graphe(st.get_series())
+    # générer la page de stats par departement
+    statistiques.gen_graphe2(st.getSeriePourCent(st.getLastDate()))
+
     #sauvegarde stats du jour
     st.saveStats()
