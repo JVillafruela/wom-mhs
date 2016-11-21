@@ -301,7 +301,7 @@ if __name__ == "__main__":
     '''Créer la liste des départements à mettre à jour'''
     listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
     #listDep = ['88','25','48', '52']
-    #listDep = ['14']
+    #listDep = ['974']
 
     '''Mettre à jour les pages des départements de la liste'''
     for d in listDep :
@@ -340,7 +340,8 @@ if __name__ == "__main__":
         logging.info("log : ----------------")
         #print(museum)
 
-        print (" A ajouter dans Wp : {} pages".format (pagesToCreate))
+        print (" A ajouter dans Wp : {} pages".format(pagesToCreate))
+        logging.info("log : A ajouter dans Wp : {} pages".format(pagesToCreate))
         ''' Générer le Html'''
         gen_pages(param.dic_dep[d],museum)
 
@@ -356,3 +357,6 @@ if __name__ == "__main__":
     statistiques.genGraphes(st.getSeriePourCent(st.getLastDate()),st.getPcSeries())
     #sauvegarde stats du jour
     st.saveStats()
+    # Afficher le conntenu d'un monument
+    # mhs = 'PA97400038'
+    # print(museum.collection[mhs])

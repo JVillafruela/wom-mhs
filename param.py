@@ -148,6 +148,6 @@ dic_dep = {'01' :{'code': '01', 'name': ['Ain'], 'url_d': ["/wiki/Liste_des_monu
 '971' :{'code': '971', 'name': ['Guadeloupe'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Guadeloupe'], 'text': 'de la Guadeloupe'},
 '972' :{'code': '972', 'name': ['Martinique'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Martinique','/wiki/Liste_des_monuments_historiques_de_Fort-de-France','/wiki/Liste_des_monuments_historiques_de_Saint-Pierre_(Martinique)'], 'text': 'de la Martinique'},
 '973' :{'code': '973', 'name': ['Guyane'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Guyane','/wiki/Liste_des_monuments_historiques_de_Cayenne'], 'text': 'de la Guyane'},
-'974' :{'code': '974', 'name': ['Réunion'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_La_Réunion'], 'text': 'de La Réunion'},
+'974' :{'code': '974', 'name': ['La Réunion'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_La_Réunion'], 'text': 'de La Réunion'},
 '975' :{'code': '975', 'name': ['Saint-Pierre-et-Miquelon'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_Saint-Pierre-et-Miquelon'], 'text': 'de Saint-Pierre-et-Miquelon'},
 }

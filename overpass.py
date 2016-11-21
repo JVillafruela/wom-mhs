@@ -171,13 +171,15 @@ def get_osm(departement,musee):
     '''
     dic_elements={}
     query = "[timeout:900];"
-    query_part1 = '''area[admin_level=6]["name"="{}"]->.boundaryarea;
+    query_part1 = '''area[admin_level={}]["name"="{}"]->.boundaryarea;
     ( node(area.boundaryarea)["ref:mhs"];
     way(area.boundaryarea)["ref:mhs"];
     relation(area.boundaryarea)["ref:mhs"]);'''
     query_end='''out meta;>;out meta;'''
     for d in departement :
-        query += query_part1.format(d)
+        if 'Miquelon' in d: level ='3'
+        else: level ='6'
+        query += query_part1.format(level,d)
     query+=query_end
     query = ' '.join(query.replace("\n","").split())
     #print("Query : ", query)
@@ -206,7 +208,7 @@ def get_osm(departement,musee):
     return musee
 
 if __name__ == "__main__":
-    departement = '38'
+    departement = '975'
     #osmWip=[]
     musee = mohist.Musee()
     #print("avant =",mohist.MoHist.ctr_monument)
