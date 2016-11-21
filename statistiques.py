@@ -399,6 +399,127 @@ def gen_graphe3(series):
     oF.write(content)
     oF.close()
 
+def genGraphes(serie1,serie2):
+    ''' Génère la page html avec deux graphes de stats
+            serie1 = graphe des départements (ancien graphe2)
+            serie2 = graphe de la progression (ancien graphe3)
+    '''
+    #Créer le fichier Wom/graphe2.html
+    if ini.prod :
+        filename=ini.url_prod+"/Wom/D/graphes.html"
+    else :
+        filename=ini.url_dev+"/Wom/D/graphes.html"
+    #print(filename)
+    oF = open(filename,"w")
+    # écrire l'entête
+    content =''' <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title> Statistiques de Wom </title>
+    <script src="../js/jquery.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    '''
+    content +='''<script type="text/javascript">
+        $(document).ready ( function() {
+            $('#container1').highcharts({
+                chart: {
+                        type: 'column'
+                        },
+                title: {
+                    text: "Intégration par département",
+                    x: -20 //center
+                        },
+                subtitle: {
+                    text: 'Source: Mérimée, Wikipédia, OpenStreetMap',
+                    x: -20
+                        },
+                xAxis: {
+                    categories: ['''+ ','.join(serie1[0])
+    content +='''],
+                 crosshair: true,
+                 title: {
+                        text: 'Départements par code'
+                        }
+                        },
+                yAxis: {
+                    title: { text: 'Pourcentage de monuments historiques intégrés dans ... '},
+                    min :0,
+                    max : 100,
+                        },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                        },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.1,
+                        borderWidth: 0
+                            }
+                        },
+
+                series: [{
+                    name: 'Osm',
+                    data: [''' + ','.join(serie1[1])
+    content += ''']},{
+                    name: 'Wp',
+                    data: ['''+ ','.join(serie1[2])
+    content +=''' ]}
+                ]
+                })
+            });
+    </script>'''
+    content +='''<script type="text/javascript">
+        $(document).ready ( function() {
+            $('#container2').highcharts({
+                title: {
+                    text: "Intégration globale",
+                    x: -20 //center
+                        },
+                subtitle: {
+                    text: 'Source: Mérimée, Wikipédia, OpenStreetMap',
+                    x: -20
+                        },
+                xAxis: {
+                    categories: ['''+ ','.join(serie2[0])
+    #print(series[1])
+    content +=''']
+                        },
+                yAxis: {
+                    title: { text: 'Pourcentage des monuments historiques intégrés dans ...'},
+                    plotLines: [{value: 0,width: 1,color: '#808080'}],
+                    min :0,
+                    max : 100,
+                        },
+                series: [{
+                    name: 'Osm',
+                    data: [''' + ','.join(serie2[1])
+
+    content += ''']},{
+                    name: 'Wp',
+                    data: ['''+ ','.join(serie2[2])
+    content +=''' ]}
+                ]
+                })
+            });
+    </script>'''
+    content += '''</head>
+    <body>
+    <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <br>
+    <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </body>
+    </html>
+    '''
+    oF.write(content)
+    oF.close()
+
+
 if __name__ == "__main__":
 
     #print(get_date())
@@ -418,6 +539,7 @@ if __name__ == "__main__":
     #pprint.pprint (stats.data)
     # series = stats.getSeriePourCent(stats.getLastDate())
     # print (series)
-    gen_graphe2(stats.getSeriePourCent(stats.getLastDate()))
+    #gen_graphe2(stats.getSeriePourCent(stats.getLastDate()))
 
-    gen_graphe3(stats.getPcSeries())
+    #gen_graphe3(stats.getPcSeries())
+    genGraphes(stats.getSeriePourCent(stats.getLastDate()),stats.getPcSeries() )

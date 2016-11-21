@@ -349,9 +349,10 @@ if __name__ == "__main__":
     #print (st)
 
     #générer la page html de stat
-    statistiques.gen_graphe(st.get_series())
+    #statistiques.gen_graphe(st.get_series())
     # générer la page de stats par departement
-    statistiques.gen_graphe2(st.getSeriePourCent(st.getLastDate()))
-    statistiques.gen_graphe3(st.getPcSeries())
+    #statistiques.gen_graphe2(st.getSeriePourCent(st.getLastDate()))
+    #statistiques.gen_graphe3(st.getPcSeries())
+    statistiques.genGraphes(st.getSeriePourCent(st.getLastDate()),st.getPcSeries())
     #sauvegarde stats du jour
     st.saveStats()
