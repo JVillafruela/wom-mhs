@@ -354,9 +354,9 @@ if __name__ == "__main__":
     # générer la page de stats par departement
     #statistiques.gen_graphe2(st.getSeriePourCent(st.getLastDate()))
     #statistiques.gen_graphe3(st.getPcSeries())
-    statistiques.genGraphes(st.getSeriePourCent(st.getLastDate()),st.getPcSeries())
+    statistiques.genGraphes(st.getSeriePourCent(),st.getPcSeries())
     #sauvegarde stats du jour
     st.saveStats()
-    # Afficher le conntenu d'un monument
-    # mhs = 'PA97400038'
+    # Afficher le contenu d'un monument
+    # mhs = 'PA97400047'
     # print(museum.collection[mhs])

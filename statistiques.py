@@ -60,7 +60,7 @@ class Statistiques:
     def __init__(self, fname = None):
         ''' la date du jour '''
         formatDate = '%Y%m%d'
-        formatDateTest = '%Y%m%d%H%M'
+        #formatDateTest = '%Y%m%d%H%M'
         self.date = datetime.datetime.now().strftime(formatDate)
         if fname == None :
             self.fname = "./stats.json"
@@ -120,9 +120,12 @@ class Statistiques:
         with open(self.fname, 'w',encoding='utf-8') as file:
             json.dump(self.stats, file, indent=4)
 
-    def getStatsDep(self,date,dep):
+    def getStatsDep(self,dep,date=None):
         '''Renvoie les %Osm et %Wp d'un département pour une date'''
-        s = self.data[date][dep]
+        if date == None :
+            date = self.date
+        #pprint.pprint(self.stats)
+        s = self.stats[date][dep]
         pCentOsm = round(((int(s[1][6]) + int(s[1][2]))/int(s[0][0]))*100,2)
         pCentWp = round(((int(s[1][6]) + int(s[1][4] - int(s[0][3])))/int(s[0][0]))*100,2)
         return pCentOsm, pCentWp
@@ -135,15 +138,17 @@ class Statistiques:
                 lastdate = date
         return lastdate
 
-    def getSeriePourCent(self,date):
+    def getSeriePourCent(self,date=None):
         ''' Renvoie les séries de pourcentage par départements pour une date'''
         serieDep = []
         serieOsm = []
         SerieWp = []
+        if date == None :
+            date = self.date
         data = OrderedDict(sorted(self.stats[date].items(), key=lambda t: t[0]))
         for departement in data :
             if departement != 'total':
-                pcOsm, pcWp = self.getStatsDep(date,departement)
+                pcOsm, pcWp = self.getStatsDep(departement)
                 serieDep.append("'"+departement+"'")
                 serieOsm.append(str(pcOsm))
                 SerieWp.append(str(pcWp))
@@ -173,7 +178,7 @@ class Statistiques:
         return [serieDate,serieOsm,serieMerwip,serieMerosmwip]
 
     def getPcSeries(self):
-        ''' Renvoie les pourcentages de monuments dans osm et wp en fonciotn du temps'''
+        ''' Renvoie les pourcentages de monuments dans osm et wp en fonction du temps'''
         serieDate = []
         seriePcOsm = []
         seriePcWp = []
@@ -182,7 +187,7 @@ class Statistiques:
             ''' liste des dates : réécrit le format date : de 20161025 en 25-10-2016'''
             grapheDate = "'{}-{}-{}'".format(dat[6:8],dat[4:6],dat[0:4])
             serieDate.append(grapheDate)
-            pcosm, pcwp = self.getStatsDep(dat,'total')
+            pcosm, pcwp = self.getStatsDep('total',dat)
             seriePcOsm.append(str(pcosm))
             seriePcWp.append(str(pcwp))
         return [serieDate,seriePcOsm,seriePcWp]

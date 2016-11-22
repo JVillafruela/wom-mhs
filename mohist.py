@@ -24,6 +24,7 @@
 '''
 import ini,merimee,overpass,wikipedia
 import pprint
+import bbox
 from collections import OrderedDict
 
 class Musee:
@@ -133,6 +134,8 @@ class Musee:
         return x
 
     def gen_infos_osm(self,n):
+
+
         ''' Produire des infos d'aide pour la création du MH dans OSM
             n est le rang de la salle dans la liste des salles (voir plus haut)
         '''
@@ -193,7 +196,7 @@ class Musee:
                 if name in ini.no_name:
                     tag_B = ''
                 else:
-                    tag_B="name={}".format(name)
+                    tag_B="name={}".format(name.replace('"',''))
                 infos+="<li>"+tag_B+"</li>"
                 #print ("Source : Base Mérimée ouverte - avril 2016 ")
                 tag_F="source:heritage=data.gouv.fr, Ministère de la Culture - 2016"
@@ -209,9 +212,7 @@ class Musee:
                     infos+="<p>"
                     infos_tags = [tag_A,tag_Q,tag_B,tag_C,tag_D,tag_E,tag_F,tag_G]
                     tags = [ t for t in infos_tags if t != "" ]
-                    infos+='<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}"\
-                            title="Création d\'un node dans JOSM (remoteControl) : Vérifier la position et les tags !" \
-                            target="blank" '.format(lon,lat,'%7C'.join(tags))
+                    infos+='<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}" title="Création d\'un node dans JOSM (remoteControl) : Vérifier la position et les tags !" target="blank" '.format(lon,lat,'%7C'.join(tags))
                     infos+='>Import JOSM</a></b></li>'
                     #exemple = http://www.openstreetmap.org/?mlat=45.44024&mlon=4.38175#map=19/45.44024/4.38175
                     # autre exemple = http://localhost:8111/add_node?lon=13.3&lat=53.2&addtags=natural=tree|name=%20%20%20==Great%20Oak==
