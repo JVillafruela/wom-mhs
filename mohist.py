@@ -24,7 +24,6 @@
 '''
 import ini,merimee,overpass,wikipedia
 import pprint
-import bbox
 from collections import OrderedDict
 
 class Musee:
