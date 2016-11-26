@@ -23,8 +23,8 @@
 ''' calculer une BBox '''
 
 def getBB(lat,lon):
-    deltaLat = 0.00063
-    deltaLon = 0.000825
+    deltaLat = 0.00043
+    deltaLon = 0.000725
     if lat < 0 :
         top = lat - deltaLat
         bottom = lat + deltaLat
