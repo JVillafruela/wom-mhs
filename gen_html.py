@@ -159,7 +159,7 @@ def get_table(salle,musee):
                 if len(MH.description[mh]['wip']['infos_manquantes'])>0:
                     #print(MH.description[mh]['wip']['infos_manquantes'])
                     if "redlink" in MH.description[mh]['wip']['infos_manquantes'][0] :
-                        # Page à créer
+                        # Page à créer avec lien
                         MH.description[mh]['wip']['infos_manquantes'][0] = '<a href="http://fr.wikipedia.org'+  MH.description[mh]['wip']['infos_manquantes'][0] + '" target="blank" title = "Page wikipédia à créer">A créer</a>'
                         note_wp+=", ".join(MH.description[mh]['wip']['infos_manquantes'])
                         #print (note_wp)

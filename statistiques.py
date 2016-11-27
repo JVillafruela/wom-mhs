@@ -126,8 +126,10 @@ class Statistiques:
             date = self.date
         #pprint.pprint(self.stats)
         s = self.stats[date][dep]
-        pCentOsm = round(((int(s[1][6]) + int(s[1][2]))/int(s[0][0]))*100,2)
-        pCentWp = round(((int(s[1][6]) + int(s[1][4] - int(s[0][3])))/int(s[0][0]))*100,2)
+        # ((NbMerOsmWip + NbMerOsm - NbOsm )/nbMer)*100
+        pCentOsm = round(((int(s[1][6]) + int(s[1][2] - int(s[1][2])))/int(s[0][0]))*100,2)
+        # ((NbMerOsmWip + NbMerWip -NbWip - PageACreer )/nbMer)*100
+        pCentWp = round(((int(s[1][6]) + int(s[1][4] -int(s[1][3]) - int(s[0][3])))/int(s[0][0]))*100,2)
         return pCentOsm, pCentWp
 
     def getLastDate(self):
@@ -498,8 +500,6 @@ def genGraphes(serie1,serie2):
                 yAxis: {
                     title: { text: 'Pourcentage des monuments historiques intégrés dans ...'},
                     plotLines: [{value: 0,width: 1,color: '#808080'}],
-                    min :0,
-                    max : 100,
                         },
                 series: [{
                     name: 'Osm',
@@ -541,10 +541,19 @@ if __name__ == "__main__":
     #
     # print(stats.getStatsDep(date,dep))
     # gen_graphe(series)
-    #pprint.pprint (stats.data)
+
     # series = stats.getSeriePourCent(stats.getLastDate())
     # print (series)
     #gen_graphe2(stats.getSeriePourCent(stats.getLastDate()))
 
     #gen_graphe3(stats.getPcSeries())
-    genGraphes(stats.getSeriePourCent(stats.getLastDate()),stats.getPcSeries() )
+    genGraphes(stats.getSeriePourCent(stats.getLastDate()),stats.getPcSeries())
+
+    '''Supprimer les enregistrements pour une date inférieure à debut '''
+
+    # debut = "20161105"
+    # for date in stats.data :
+    #     if date < debut:
+    #         print ('Statistiques du {} supprimées'.format(date))
+    #         del stats.stats[date]
+    # stats.saveStats()
