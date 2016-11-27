@@ -26,6 +26,8 @@ from __future__ import unicode_literals
 import os,shutil,logging
 import datetime
 import statistiques
+import begin
+import re
 import index,merimee,overpass,wikipedia,ini,mohist,wkdcodes,param
 from collections import OrderedDict
 
@@ -34,7 +36,7 @@ def get_log_date():
 
 def get_bandeau(dep,title,musee):
     ''' définir le bandeau de la page'''
-    toCreateWp = museum.get_nb_pageToCreate()
+    toCreateWp = musee.get_nb_pageToCreate()
     bandeau= '''<body>
      <div id="bandeau"> <h4 class='Titre'>{}'''.format(title)
     #bandeau+=''' <p id="msg">&nbsp;</p> '''
@@ -268,10 +270,23 @@ def gen_pages(dep, musee):
         # # '''fermer le fichier'''
             oF.close()
 
-if __name__ == "__main__":
+@begin.start
+def main(departement:'Analyse d\'un seul département'='all',monument:'Analyse d\'un seul monument'='all'):
+    '''
+        Obtenir la mise à jour d'un département ou d\'une liste de département (-d code_dep,code_dep,code_dep). Obtenir le dico d'un seul monument (-d code_dep -m code_Mérimée). Attention : pour avoir le dico d'un monument,
+        il faut donner le code de son département.
+    '''
     stats={}
     wkdCodes = {}
-
+    #print(departement,monument)
+    if ',' in departement :
+        departement = departement.split(',')
+    if monument != 'all' and departement == 'all':
+        print('ERREUR : vous devez préciser un code de département.')
+        exit(3)
+    if monument != 'all' and not re.match('^PA[0-9]{8}', monument) :
+        print ('ERREUR : Code monument non conforme. ')
+        exit(4)
     ''' Définir les variables d'entrée'''
     if ini.prod :
         base_url = ini.url_prod+"/Wom"
@@ -299,20 +314,25 @@ if __name__ == "__main__":
     st.fname = './stats.json'
 
     '''Créer la liste des départements à mettre à jour'''
-    listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
+    if departement == 'all':
+        listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
     #listDep = ['88','25','48', '52']
-    #listDep = ['974']
-
+    elif type(departement) == list :
+        listDep = departement
+    else :
+        listDep = [departement]
+    #print (listDep)
+    # print(len(listDep))
     '''Mettre à jour les pages des départements de la liste'''
-    for d in listDep :
-        print('------'+d+'------')
-        logging.info('log : ------ {} ------'.format(d))
+    for dep in listDep :
+        print('------'+dep+'------')
+        logging.info('log : ------ {} ------'.format(dep))
         ''' Acquérir les datas'''
         #print('----- Acquisition des datas ------')
         museum= mohist.Musee()
-        museum= overpass.get_osm(param.dic_dep[d]['name'],museum)
-        museum= merimee.get_merimee(param.dic_dep[d]['code'],museum)
-        museum= wikipedia.get_wikipedia(param.dic_dep[d]['url_d'],museum)
+        museum= overpass.get_osm(param.dic_dep[dep]['name'],museum)
+        museum= merimee.get_merimee(param.dic_dep[dep]['code'],museum)
+        museum= wikipedia.get_wikipedia(param.dic_dep[dep]['url_d'],museum)
         '''Associer les qcodes de wikidata à chaque MH'''
         museum.maj_Qcodes(wkdCodes)
         ''' Trier et compter '''
@@ -325,10 +345,10 @@ if __name__ == "__main__":
 
         pagesToCreate = museum.get_nb_pageToCreate()
         # enregistrer les stats du département et des salles
-        st.addStats(d,museum.stats,pagesToCreate,museum.statsSalles())
+        st.addStats(dep,museum.stats,pagesToCreate,museum.statsSalles())
         # listStatSalles = museum.statsSalles()
         # print(listStatSalles)
-        #st.addStatsSalles(d, museum.statsSalles())
+        #st.addStatsSalles(dep, museum.statsSalles())
         #print('----- Statistiques globales ------')
         print("Merimée :",museum.stats['mer'])
         logging.info("log : Merimée : {}".format(museum.stats['mer']))
@@ -342,21 +362,27 @@ if __name__ == "__main__":
 
         print (" A ajouter dans Wp : {} pages".format(pagesToCreate))
         logging.info("log : A ajouter dans Wp : {} pages".format(pagesToCreate))
-        ''' Générer le Html'''
-        gen_pages(param.dic_dep[d],museum)
+        ''' Générer le Html si on ne demande pas le dico d'un monument'''
+        if monument == 'all' :
+            gen_pages(param.dic_dep[dep],museum)
 
-    # faire le total des stats et afficher
-    st.totalStats()
-    #print (st)
+    if departement == 'all' :
+        # faire le total des stats et afficher
+        st.totalStats()
+        #print (st)
 
-    #générer la page html de stat
-    #statistiques.gen_graphe(st.get_series())
-    # générer la page de stats par departement
-    #statistiques.gen_graphe2(st.getSeriePourCent(st.getLastDate()))
-    #statistiques.gen_graphe3(st.getPcSeries())
-    statistiques.genGraphes(st.getSeriePourCent(),st.getPcSeries())
-    #sauvegarde stats du jour
-    st.saveStats()
+        #générer la page html de stat
+        #statistiques.gen_graphe(st.get_series())
+        # générer la page de stats par departement
+        #statistiques.gen_graphe2(st.getSeriePourCent(st.getLastDate()))
+        #statistiques.gen_graphe3(st.getPcSeries())
+        statistiques.genGraphes(st.getSeriePourCent(),st.getPcSeries())
+        #sauvegarde stats du jour
+        st.saveStats()
     # Afficher le contenu d'un monument
-    # mhs = 'PA97400047'
-    # print(museum.collection[mhs])
+    if monument != 'all' :
+        print(museum.collection[monument])
+    exit()
+
+if __name__ == "__main__":
+    main()

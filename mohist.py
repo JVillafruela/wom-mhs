@@ -270,8 +270,8 @@ class MoHist:
         MoHist.ctr_monument+=1
 
     def __repr__(self):
-        #pprint.pprint(self.description)
-        print(self.description)
+        pprint.pprint(self.description)
+        #print(self.description)
         return "ref: "+self.mhs+' noté : '+ str(self.note)
 
     def add_infos_mer(self, insee, commune, adresse, nom, classement):
