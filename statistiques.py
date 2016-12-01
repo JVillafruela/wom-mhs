@@ -21,7 +21,7 @@
 #
 '''
     Faire des statistiques dans les bases
-    créer une date et une rotation par jour
+    créer une date
     les enregistrer en json dans un fichier
     générer un page html/jquery d'affichage à partir du json
 '''
@@ -132,13 +132,13 @@ class Statistiques:
         pCentWp = round(((int(s[1][6]) + int(s[1][4] -int(s[1][3]) - int(s[0][3])))/int(s[0][0]))*100,2)
         return pCentOsm, pCentWp
 
-    def getLastDate(self):
-        '''Renvoie la dernière date de statistique'''
-        lastdate = ""
-        for date in self.data:
-            if date > lastdate :
-                lastdate = date
-        return lastdate
+    def LastDate(self):
+        '''Renvoie la dernière date des statistiques'''
+        return max(self.data.keys())
+
+    def FirstDate(self):
+        ''' Renvoie la première date des statistiques'''
+        return min(self.data.keys())
 
     def getSeriePourCent(self,date=None):
         ''' Renvoie les séries de pourcentage par départements pour une date'''
@@ -157,7 +157,9 @@ class Statistiques:
         return [serieDep,serieOsm,SerieWp]
 
     def get_series(self):
-        ''' renvoie les valeurs de stats en serie pour permettre le graphe'''
+        ''' renvoie les valeurs de stats pour permettre le graphe.
+            Obsolète.
+        '''
         serieDate = []
         serieMerosmwip = []
         serieMerwip = []
@@ -180,7 +182,9 @@ class Statistiques:
         return [serieDate,serieOsm,serieMerwip,serieMerosmwip]
 
     def getPcSeries(self):
-        ''' Renvoie les pourcentages de monuments dans osm et wp en fonction du temps'''
+        ''' Renvoie les pourcentages de monuments dans osm et wp en fonction du temps.
+            calcul avec suppression des pages inexistantes dans WP
+        '''
         serieDate = []
         seriePcOsm = []
         seriePcWp = []
@@ -194,9 +198,41 @@ class Statistiques:
             seriePcWp.append(str(pcwp))
         return [serieDate,seriePcOsm,seriePcWp]
 
+    def CalculeAugmentation(self):
+        ''' Retourne les valeurs de l'augmentation du nombre total de monuments intégrés sur le dernier jour.
+            pour Osm et Wp
+        '''
+        seriedate = []
+        serieosm = []
+        seriewp = []
+
+
+        firstdate = [self.FirstDate()]
+        listdate = list(self.data.keys())
+        last = self.data[listdate[0]]
+        for x in range(1,len(listdate)):
+            #print (x, listdate[x], self.data[listdate[x]]['total'])
+            #print (x, listdate[x])
+            if listdate[x] == '20161128':
+                seriedate.append('')
+                serieosm.append('0')
+                seriewp.append('0')
+                last = self.data[listdate[x]]
+            else :
+                # ''' liste des dates : réécrit le format date : de 20161025 en 25-10-2016'''
+                graphedate = "'{}-{}-{}'".format(listdate[x][6:8],listdate[x][4:6],listdate[x][0:4])
+                seriedate.append(graphedate)
+                osm = self.data[listdate[x]]['total'][1][6] - self.data[listdate[x-1]]['total'][1][6]
+                serieosm.append(str(osm))
+                wp = (self.data[listdate[x]]['total'][0][2] - self.data[listdate[x]]['total'][0][3]) - (last['total'][0][2] - last['total'][0][3])
+                last = self.data[listdate[x]]
+                seriewp.append(str(wp))
+        return [seriedate,serieosm,seriewp]
 
 def gen_graphe(series):
-    ''' Génère la page html avec le graphe de stats'''
+    ''' Génère la page html avec le graphe de stats
+        le graphe d'évolution dans le temps
+    '''
     #Créer le fichier Wom/graphe.html
     if ini.prod :
         filename=ini.url_prod+"/Wom/D/graphe.html"
@@ -406,6 +442,121 @@ def gen_graphe3(series):
     oF.write(content)
     oF.close()
 
+def genGraphe4(serie1,serie2):
+    ''' Génère la page html d'un graphe avec double graduation :
+            serie1 = date, %Osm, %Wp => spline
+            serie1 : la progression en % de l'intégration des MH dans Osm et Wp,
+            serie1 = date, deltaOsm, deltaWp => column
+            serie2 : le nombre de nouveau MH intégrés dans Osm et Wp  la veille
+    '''
+    #Créer le fichier Wom/graphe2.html
+    if ini.prod :
+        filename=ini.url_prod+"/Wom/D/graphe4.html"
+    else :
+        filename=ini.url_dev+"/Wom/D/graphe4.html"
+    #print(filename)
+    oF = open(filename,"w")
+    # écrire l'entête
+    content =''' <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title> Statistiques de Wom </title>
+    <script src="../js/jquery.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    '''
+    content+='''<script type="text/javascript">
+    $(document).ready ( function() {
+         Highcharts.chart('container1', {
+            chart: { zoomType: 'xy' },
+            title: { text: 'Suivi Intégration des MH' },
+            subtitle: { text: 'Source: Mérimée, OpenStreetMap, Wikipédia' },
+            xAxis: [{
+                categories: ['''+ ','.join(serie1[0])
+    content+='''],
+                crosshair: true
+                }],
+            yAxis: [{ // Primary yAxis : graphe % d\'intégration max
+                labels: {
+                    format: '{value} %',
+                    style: { color: Highcharts.getOptions().colors[1] },
+                        },
+                title: {
+                    text: '% intégration globale des ref:mhs ',
+                    style: { color: Highcharts.getOptions().colors[1] }
+                        },
+            },{ // Secondary yAxis : Graphe par jour :
+                gridLineWidth: 0,
+                title: {
+                    text: 'Nouveaux monuments ce jour',
+                    style: { color: Highcharts.getOptions().colors[1] }
+                        },
+                labels: {
+                    format: '{value} Mh',
+                style: { color: Highcharts.getOptions().colors[1] }
+                        },
+                opposite: true,
+            }],
+            tooltip: { shared: true },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                x: 80,
+                verticalAlign: 'top',
+                y: 55,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                    },
+            series: [{
+                name: "% Ref:mhs dans Osm",
+                type: 'spline',
+                style: { color: Highcharts.getOptions().colors[0] },
+                yAxis: 0,
+                data: ['''+','.join(serie1[1])
+    content+='''],
+                tooltip: { valueSuffix: ' %' },
+                    },{
+                name: '% Ref:mhs dans Wp',
+                type: 'spline',
+                style: { color: Highcharts.getOptions().colors[6] },
+                yAxis: 0,
+                data: ['''+','.join(serie1[2])
+    content+='''],
+                tooltip: { valueSuffix: ' %' },
+                },{
+                name: 'Contrib Osm du jour ',
+                type: 'spline',
+                yAxis: 1,
+                data: ['''+','.join(serie2[1])
+    content+='''],
+                tooltip: { valueSuffix: ' mh' }
+                    },{
+                name: 'Contrib Wp du jour',
+                type: 'spline',
+                yAxis: 1,
+                data: ['''+','.join(serie2[2])
+    content+='''],
+                tooltip: { valueSuffix: ' mh' }
+                    },
+                ]
+         });
+    });
+    '''
+    content += '''</script></head>
+    <body>
+    <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <p>
+    <b>Attention :</b> La chute de la courbe noire (intégration globale des monuments historiques dans Wikipédia) est due à un changement de mode de calcul le 27 novembre 2016.
+    A partir de cette date, les monuments référencés dans les pages départementales mais ayant l'étiquette "page monument inexistante" ne sont plus comptés.
+    </p>
+    </body>
+    </html>
+    '''
+    oF.write(content)
+    oF.close()
+
+
 def genGraphes(serie1,serie2):
     ''' Génère la page html avec deux graphes de stats
             serie1 = graphe des départements (ancien graphe2)
@@ -542,15 +693,22 @@ if __name__ == "__main__":
     # print(stats.getStatsDep(date,dep))
     # gen_graphe(series)
 
-    # series = stats.getSeriePourCent(stats.getLastDate())
-    # print (series)
-    #gen_graphe2(stats.getSeriePourCent(stats.getLastDate()))
 
+    ''' Test de graphe en % par département '''
+    # series = stats.getSeriePourCent(stats.LastDate())
+    # print (series)
+    #gen_graphe2(stats.getSeriePourCent(stats.LastDate()))
+    #print(stats.CalculeAugmentation())
+    ''' test de graphes d'intégration en % '''
     #gen_graphe3(stats.getPcSeries())
-    genGraphes(stats.getSeriePourCent(stats.getLastDate()),stats.getPcSeries())
+
+    '''test graphe avec double graduation'''
+    genGraphe4(stats.getPcSeries(),stats.CalculeAugmentation())
+
+    ''' générer les graphes de prod '''
+    #genGraphes(stats.getSeriePourCent(stats.LastDate()),stats.getPcSeries())
 
     '''Supprimer les enregistrements pour une date inférieure à debut '''
-
     # debut = "20161105"
     # for date in stats.data :
     #     if date < debut:

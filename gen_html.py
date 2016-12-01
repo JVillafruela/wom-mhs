@@ -369,7 +369,7 @@ def main(departement:'Analyse d\'un seul département'='all',monument:'Analyse d
     if departement == 'all' :
         # faire le total des stats et afficher
         st.totalStats()
-        #print (st)
+        print (st)
 
         #générer la page html de stat
         #statistiques.gen_graphe(st.get_series())
