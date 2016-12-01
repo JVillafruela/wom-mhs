@@ -67,9 +67,9 @@ def write_bandeau_index(file,title):
         </p>
 
 
-    <p>Ces pages sont du HTML statique avec un peu de jQuery. Elles sont générées automatiquement chaque nuit par un script python3, puis poussées sur un serveur Web.
-     Le code est visible et disponible sur Framagit.org <a href="https://framagit.org/JeaRRo/Mhs" target="blank"> Mhs.git </a>.<br>
-     <a href="https://github.com/JeaRRo/Wom" target ="blank">L'historique des pages web</a> est aussi accessible.</p>
+    <p>Ces pages sont du HTML statique avec un peu de jQuery. Elles sont générées automatiquement chaque nuit par un script Python sur une machine réveillée "wakeonlan" par un Nas, puis poussées sur <a href="https://github.com/JeaRRo/Wom" target ="blank"> GitHub</a>.
+     Le code des scripts est sur Framagit.org : <a href="https://framagit.org/JeaRRo/Mhs" target="blank"> Mhs.git </a>.<br>
+
     <p> Dernière construction des pages, le :<b> {}</b></p>
     '''.format(time.strftime('%d-%m-%Y %H:%M',time.localtime()))
 
@@ -81,6 +81,9 @@ def write_bandeau_index(file,title):
       <button onclick="openlink()">Lister les monuments</button>
     </div>
     <hr style="width:100%; color:grey; background-color:grey; height:3px;" />
+    '''
+    contenu+='''
+    <p><a href='D/graphes.html' target='_blank' title="Statistiques de Wom"> Quelques statistiques d'intégration des monuments historiques.</p>
     '''
     file.write(contenu)
 
@@ -184,7 +187,7 @@ def creer_fichier(name,d=None):
         return open(rep+'/'+name,"w")
 
 def del_files(d):
-    ''' Effacer les fichiers du répertoire du département (supprime les fichiers anciens inutiles'''
+    ''' Effacer les fichiers du répertoire du département (supprime les fichiers anciens inutiles)'''
     #print (d)
     s_rep="D/"+str(d['code'])+"_pages"
     if ini.prod :
@@ -235,7 +238,7 @@ def gen_page_index():
 if __name__ == "__main__":
 
     ''' générer la page index'''
-    #gen_page_index()
+    gen_page_index()
     '''  Netoyer le répertoire d'un département'''
-    d = '01'
-    del_files(param.dic_dep[d])
+    #d = '01'
+    #del_files(param.dic_dep[d])

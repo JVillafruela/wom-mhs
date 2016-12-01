@@ -542,8 +542,9 @@ def genGraphe4(serie1,serie2):
                 ]
          });
     });
+    </script>
     '''
-    content += '''</script></head>
+    content += '''</head>
     <body>
     <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     <p>
@@ -557,10 +558,11 @@ def genGraphe4(serie1,serie2):
     oF.close()
 
 
-def genGraphes(serie1,serie2):
+def genGraphes(serie1,serie2,serie3):
     ''' Génère la page html avec deux graphes de stats
             serie1 = graphe des départements (ancien graphe2)
-            serie2 = graphe de la progression (ancien graphe3)
+            serie2 = graphe de la progression globale (ancien graphe3)
+            serie3 = graphe des ajouts de monumenst par jour (ancien graphe4)
     '''
     #Créer le fichier Wom/graphe2.html
     if ini.prod :
@@ -575,6 +577,7 @@ def genGraphes(serie1,serie2):
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title> Statistiques de Wom </title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <script src="../js/jquery.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -632,43 +635,95 @@ def genGraphes(serie1,serie2):
                 })
             });
     </script>'''
-    content +='''<script type="text/javascript">
-        $(document).ready ( function() {
-            $('#container2').highcharts({
+    content+='''<script type="text/javascript">
+    $(document).ready ( function() {
+         Highcharts.chart('container2', {
+            chart: { zoomType: 'xy' },
+            title: { text: 'Intégration globale et contributions par jour' },
+            subtitle: { text: 'Source: Mérimée, OpenStreetMap, Wikipédia' },
+            xAxis: [{
+                categories: ['''+ ','.join(serie2[0])
+    content+='''],
+                crosshair: true
+                }],
+            yAxis: [{ // Primary yAxis : graphe % d\'intégration max
+                labels: {
+                    format: '{value} %',
+                    style: { color: Highcharts.getOptions().colors[1] },
+                        },
                 title: {
-                    text: "Intégration globale",
-                    x: -20 //center
+                    text: '% intégration globale des ref:mhs ',
+                    style: { color: Highcharts.getOptions().colors[1] }
                         },
-                subtitle: {
-                    text: 'Source: Mérimée, Wikipédia, OpenStreetMap',
-                    x: -20
+            },{ // Secondary yAxis : Graphe par jour :
+                gridLineWidth: 0,
+                title: {
+                    text: 'Nouveaux monuments ce jour',
+                    style: { color: Highcharts.getOptions().colors[1] }
                         },
-                xAxis: {
-                    categories: ['''+ ','.join(serie2[0])
-    #print(series[1])
-    content +=''']
+                labels: {
+                    format: '{value} Mh',
+                style: { color: Highcharts.getOptions().colors[1] }
                         },
-                yAxis: {
-                    title: { text: 'Pourcentage des monuments historiques intégrés dans ...'},
-                    plotLines: [{value: 0,width: 1,color: '#808080'}],
-                        },
-                series: [{
-                    name: 'Osm',
-                    data: [''' + ','.join(serie2[1])
-
-    content += ''']},{
-                    name: 'Wp',
-                    data: ['''+ ','.join(serie2[2])
-    content +=''' ]}
+                opposite: true,
+            }],
+            tooltip: { shared: true },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                x: 80,
+                verticalAlign: 'top',
+                y: 155,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                    },
+            series: [{
+                name: "% Ref:mhs dans Osm",
+                type: 'spline',
+                style: { color: Highcharts.getOptions().colors[0] },
+                yAxis: 0,
+                data: ['''+','.join(serie2[1])
+    content+='''],
+                tooltip: { valueSuffix: ' %' },
+                    },{
+                name: '% Ref:mhs dans Wp',
+                type: 'spline',
+                style: { color: Highcharts.getOptions().colors[6] },
+                yAxis: 0,
+                data: ['''+','.join(serie2[2])
+    content+='''],
+                tooltip: { valueSuffix: ' %' },
+                },{
+                name: 'Contrib Osm du jour ',
+                type: 'spline',
+                yAxis: 1,
+                data: ['''+','.join(serie3[1])
+    content+='''],
+                tooltip: { valueSuffix: ' mh' }
+                    },{
+                name: 'Contrib Wp du jour',
+                type: 'spline',
+                yAxis: 1,
+                data: ['''+','.join(serie3[2])
+    content+='''],
+                tooltip: { valueSuffix: ' mh' }
+                    },
                 ]
-                })
-            });
-    </script>'''
+         });
+    });
+    </script>
+    '''
     content += '''</head>
     <body>
     <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     <br>
     <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id='text'>
+    <p>
+    <b>Attention :</b> La chute de la courbe noire (intégration globale des monuments historiques dans Wikipédia) est due à un changement de mode de calcul le 27 novembre 2016.
+    A partir de cette date, les monuments référencés dans les pages départementales mais ayant l'étiquette "page monument inexistante" ne sont plus comptés.
+    </p>
+    </div>
     </body>
     </html>
     '''
@@ -703,10 +758,10 @@ if __name__ == "__main__":
     #gen_graphe3(stats.getPcSeries())
 
     '''test graphe avec double graduation'''
-    genGraphe4(stats.getPcSeries(),stats.CalculeAugmentation())
+    #genGraphe4(stats.getPcSeries(),stats.CalculeAugmentation())
 
     ''' générer les graphes de prod '''
-    #genGraphes(stats.getSeriePourCent(stats.LastDate()),stats.getPcSeries())
+    genGraphes(stats.getSeriePourCent(stats.LastDate()),stats.getPcSeries(),stats.CalculeAugmentation())
 
     '''Supprimer les enregistrements pour une date inférieure à debut '''
     # debut = "20161105"
