@@ -33,37 +33,39 @@
 
 '''
 from __future__ import unicode_literals
-import csv, os
-#from unidecode import unidecode
+import csv
+import os
+# from unidecode import unidecode
+
 
 class Insee(csv.excel):
     # Séparateur de champ = tabulation
     delimiter = str("\t")
 
+
 def get_insee(commune):
     ''' Renvoie le code insee d'une commune'''
-    if commune[:2] in ["La",'Le',"L'"]:
+    if commune[:2] in ["La", 'Le', "L'"]:
         commune = commune[3:]
-    commune=commune.replace(" ","-")
+    commune = commune.replace(" ", "-")
     csv.register_dialect('insee', Insee())
     fname = "comsimp2015_utf8.txt"
     file = open(fname, "r")
 
     try:
-        reader = csv.reader(file,'insee')
+        reader = csv.reader(file, 'insee')
         for line in reader:
-            #print (commune, line)
+            # print (commune, line)
             if commune in line[11]:
-                code = line[3]+line[4]
+                code = line[3] + line[4]
                 return code
                 break
     finally:
         file.close()
 
 
-
 if __name__ == "__main__":
 
     com = ('Lyon')
     insee = get_insee(com)
-    print(com, " : ",insee)
+    print(com, " : ", insee)

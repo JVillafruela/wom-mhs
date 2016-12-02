@@ -22,19 +22,20 @@
 
 ''' calculer une BBox '''
 
-def getBB(lat,lon):
+
+def getBB(lat, lon):
     deltaLat = 0.00043
     deltaLon = 0.000725
-    if lat < 0 :
+    if lat < 0:
         top = lat - deltaLat
         bottom = lat + deltaLat
-    else :
+    else:
         top = lat + deltaLat
         bottom = lat - deltaLat
 
     left = lon - deltaLon
     right = lon + deltaLon
-    return str(left),str(right),str(top),str(bottom)
+    return str(left), str(right), str(top), str(bottom)
 
 
 if __name__ == "__main__":
@@ -42,4 +43,4 @@ if __name__ == "__main__":
     # lon = 55.6288341
     lon = 0.877774
     lat = 47.666316
-    print (getBB(lat,lon))
+    print(getBB(lat, lon))

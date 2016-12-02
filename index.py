@@ -23,33 +23,38 @@
     Génération de pages statiques directement en html
 
 '''
-import os,ini,time,param
+import os
+import ini
+import time
+import param
 import os.path
 from collections import OrderedDict
+
 
 def write_entete_index(file, title):
     '''
         Ecrire l'entête du fichier html
     '''
-    header=""
+    header = ""
     header += '''<!DOCTYPE html>
     <html>
     <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>{}</title>\n\t'''.format(title)
-    header+='''<link rel="stylesheet" type="text/css" href="css/style.css" />
+    header += '''<link rel="stylesheet" type="text/css" href="css/style.css" />
                <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
                '''
-    header+='''<script src="js/jquery.js"></script>
+    header += '''<script src="js/jquery.js"></script>
             <script src="js/jquery-ui.min.js"></script>'''
-    header+= '''<script src="js/select.js"></script>'''
-    header+='''   </head>'''
+    header += '''<script src="js/select.js"></script>'''
+    header += '''   </head>'''
     file.write(header)
 
-def write_bandeau_index(file,title):
-    #menu=""
-    contenu=""
-    contenu+=''' <body>
+
+def write_bandeau_index(file, title):
+    # menu=""
+    contenu = ""
+    contenu += ''' <body>
     <div id="bandeau"> <h4 class="Titre">{}</h4>\n'''.format(title)
     contenu += ''' <p>Les pages de ce site présentent des tableaux comparatifs des monuments historiques dans les bases de données suivantes :
         <ul>
@@ -71,9 +76,9 @@ def write_bandeau_index(file,title):
      Le code des scripts est sur Framagit.org : <a href="https://framagit.org/JeaRRo/Mhs" target="_blank"> Mhs.git </a>.<br>
 
     <p> Dernière construction des pages, le :<b> {}</b></p>
-    '''.format(time.strftime('%d-%m-%Y %H:%M',time.localtime()))
+    '''.format(time.strftime('%d-%m-%Y %H:%M', time.localtime()))
 
-    contenu+='''
+    contenu += '''
     <hr style="width:100%; color:grey; background-color:grey; height:3px;" />
     <div class="ui-widget">
       <label for="tags">Choisir un département : </label>
@@ -82,30 +87,31 @@ def write_bandeau_index(file,title):
     </div>
     <hr style="width:100%; color:grey; background-color:grey; height:3px;" />
     '''
-    contenu+='''
+    contenu += '''
     <p><a href='D/graphes.html' target='_blank' title="Statistiques de Wom"> Quelques statistiques d'intégration des monuments historiques.</p>
     '''
     file.write(contenu)
 
-def write_entete(file, title) :
+
+def write_entete(file, title):
     '''
         Ecrire l'entête du fichier html
     '''
-    header=""
+    header = ""
     header += '''<!DOCTYPE html>
     <html>
     <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>{}</title>\n\t'''.format(title)
-    #header+='''<link rel="stylesheet" type="text/css" href="{}">\n\t'''.format(cssFile)
-    header+='''<link rel="stylesheet" type="text/css" href="../../css/jquery-ui.min.css">
-	           <link rel="stylesheet" type="text/css" href="../../css/style.css" />
-	           <link rel="stylesheet" type="text/css" href="../../css/jquery.dataTables_mod.css"  />'''
+    # header+='''<link rel="stylesheet" type="text/css" href="{}">\n\t'''.format(cssFile)
+    header += '''<link rel="stylesheet" type="text/css" href="../../css/jquery-ui.min.css">
+                <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+                <link rel="stylesheet" type="text/css" href="../../css/jquery.dataTables_mod.css"  />'''
 
-    header+='''<script src="../../js/jquery.js"></script>
-	           <script src="../../js/jquery.dataTables.min.js"></script>
+    header += '''<script src="../../js/jquery.js"></script>
+                <script src="../../js/jquery.dataTables.min.js"></script>
                <script src="../../js/jquery-ui.min.js"></script>  '''
-    header+='''
+    header += '''
     <script>
     $(document).ready(function(){
          $("tr").click(function(){
@@ -117,7 +123,7 @@ def write_entete(file, title) :
 
         $(".infoBloc").click(function(){
             $("#"+this.id.slice(5)).dialog({
-				title: "Pour créer le monument dans OSM",
+                title: "Pour créer le monument dans OSM",
                 draggable: false,
                 resizable: false,
                 width:550,
@@ -131,76 +137,80 @@ def write_entete(file, title) :
             return false;
         });
 
-		$("#table_data").DataTable({
-			"columnDefs": [
+            $("#table_data").DataTable({
+                "columnDefs": [
             {
                 "targets": [ 2 ],
                 "searchable": false,
                 "sortable" : false,
             }],
-			"scrollX": true,
-			"pageLength": 25,
-			"language": {
-					"search": "Rechercher :",
-					"lengthMenu": "Voir _MENU_ monuments/page",
-					"zeroRecords": "Aucun résultat pour cette recherche - désolé",
-					"info": "Monuments visibles : de _START_ à _END_ sur _TOTAL_ ",
-					"infoEmpty": "Aucun résultat",
-					"infoFiltered": " sélectionnés parmi _MAX_ enregistrements",
-					"paginate": {
-						"first":      "Première",
-						"last":       "Dernière",
-						"next":       "Suivante",
-						"previous":   "Précédente"
-							},
-				}
+            "scrollX": true,
+            "pageLength": 25,
+            "language": {
+                    "search": "Rechercher :",
+                    "lengthMenu": "Voir _MENU_ monuments/page",
+                    "zeroRecords": "Aucun résultat pour cette recherche - désolé",
+                    "info": "Monuments visibles : de _START_ à _END_ sur _TOTAL_ ",
+                    "infoEmpty": "Aucun résultat",
+                    infoFiltered": " sélectionnés parmi _MAX_ enregistrements",
+                    "paginate": {
+                        "first":      "Première",
+                        "last":       "Dernière",
+                        "next":       "Suivante",
+                        "previous":   "Précédente"
+                        },
+                        }
             });
     });
     </script>
     </head>'''
     file.write(header)
 
+
 def write_footer(file):
-    footer='''<div id="footer"> Page proposée par <a href="http://wiki.openstreetmap.org/wiki/User:JeaRRo">JeaRRo</a>, contributeur OSM </div>
+    footer = '''<div id="footer"> Page proposée par <a href="http://wiki.openstreetmap.org/wiki/User:JeaRRo">JeaRRo</a>, contributeur OSM </div>
         </body
     </html>
     '''
     file.write(footer)
 
-def creer_fichier(name,d=None):
+
+def creer_fichier(name, d=None):
     '''
         Vérifier si le repertoire existe sinon le créer.
         puis ouvrir le fichier et renvoyer un writer
     '''
-    if d :
-        s_rep="D/"+str(d['code'])+"_pages"
+    if d:
+        s_rep = "D/" + str(d['code']) + "_pages"
     else:
-        s_rep=""
-    if ini.prod :
-        rep=ini.url_prod+"/Wom/"+s_rep
-    else :
-        rep=ini.url_dev+"/Wom/"+s_rep
+        s_rep = ""
+    if ini.prod:
+        rep = ini.url_prod + "/Wom/" + s_rep
+    else:
+        rep = ini.url_dev + "/Wom/" + s_rep
     # FIXME !! Le répertoire racine /Wom n'est pas créé et ne doit pas être effacé
     if not os.path.exists(rep):
         os.mkdir(rep)
     if os.path.isdir(rep):
-        return open(rep+'/'+name,"w")
+        return open(rep + '/' + name, "w")
+
 
 def del_files(d):
     ''' Effacer les fichiers du répertoire du département (supprime les fichiers anciens inutiles)'''
-    #print (d)
-    s_rep="D/"+str(d['code'])+"_pages"
-    if ini.prod :
-        rep=ini.url_prod+"/Wom/"+s_rep
-    else :
-        rep=ini.url_dev+"/Wom/"+s_rep
+    # print (d)
+    s_rep = "D/" + str(d['code']) + "_pages"
+    if ini.prod:
+        rep = ini.url_prod + "/Wom/" + s_rep
+    else:
+        rep = ini.url_dev + "/Wom/" + s_rep
     if os.path.exists(rep):
-        filelist = [ f for f in os.listdir(rep) if f.endswith(".html") ]
+        filelist = [f for f in os.listdir(rep) if f.endswith(".html")]
         for f in filelist:
-            f = rep+"/"+f
-            #print(f)
-            if os.path.exists(f) :
+            f = rep + "/" + f
+            # print(f)
+            if os.path.exists(f):
                 os.remove(f)
+
 
 def gen_page_index():
     '''
@@ -220,18 +230,18 @@ def gen_page_index():
             index.html
     '''
     # génération dans l'odre des départements pour le menu
-    #dico = OrderedDict(sorted(dico.items(), key=lambda t: t[0]))
+    # dico = OrderedDict(sorted(dico.items(), key=lambda t: t[0]))
 
-    page_name="index.html"
+    page_name = "index.html"
 
-    titre=" Wom : Mérimée, OpenStreetMap, Wikipédia"
-    #changer le répertoire de génération des pages : prod=True or not
+    titre = " Wom : Mérimée, OpenStreetMap, Wikipédia"
+    # changer le répertoire de génération des pages : prod=True or not
     oF = creer_fichier(page_name)
 
-    write_entete_index(oF,titre)
+    write_entete_index(oF, titre)
 
-    titre="Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
-    write_bandeau_index(oF,titre)
+    titre = "Etat comparé des monuments historiques dans les bases Mérimée, OSM et WikiPédia"
+    write_bandeau_index(oF, titre)
     #    write_footer(oF)
     oF.close()
 
@@ -240,5 +250,5 @@ if __name__ == "__main__":
     ''' générer la page index'''
     gen_page_index()
     '''  Netoyer le répertoire d'un département'''
-    #d = '01'
-    #del_files(param.dic_dep[d])
+    # d = '01'
+    # del_files(param.dic_dep[d])

@@ -29,21 +29,27 @@
 
 '''
 from __future__ import unicode_literals
-import requests, json, os
-import ini, mohist
+import requests
+import json
+import os
+import ini
+import mohist
 import logging
 from collections import OrderedDict
 
+
 def charger_Q_codes(fichier):
-    with open(fichier, 'r',encoding='utf-8') as file:
+    with open(fichier, 'r', encoding='utf-8') as file:
         return json.load(file)
 
+
 def sauvegarder_Q_codes(filename, dico):
-    with open(filename, 'w',encoding='utf-8') as file:
+    with open(filename, 'w', encoding='utf-8') as file:
         json.dump(dico, file, indent=4)
 
+
 def get_Q_codes():
-    filename="wkdcodes.json"
+    filename = "wkdcodes.json"
     # dictionnaire des "wikidata codes contient pour chaque code Mhs (mérimée) une liste de code wikidata (Qxxxx)"
     wCodes = {}
     url = "https://query.wikidata.org/bigdata/namespace/wdq/sparql?query={}"
@@ -54,27 +60,26 @@ def get_Q_codes():
       FILTER(NOT EXISTS { ?heritage_statement pq:P582 ?end. })
     }
     '''
-    query = ' '.join(query.replace("\n","").split())
-    #print (query)
-    param = {"format" : "json"}
-    r = requests.get(url.format(query),params=param)
-    #print(r.url)
-    if r.status_code == 200 :
+    query = ' '.join(query.replace("\n", "").split())
+    # print (query)
+    param = {"format": "json"}
+    r = requests.get(url.format(query), params=param)
+    # print(r.url)
+    if r.status_code == 200:
         rep = r.json()
         for dico in rep['results']['bindings']:
             codeMh = dico['codeMh']['value']
             Q_Mh = dico['item']['value'].split('entity/')[1]
-            #print(codeMh, '->', Q_Mh)
+            # print(codeMh, '->', Q_Mh)
             if codeMh in wCodes:
                 wCodes[codeMh].append(Q_Mh)
-            else :
+            else:
                 wCodes[codeMh] = [Q_Mh]
 
-
         OwCodes = OrderedDict(sorted(wCodes.items(), key=lambda t: t[0]))
-        sauvegarder_Q_codes(filename,OwCodes)
+        sauvegarder_Q_codes(filename, OwCodes)
         logging.info(" {} Codes Wikidata téléchargés.".format(len(OwCodes)))
-    else :
+    else:
         print("Réponse du serveur non valide : Code réponse = ", r.status_code)
         logging.debug("Réponse du serveur non valide : Code réponse = {}".format(r.status_code))
         if os.path.isfile(filename):

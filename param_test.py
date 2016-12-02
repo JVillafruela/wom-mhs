@@ -26,9 +26,6 @@ from __future__ import unicode_literals
 import param
 
 
-
-
-
 if __name__ == "__main__":
-    dep=("75")
+    dep = ("75")
     print(param.dic_dep[dep])

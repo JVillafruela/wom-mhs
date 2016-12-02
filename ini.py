@@ -23,13 +23,13 @@
 
 # Attention ce répertoire doit être créer avant le lancement du programme !
 # racine des pages web
-prod=False
+prod = False
 # en local
-url_dev="/home/jean/osm/monuments_historiques"
+url_dev = "/home/jean/osm/monuments_historiques"
 # sur Syno
-url_prod="/var/services/homes/jean/web_wom"
+url_prod = "/var/services/homes/jean/web_wom"
 # fichier statique : style.css
-#cssFile ="style.css"
+# cssFile ="style.css"
 
-#les textes qui ne doivent pas apparaitre comme name= pour OSM
-no_name = ['Immeuble','Maison','Maisons','Eglise', 'Église', 'Château','Ecurie','Ecuries','Écurie','Écuries','Presbytère','Beffroi','Cimetière','Prieuré','Remparts','Hôtel']
+# les textes qui ne doivent pas apparaitre comme name= pour OSM
+no_name = ['Immeuble', 'Maison', 'Maisons', 'Eglise', 'Église', 'Château', 'Ecurie', 'Ecuries', 'Écurie', 'Écuries', 'Presbytère', 'Beffroi', 'Cimetière', 'Prieuré', 'Remparts', 'Hôtel']

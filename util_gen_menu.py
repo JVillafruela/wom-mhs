@@ -28,13 +28,14 @@ from __future__ import unicode_literals
 import param
 from collections import OrderedDict
 
+
 def gen_list_dep():
     listDep = []
     dic = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
-    for code in dic :
-        #print (code)
+    for code in dic:
+        # print (code)
         name = param.dic_dep[code]['name']
-        listDep.append(code+' - '+name)
+        listDep.append(code + ' - ' + name)
     return listDep
 
 if __name__ == "__main__":

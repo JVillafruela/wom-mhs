@@ -43,29 +43,33 @@
 
 
 '''
-from __future__ import unicode_literals
-import csv, os
-import requests,bs4
-import urllib.parse
+from __future__ import unicode_literal
 from bs4 import BeautifulSoup
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
+import csv
+import os
+import requests
+import bs4
+import urllib.parse
 
-url_base ="https://fr.wikipedia.org/wiki/Catégorie:Monument_historique_par_département"
+
+url_base = "https://fr.wikipedia.org/wiki/Catégorie:Monument_historique_par_département"
 
 
 class Insee(csv.excel):
     # Séparateur de champ = tabulation
     delimiter = str("\t")
 
+
 def get_nom(code):
     csv.register_dialect('insee', Insee())
     fname = "depts2016_utf8.txt"
     file = open(fname, "r")
     try:
-        reader = csv.reader(file,'insee')
+        reader = csv.reader(file, 'insee')
         for line in reader:
-            #print (commune, line)
+            # print (commune, line)
             if code in line[1]:
                 nom = line[5]
                 return nom
@@ -81,17 +85,20 @@ cache_opts = {
 
 cache = CacheManager(**parse_cache_config_options(cache_opts))
 
+
 @cache.cache('wikipedia-cache', expire=7200)
 def makeQuery(url):
     return requests.get(url)
 
+
 def getData(url):
     r = makeQuery(url)
     contenu = r.text
-    #contenu = open("wiki.html", "r").read()
-    main_page = BeautifulSoup(contenu,'html.parser')
-    #print(main_page.prettify())
+    # contenu = open("wiki.html", "r").read()
+    main_page = BeautifulSoup(contenu, 'html.parser')
+    # print(main_page.prettify())
     return main_page
+
 
 def get_url(main_page, nom_dep):
     '''
@@ -102,13 +109,14 @@ def get_url(main_page, nom_dep):
     '''
 #    for link in main_page.find_all('a',"CategoryTreeLabel"):
     #    print(link.get('href'), link.get_text())
-    for link in main_page.find_all('a',"CategoryTreeLabel"):
+    for link in main_page.find_all('a', "CategoryTreeLabel"):
         if nom_dep in link.get_text():
-            #print(link.get('href'))
-            url = "https://fr.wikipedia.org"+link.get('href')
-            #print(url)
+            # print(link.get('href'))
+            url = "https://fr.wikipedia.org" + link.get('href')
+            # print(url)
             return url
             break
+
 
 def get_url_suivante(page):
     '''
@@ -127,7 +135,7 @@ def get_url_suivante(page):
          </div>
 
     '''
-    table = page.find('div','mw-category-group')
+    table = page.find('div', 'mw-category-group')
     T = table.find_all('a')
     for link in T:
         print(link)
@@ -135,11 +143,11 @@ def get_url_suivante(page):
 
 if __name__ == "__main__":
     code = '12'
-    nom_dep= get_nom(code)
-    print(code, " : ",nom_dep)
+    nom_dep = get_nom(code)
+    print(code, " : ", nom_dep)
     main_page = getData(url_base)
-    url2 = get_url(main_page,nom_dep)
-    #print(urllib.parse.unquote(url2))
+    url2 = get_url(main_page, nom_dep)
+    # print(urllib.parse.unquote(url2))
     second_page = getData(urllib.parse.unquote(url2))
     get_url_suivante(second_page)
-    #print(second_page.prettify())
+    # print(second_page.prettify())
