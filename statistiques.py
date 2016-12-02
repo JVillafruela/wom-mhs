@@ -150,7 +150,7 @@ class Statistiques:
         data = OrderedDict(sorted(self.stats[date].items(), key=lambda t: t[0]))
         for departement in data :
             if departement != 'total':
-                pcOsm, pcWp = self.getStatsDep(departement)
+                pcOsm, pcWp = self.getStatsDep(departement,date)
                 serieDep.append("'"+departement+"'")
                 serieOsm.append(str(pcOsm))
                 SerieWp.append(str(pcWp))
@@ -229,342 +229,13 @@ class Statistiques:
                 seriewp.append(str(wp))
         return [seriedate,serieosm,seriewp]
 
-def gen_graphe(series):
-    ''' Génère la page html avec le graphe de stats
-        le graphe d'évolution dans le temps
-    '''
-    #Créer le fichier Wom/graphe.html
-    if ini.prod :
-        filename=ini.url_prod+"/Wom/D/graphe.html"
-    else :
-        filename=ini.url_dev+"/Wom/D/graphe.html"
-    #print(filename)
-    oF = open(filename,"w")
-
-    # écrire l'entête
-    content =''' <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title> Statistiques de Wom </title>
-    <script src="../js/jquery.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    '''
-    content +='''<script type="text/javascript">
-        $(document).ready ( function() {
-            $('#container').highcharts({
-                title: {
-                    text: 'Statistiques de Wom',
-                    x: -20 //center
-                        },
-                subtitle: {
-                    text: 'Source: Mérimée, Wikipédia, OpenStreetMap',
-                    x: -20
-                        },
-                xAxis: {
-                    categories: ['''+ ','.join(series[0])
-    #print(series[1])
-    content +=''']
-                        },
-                yAxis: {
-                    title: { text: 'Nombre de monuments historiques'},
-                    plotLines: [{value: 0,width: 1,color: '#808080'}]
-                        },
-                legend: {layout: 'vertical',align: 'right',verticalAlign: 'middle', borderWidth: 0},
-                series: [{
-                    name: 'Osm',
-                    data: [''' + ','.join(series[1])
-
-    content += ''']},{
-                    name: 'Mer Osm Wp',
-                    data: ['''+ ','.join(series[3])
-    content +=''' ]}
-                ]
-                })
-            });
-    </script>'''
-
-    content += '''</head>
-    <body>
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-    </body>
-    </html>
-    '''
-    oF.write(content)
-    oF.close()
-
-def gen_graphe2(series):
-    ''' Génère la page html avec le graphe2 de stats
-        http://www.highcharts.com/demo/column-basic/grid-lighthttp://www.highcharts.com/demo/column-basic/grid-light
-    '''
-    #Créer le fichier Wom/graphe2.html
-    if ini.prod :
-        filename=ini.url_prod+"/Wom/D/graphe2.html"
-    else :
-        filename=ini.url_dev+"/Wom/D/graphe2.html"
-    #print(filename)
-    oF = open(filename,"w")
-    # écrire l'entête
-    content =''' <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title> Statistiques de Wom </title>
-    <script src="../js/jquery.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    '''
-    content +='''<script type="text/javascript">
-        $(document).ready ( function() {
-            $('#container').highcharts({
-                chart: {
-                        type: 'column'
-                        },
-                title: {
-                    text: 'Statistiques de Wom',
-                    x: -20 //center
-                        },
-                subtitle: {
-                    text: 'Source: Mérimée, Wikipédia, OpenStreetMap',
-                    x: -20
-                        },
-                xAxis: {
-                    categories: ['''+ ','.join(series[0])
-    content +='''],
-                 crosshair: true,
-                 title: {
-                        text: 'Départements'
-                        }
-                        },
-                yAxis: {
-                    title: { text: 'Pourcentage de monuments historiques intégrés dans ... '},
-                    min :0,
-                    max : 100,
-                        },
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                        },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.1,
-                        borderWidth: 0
-                            }
-                        },
-
-                series: [{
-                    name: 'Osm',
-                    data: [''' + ','.join(series[1])
-    content += ''']},{
-                    name: 'Wp',
-                    data: ['''+ ','.join(series[2])
-    content +=''' ]}
-                ]
-                })
-            });
-    </script>'''
-    content += '''</head>
-    <body>
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-    </body>
-    </html>
-    '''
-    oF.write(content)
-    oF.close()
-
-def gen_graphe3(series):
-    ''' Génère la page html avec le graphe de stats'''
-    #Créer le fichier Wom/graphe.html
-    if ini.prod :
-        filename=ini.url_prod+"/Wom/D/graphe3.html"
-    else :
-        filename=ini.url_dev+"/Wom/D/graphe3.html"
-    #print(filename)
-    oF = open(filename,"w")
-
-    # écrire l'entête
-    content =''' <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title> Statistiques de Wom </title>
-    <script src="../js/jquery.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    '''
-    content +='''<script type="text/javascript">
-        $(document).ready ( function() {
-            $('#container').highcharts({
-                title: {
-                    text: 'Statistiques de Wom',
-                    x: -20 //center
-                        },
-                subtitle: {
-                    text: 'Source: Mérimée, Wikipédia, OpenStreetMap',
-                    x: -20
-                        },
-                xAxis: {
-                    categories: ['''+ ','.join(series[0])
-    #print(series[1])
-    content +=''']
-                        },
-                yAxis: {
-                    title: { text: 'Pourcentage des monuments historiques intégrés dans ...'},
-                    plotLines: [{value: 0,width: 1,color: '#808080'}],
-                    min :0,
-                    max : 100,
-                        },
-                legend: {layout: 'vertical',align: 'right',verticalAlign: 'middle', borderWidth: 0},
-                series: [{
-                    name: 'Osm',
-                    data: [''' + ','.join(series[1])
-
-    content += ''']},{
-                    name: 'Wp',
-                    data: ['''+ ','.join(series[2])
-    content +=''' ]}
-                ]
-                })
-            });
-    </script>'''
-
-    content += '''</head>
-    <body>
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-    </body>
-    </html>
-    '''
-    oF.write(content)
-    oF.close()
-
-def genGraphe4(serie1,serie2):
-    ''' Génère la page html d'un graphe avec double graduation :
-            serie1 = date, %Osm, %Wp => spline
-            serie1 : la progression en % de l'intégration des MH dans Osm et Wp,
-            serie1 = date, deltaOsm, deltaWp => column
-            serie2 : le nombre de nouveau MH intégrés dans Osm et Wp  la veille
-    '''
-    #Créer le fichier Wom/graphe2.html
-    if ini.prod :
-        filename=ini.url_prod+"/Wom/D/graphe4.html"
-    else :
-        filename=ini.url_dev+"/Wom/D/graphe4.html"
-    #print(filename)
-    oF = open(filename,"w")
-    # écrire l'entête
-    content =''' <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title> Statistiques de Wom </title>
-    <script src="../js/jquery.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    '''
-    content+='''<script type="text/javascript">
-    $(document).ready ( function() {
-         Highcharts.chart('container1', {
-            chart: { zoomType: 'xy' },
-            title: { text: 'Suivi Intégration des MH' },
-            subtitle: { text: 'Source: Mérimée, OpenStreetMap, Wikipédia' },
-            xAxis: [{
-                categories: ['''+ ','.join(serie1[0])
-    content+='''],
-                crosshair: true
-                }],
-            yAxis: [{ // Primary yAxis : graphe % d\'intégration max
-                labels: {
-                    format: '{value} %',
-                    style: { color: Highcharts.getOptions().colors[1] },
-                        },
-                title: {
-                    text: '% intégration globale des ref:mhs ',
-                    style: { color: Highcharts.getOptions().colors[1] }
-                        },
-            },{ // Secondary yAxis : Graphe par jour :
-                gridLineWidth: 0,
-                title: {
-                    text: 'Nouveaux monuments ce jour',
-                    style: { color: Highcharts.getOptions().colors[1] }
-                        },
-                labels: {
-                    format: '{value} Mh',
-                style: { color: Highcharts.getOptions().colors[1] }
-                        },
-                opposite: true,
-            }],
-            tooltip: { shared: true },
-            legend: {
-                layout: 'vertical',
-                align: 'left',
-                x: 80,
-                verticalAlign: 'top',
-                y: 55,
-                floating: true,
-                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-                    },
-            series: [{
-                name: "% Ref:mhs dans Osm",
-                type: 'spline',
-                style: { color: Highcharts.getOptions().colors[0] },
-                yAxis: 0,
-                data: ['''+','.join(serie1[1])
-    content+='''],
-                tooltip: { valueSuffix: ' %' },
-                    },{
-                name: '% Ref:mhs dans Wp',
-                type: 'spline',
-                style: { color: Highcharts.getOptions().colors[6] },
-                yAxis: 0,
-                data: ['''+','.join(serie1[2])
-    content+='''],
-                tooltip: { valueSuffix: ' %' },
-                },{
-                name: 'Contrib Osm du jour ',
-                type: 'spline',
-                yAxis: 1,
-                data: ['''+','.join(serie2[1])
-    content+='''],
-                tooltip: { valueSuffix: ' mh' }
-                    },{
-                name: 'Contrib Wp du jour',
-                type: 'spline',
-                yAxis: 1,
-                data: ['''+','.join(serie2[2])
-    content+='''],
-                tooltip: { valueSuffix: ' mh' }
-                    },
-                ]
-         });
-    });
-    </script>
-    '''
-    content += '''</head>
-    <body>
-    <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-    <p>
-    <b>Attention :</b> La chute de la courbe noire (intégration globale des monuments historiques dans Wikipédia) est due à un changement de mode de calcul le 27 novembre 2016.
-    A partir de cette date, les monuments référencés dans les pages départementales mais ayant l'étiquette "page monument inexistante" ne sont plus comptés.
-    </p>
-    </body>
-    </html>
-    '''
-    oF.write(content)
-    oF.close()
-
-
 def genGraphes(serie1,serie2,serie3):
     ''' Génère la page html avec deux graphes de stats
-            serie1 = graphe des départements (ancien graphe2)
-            serie2 = graphe de la progression globale (ancien graphe3)
-            serie3 = graphe des ajouts de monumenst par jour (ancien graphe4)
+            serie1 = graphe des départements
+            serie2 = graphe de la progression globale
+            serie3 = graphe des ajouts de monumenst par jour
     '''
-    #Créer le fichier Wom/graphe2.html
+    #Créer le fichier Wom/graphes.html
     if ini.prod :
         filename=ini.url_prod+"/Wom/D/graphes.html"
     else :
@@ -718,9 +389,9 @@ def genGraphes(serie1,serie2,serie3):
     <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     <br>
     <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-    <div id='text'>
+    <div class='message'>
     <p>
-    <b>Attention :</b> La chute de la courbe noire (intégration globale des monuments historiques dans Wikipédia) est due à un changement de mode de calcul le 27 novembre 2016.
+    <b>Attention :</b> La chute sur la courbe noire (intégration globale des monuments historiques dans Wikipédia) est due à un changement de mode de calcul le 27 novembre 2016.
     A partir de cette date, les monuments référencés dans les pages départementales mais ayant l'étiquette "page monument inexistante" ne sont plus comptés.
     </p>
     </div>
@@ -733,8 +404,6 @@ def genGraphes(serie1,serie2,serie3):
 
 if __name__ == "__main__":
 
-    #print(get_date())
-    #return OrderedDict(sorted(self.collection.items(), key=lambda t: t[0]))
     stats = Statistiques()
     stats.fname = './stats.json'
     #print (stats)
@@ -744,21 +413,7 @@ if __name__ == "__main__":
     #
     # date = "20161119"
     # dep ="70"
-    #
     # print(stats.getStatsDep(date,dep))
-    # gen_graphe(series)
-
-
-    ''' Test de graphe en % par département '''
-    # series = stats.getSeriePourCent(stats.LastDate())
-    # print (series)
-    #gen_graphe2(stats.getSeriePourCent(stats.LastDate()))
-    #print(stats.CalculeAugmentation())
-    ''' test de graphes d'intégration en % '''
-    #gen_graphe3(stats.getPcSeries())
-
-    '''test graphe avec double graduation'''
-    #genGraphe4(stats.getPcSeries(),stats.CalculeAugmentation())
 
     ''' générer les graphes de prod '''
     genGraphes(stats.getSeriePourCent(stats.LastDate()),stats.getPcSeries(),stats.CalculeAugmentation())

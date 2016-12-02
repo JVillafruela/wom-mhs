@@ -370,12 +370,7 @@ def main(departement:'Analyse d\'un seul département'='all',monument:'Analyse d
         # faire le total des stats et afficher
         st.totalStats()
         print (st)
-
         #générer la page html de stat
-        #statistiques.gen_graphe(st.get_series())
-        # générer la page de stats par departement
-        #statistiques.gen_graphe2(st.getSeriePourCent(st.getLastDate()))
-        #statistiques.gen_graphe3(st.getPcSeries())
         statistiques.genGraphes(st.getSeriePourCent(),st.getPcSeries(),st.CalculeAugmentation())
         #sauvegarde stats du jour
         st.saveStats()
