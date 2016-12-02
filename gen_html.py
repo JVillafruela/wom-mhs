@@ -134,7 +134,7 @@ def get_table(salle,musee):
                 if "wikidata" in MH.description[mh]['osm']['tags_manquants'] and MH.description[mh]['wkd'] != "":
                     #print (MH.description[mh]['wkd'])
                     if len(MH.description[mh]['wkd']) == 1 :
-                        url_wkd = '<a {}&addtags=wikidata={}" target="blank" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm,MH.description[mh]['wkd'][0],MH.description[mh]['wkd'][0])
+                        url_wkd = '<a {}&addtags=wikidata={}" target="__blank" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm,MH.description[mh]['wkd'][0],MH.description[mh]['wkd'][0])
                         MH.description[mh]['osm']['tags_manquants'][-1] = url_wkd
                     else:
                         # Multiples codes Wikidata
@@ -142,7 +142,7 @@ def get_table(salle,musee):
 
                 note_osm+=", ".join(MH.description[mh]['osm']['tags_manquants'])
             elif MH.description[mh]['osm']['mhs_bis'] != None :
-                note_osm+=' <a href="http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['mhs_bis'][0]+'" target="blank" title="Monument en double dans OSM"> Double OSM </a>'
+                note_osm+=' <a href="http://www.openstreetmap.org/browse/'+MH.description[mh]['osm']['mhs_bis'][0]+'" target="_blank" title="Monument en double dans OSM"> Double OSM </a>'
             else :
                 note_osm =""
             #print(note_osm)
@@ -160,7 +160,7 @@ def get_table(salle,musee):
                     #print(MH.description[mh]['wip']['infos_manquantes'])
                     if "redlink" in MH.description[mh]['wip']['infos_manquantes'][0] :
                         # Page à créer avec lien
-                        MH.description[mh]['wip']['infos_manquantes'][0] = '<a href="http://fr.wikipedia.org'+  MH.description[mh]['wip']['infos_manquantes'][0] + '" target="blank" title = "Page wikipédia à créer">A créer</a>'
+                        MH.description[mh]['wip']['infos_manquantes'][0] = '<a href="http://fr.wikipedia.org'+  MH.description[mh]['wip']['infos_manquantes'][0] + '" target="_blank" title = "Page wikipédia à créer">A créer</a>'
                         note_wp+=", ".join(MH.description[mh]['wip']['infos_manquantes'])
                         #print (note_wp)
                     else:
@@ -168,10 +168,10 @@ def get_table(salle,musee):
                 else:
                     note_wp+=""
             if 'mhs_ter' in MH.description[mh]['wip'] :
-                note_wp+=', <a href="'+MH.description[mh]['wip']['mhs_ter']['url']+'#'+MH.description[mh]['wip']['mhs_ter']['id']+'" target="blank" \
+                note_wp+=', <a href="'+MH.description[mh]['wip']['mhs_ter']['url']+'#'+MH.description[mh]['wip']['mhs_ter']['id']+'" target="_blank" \
                         title="Monument en triple dans WP"> Triple WP </a>'
             elif 'mhs_ter' not in MH.description[mh]['wip'] and 'mhs_bis' in MH.description[mh]['wip'] :
-                note_wp+=', <a href="'+MH.description[mh]['wip']['mhs_bis']['url']+'#'+MH.description[mh]['wip']['mhs_bis']['id']+'" target="blank" \
+                note_wp+=', <a href="'+MH.description[mh]['wip']['mhs_bis']['url']+'#'+MH.description[mh]['wip']['mhs_bis']['id']+'" target="_blank" \
                         title="Monument en double dans WP"> Double WP </a>'
             # recherche des urls WP
             if 'url' in MH.description[mh]['wip']:
@@ -187,11 +187,11 @@ def get_table(salle,musee):
         if 'ERR' in mh:
             table+= ''' <td class="lien">  ----  </td>'''
         else:
-            table+= ''' <td class="lien"><a href="{}{}" target="blank" title="La fiche dans la base Mérimée">{}</a></td>'''.format(l0,mh,mh)
+            table+= ''' <td class="lien"><a href="{}{}" target="_blank" title="La fiche dans la base Mérimée">{}</a></td>'''.format(l0,mh,mh)
         #colonne OSM
         if 'osm' in salle.salle['nom']:
-            table += '''<td class="lien"><a {}" target="blank" title="Voir sur OpenStreetMap.org"> ORG </a> -
-            <a {}" target="blank" title="Editer avec ID"> ID </a> - <a {}" target="blank" title="Editer avec Josm"> Josm </a> </td>
+            table += '''<td class="lien"><a {}" target="_blank" title="Voir sur OpenStreetMap.org"> ORG </a> -
+            <a {}" target="_blank" title="Editer avec ID"> ID </a> - <a {}" target="_blank" title="Editer avec Josm"> Josm </a> </td>
             '''.format(url_osm_org, url_osm_id, url_josm)
 
         elif 'infos_osm' in MH.description[mh]:
@@ -207,14 +207,14 @@ def get_table(salle,musee):
 
         # colonne WP
         if url_wip and url_osmwp :
-            table+='''<td class="lien"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> -
-          <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </td>'''.format(url_wip,url_osmwp)
+            table+='''<td class="lien"> <a href="{}" target="_blank" title="Description sur page Wp départementale">  WP1 </a> -
+          <a {}" target="_blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </td>'''.format(url_wip,url_osmwp)
         elif url_wip and not url_osmwp:
             url_wip = MH.description[mh]['wip']['url']+"#"+MH.description[mh]['wip']['id']
-            table+='''<td class="lien"> <a href="{}" target="blank" title="Description sur page Wp départementale">  WP1 </a> </td>'''.format(url_wip)
+            table+='''<td class="lien"> <a href="{}" target="_blank" title="Description sur page Wp départementale">  WP1 </a> </td>'''.format(url_wip)
         elif not url_wip and url_osmwp:
             url_osmwp = 'href="https://fr.wikipedia.org/wiki/'+MH.description[mh]['osm']['tags_mhs']['wikipedia']
-            table+='''<td class="lien">  <a {}" target="blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </td>'''.format(url_osmwp)
+            table+='''<td class="lien">  <a {}" target="_blank" title ="Lien direct à partir du tag wikipedia sur Osm" > WP2 </a> </td>'''.format(url_osmwp)
         else:
             table+='''<td class="lien">  ---- </td>'''
         #table remarques OSM et WP

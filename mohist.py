@@ -207,19 +207,19 @@ class Musee:
                     lat= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[0]
                     lon= self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[1]
                     #print("Position estimée : http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}".format(lat,lon,lat,lon))
-                    infos+='<li><b><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Géocodage fourni par Wikipédia : à vérifier" target="blank"'.format(lat,lon,lat,lon)
+                    infos+='<li><b><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Géocodage fourni par Wikipédia : à vérifier" target="__blank"'.format(lat,lon,lat,lon)
                     infos+='>Position estimée</a></b></li>'
                     infos+="<p>"
                     infos_tags = [tag_A,tag_Q,tag_B,tag_C,tag_D,tag_E,tag_F,tag_G]
                     tags = [ t for t in infos_tags if t != "" ]
-                    infos+='<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}" title="Création d\'un node dans JOSM (remoteControl) : Vérifier la position et les tags !" target="blank" '.format(lon,lat,'%7C'.join(tags))
+                    infos+='<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}" title="Création d\'un node dans JOSM (remoteControl) : Vérifier la position et les tags !" target="_blank" '.format(lon,lat,'%7C'.join(tags))
                     infos+='>Créer un point dans JOSM</a></b></li>'
                     # télécharger la zone du mh dans JOSM
                     # http://127.0.0.1:8111/load_and_zoom?left=8.19&right=8.20&top=48.605&bottom=48.590
                     left,right,top,bottom = bbox.getBB(float(lat),float(lon))
                     infos+='<li><b><a href="http://localhost:8111/load_and_zoom?left={}&right={}&top={}&bottom={}&zoom_mode=download" \
                             title="Copier tous les tags ci-dessus (ctrl-C) puis dans Josm, sélectionner un bâtiment et coller (Ctrl-shift-V)? ATTENTION : ne marche pas si \'Classements multiples\'"\
-                            target="blank" '.format(left,right,top,bottom)
+                            target="_blank" '.format(left,right,top,bottom)
                     infos+='>Charger la zone dans JOSM</a></b></li>'
                 #print (infos)
                 self.collection[mh].description[mh]['infos_osm']=infos
