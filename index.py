@@ -152,7 +152,7 @@ def write_entete(file, title):
                     "zeroRecords": "Aucun résultat pour cette recherche - désolé",
                     "info": "Monuments visibles : de _START_ à _END_ sur _TOTAL_ ",
                     "infoEmpty": "Aucun résultat",
-                    infoFiltered": " sélectionnés parmi _MAX_ enregistrements",
+                    "infoFiltered": " sélectionnés parmi _MAX_ enregistrements",
                     "paginate": {
                         "first":      "Première",
                         "last":       "Dernière",
