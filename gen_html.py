@@ -211,6 +211,7 @@ def get_table(salle, musee):
         elif 'infos_osm' in MH.description[mh]:
             table += '''<td id="info_bloc{}" class="infoBloc" > Tags pour OSM'''.format(n)
             table += '''   <div id="bloc{}" class="dialogBloc">
+                                <iframe name="hide" style="display: None;"></iframe>
                             <ul>{}</ul>
                         </div>'''.format(n, MH.description[mh]['infos_osm'])
             table += '''</td> '''
