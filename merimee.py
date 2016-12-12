@@ -124,8 +124,20 @@ def get_maj_base_merimee():
 def get_merimee(dep, musee):
     '''
          Recherche sur le code département (01)
-         les champs du fichier json :
+         Les champs du fichier json :
          REF|ETUD|REG|DPT|COM|INSEE|TICO|ADRS|STAT|AFFE|PPRO|DPRO|AUTR|SCLE
+             REF (référence de l'édifice dans la base Mérimée)
+             ETUD (type d'étude : recensement immeubles MH, avec éventuellement la mention label Xxe)
+             LOCA OU REG + DEPT + COM (localisation de l'édifice)
+             INSEE (code INSEE)
+             TICO (appellation courante de l'édifice)
+             ADRS (adresse, n° de la voie, type de voie, nom de la voie)
+             STAT (statut propriété : type de propriétaire par catégorie ; pas de nom)
+             AFFE (affectataire : utile pour les propriétés de l'Etat, mentionne le nom du ministère affectataire)
+             PPRO (précisions sur la protection : article 1er de l'arrêté de protection + cadastre + nature et date de la protection)
+             DPRO (date de protection)
+             AUTR (architecte ou maître d'oeuvre)
+             SCLE (période de construction)
          Renvoie un musee contenant des monuments par reférence mhs contenant la clé 'mer' avec la note 1
      '''
     global datafile
@@ -141,7 +153,7 @@ def get_merimee(dep, musee):
             # 	'adresse:',mh['ADRS'],'\n','nom monument :',mh['TICO'],'\n','Classement :',mh['DPRO'])
             MH = musee.add_Mh(mh['REF'])
             # m.add_infos_mer('insee','commune','adresse','Nom mh', 'Infos classement')
-            MH.add_infos_mer(mh['INSEE'], mh['COM'], mh['ADRS'], mh['TICO'], mh['DPRO'])
+            MH.add_infos_mer(mh['INSEE'], mh['COM'], mh['ADRS'], mh['TICO'], mh['DPRO'], mh['SCLE'])
     return musee
 
 
@@ -179,7 +191,7 @@ if __name__ == "__main__":
     print(nb)
 
     # affichier le contenu d'un MH
-    ref = "PA00116375"
-    # ref = "PA00116287"
+    # ref = "PA00116375"
+    ref = "PA00116290"
     get_mh(ref)
-    # print (musee.collection[ref])
+    print(musee.collection[ref])

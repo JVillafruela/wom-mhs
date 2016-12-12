@@ -140,9 +140,26 @@ class Musee:
                 x += 1
         return x
 
+    def get_other_tags(self, mh):
+        ''' construire des tags OSM à partir des infos TICO et SCLE de la base mérimée'''
+        ot = ''
+        k = self.collection[mh].description[mh]['mer']['nom'].split(' ')[0].lower()
+        if k in ini.other_tags:
+            # print("<li>", '</li> <li>'.join(ini.other_tags[k]), "</li>")
+            ot = "<li>" + '</li> <li>'.join(ini.other_tags[k]) + "</li>"
+        # FIXME : ajouter une liste des noms n'ayant pas de tags
+        s = self.collection[mh].description[mh]['mer']['siecle']
+        if 'e siècle' in s:
+            # print(s[s.index('e siècle') - 2:s.index('e siècle')])
+            ot += "<li>start_date={}C</li>".format(s[s.index('e siècle') - 2:s.index('e siècle')])
+        elif 'er siècle' in s:
+            # print(s[s.index('er siècle') - 1: s.index('er siècle')])
+            ot += "<li>start_date={}C</li>".format(s[s.index('er siècle') - 1:s.index('er siècle')])
+        return ot
+
     def gen_infos_osm(self, n):
         '''
-            Produire des infos d'aide pour la création du MH dans OSM
+            Produire des infos d'aide (les tags) pour la création du MH dans OSM
             n est le rang de la salle dans la liste des salles (voir plus haut)
         '''
         # print("Génération complémentaire pour : {}".format(self.salles[n].salle['nom']))
@@ -150,19 +167,28 @@ class Musee:
             for mh in self.salles[n].s_collection:
                 # print (self.collection[mh])
                 infos = ""
+                ################
+                # trouvés les autres tags (détails )
+                tag_O = self.get_other_tags(mh)
+                # print(tag_O)
+                infos += tag_O
+                ################
+                # tag ref:mhs
                 # print ("ref:mhs = {}".format(mh))
                 tag_A = "ref:mhs={}".format(mh)
                 infos += "<li>" + tag_A + "</li>"
+                ################
                 # tags wikidata
                 if len(self.collection[mh].description[mh]['wkd']) == 1:
                     tag_Q = "wikidata={}".format(self.collection[mh].description[mh]['wkd'][0])
                     infos += "<li>" + tag_Q + "</li>"
                 else:
                     # infos+= "<li><b>Wikidata multiples :</b> {}</li>".format(', '.join(self.collection[mh].description[mh]['wkd']))
-                    print("ERR wikidata : {} ->  {}".format(mh, ', '.join(self.collection[mh].description[mh]['wkd'])))
+                    # FIXME envoyer les erreurs wikidata vers un fichier
+                    # print("ERR wikidata : {} ->  {}".format(mh, ', '.join(self.collection[mh].description[mh]['wkd'])))
                     tag_Q = ""
-                # tag_Q=""
-                # print ("heritage:operator= mhs")
+                ################
+                # classement
                 tag_C = "heritage:operator=mhs"
                 infos += "<li>" + tag_C + "</li>"
                 classement = self.collection[mh].description[mh]['mer']['classement']
@@ -185,7 +211,8 @@ class Musee:
                     tag_D = ""
                     tag_E = ""
                     infos += "<li><b>Import sans classement !</b> </li>"
-                # lien wikipedia
+                    ################
+                    # lien wikipedia
                 if 'infos_manquantes' in self.collection[mh].description[mh]['wip'] and "Page monument absente" not in self.collection[mh].description[mh]['wip']['infos_manquantes']:
                     texte = self.collection[mh].description[mh]['wip']['tag_wk']
                     ''' Suppression proposition de nom pour un tag wikipédia:fr vers une page qui n'existe pas '''
@@ -197,6 +224,7 @@ class Musee:
                 else:
                     tag_G = ""
                 infos += "<li>" + tag_G + "</li>"
+                ################
                 # le nom probable du MH
                 name = self.collection[mh].description[mh]['mer']['nom']
                 if name in ini.no_name:
@@ -204,10 +232,13 @@ class Musee:
                 else:
                     tag_B = "name={}".format(name.replace('"', ''))
                 infos += "<li>" + tag_B + "</li>"
+                ################
                 # print ("Source : Base Mérimée ouverte - avril 2016 ")
                 tag_F = "source:heritage=data.gouv.fr, Ministère de la Culture - 2016"
                 infos += "<li>" + tag_F + "</li>"
                 infos += "<p>"
+                ################
+                # Géolocalisation et liens si elle exite
                 if 'geoloc' in self.collection[mh].description[mh]['wip'] and self.collection[mh].description[mh]['wip']['geoloc'] != '':
                     # print ("Geolocalisation : {}".format(self.collection[mh].description[mh]['wip']['geoloc']))
                     lat = self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[0]
@@ -281,13 +312,14 @@ class MoHist:
         # print(self.description)
         return "ref: " + self.mhs + ' noté : ' + str(self.note)
 
-    def add_infos_mer(self, insee, commune, adresse, nom, classement):
+    def add_infos_mer(self, insee, commune, adresse, nom, classement, siecle):
         '''Ajouter les informations issues de la base Mérimée à un monument'''
         self.description[self.mhs]['mer'] = {'insee': insee,
                                              'commune': commune,
                                              'adresse': adresse,
                                              'nom': nom,
-                                             'classement': classement}
+                                             'classement': classement,
+                                             'siecle': siecle}
         #  if not 'osm' in self.description[self.mhs]:
         self.note += 1
 

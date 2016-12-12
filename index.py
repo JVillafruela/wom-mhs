@@ -127,7 +127,7 @@ def write_entete(file, title):
                 draggable: false,
                 resizable: false,
                 width:550,
-                height:350,
+                height:400,
                 modal: true,
                 overlay: {
                     backgroundColor: '#000',
