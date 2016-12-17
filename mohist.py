@@ -28,6 +28,7 @@ import overpass
 import wikipedia
 import pprint
 import bbox
+import re
 from collections import OrderedDict
 
 
@@ -146,7 +147,7 @@ class Musee:
         k = self.collection[mh].description[mh]['mer']['nom'].split(' ')[0].lower()
         if k in ini.other_tags:
             # print("<li>", '</li> <li>'.join(ini.other_tags[k]), "</li>")
-            ot = "<li>" + '</li> <li>'.join(ini.other_tags[k]) + "</li>"
+            ot = "<li>" + '</li><li>'.join(ini.other_tags[k]) + "</li>"
         # FIXME : ajouter une liste des noms n'ayant pas de tags
         s = self.collection[mh].description[mh]['mer']['siecle']
         if 'e siècle' in s:
@@ -171,6 +172,14 @@ class Musee:
                 # trouvés les autres tags (détails )
                 tag_O = self.get_other_tags(mh)
                 # print(tag_O)
+                # Enlever le tag 'building' pour la création d'un point dans Josm
+                if tag_O != "":
+                    modif = re.sub(r'<li>building=([a-z]*)</li>', r'', tag_O)
+                    modif = re.sub(r'</li><li>', r'%7C', modif)
+                    tag_P = re.sub(r'<(/*)li>', r'', modif)
+                else:
+                    tag_P = ''
+                # print(tag_P)
                 infos += tag_O
                 ################
                 # tag ref:mhs
@@ -247,7 +256,7 @@ class Musee:
                     infos += '<li><b><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Géocodage fourni par Wikipédia : à vérifier" target="__blank"'.format(lat, lon, lat, lon)
                     infos += '>Position estimée</a></b></li>'
                     infos += "<p>"
-                    infos_tags = [tag_A, tag_Q, tag_B, tag_C, tag_D, tag_E, tag_F, tag_G]
+                    infos_tags = [tag_P, tag_A, tag_Q, tag_B, tag_C, tag_D, tag_E, tag_F, tag_G]
                     tags = [t for t in infos_tags if t != ""]
                     infos += '<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}" title="Création d\'un node dans JOSM (remoteControl) : Vérifier la position et les tags ! ATTENTION : un calque doit déjà être ouvert dans JOSM." target="hide" '.format(lon, lat, '%7C'.join(tags))
                     infos += '>Créer un point dans JOSM</a></b></li>'

@@ -27,7 +27,7 @@ prod = False
 # en local
 url_dev = "/home/jean/osm/monuments_historiques"
 # sur Syno
-url_prod = "/var/services/homes/jean/web_wom"
+url_prod = "/home/jearro/osm"
 # fichier statique : style.css
 # cssFile ="style.css"
 
