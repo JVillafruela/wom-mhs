@@ -96,10 +96,13 @@ def existe_nouvelle_version():
     url = "http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/"
     contenu = requests.get(url).text
     page = BeautifulSoup(contenu, 'html.parser')
-    date = page.find("p", attrs={"class": "list-group-item-text ellipsis"}).text
-    old_date = open('last_date.txt', 'r').read()
-    new_date = conv_date(date.strip().split(' ')[-3:])
-    return new_date > old_date
+    if type(page.find("p", attrs={"class": "list-group-item-text ellipsis"})) is None:
+        return False
+    else:
+        date = page.find("p", attrs={"class": "list-group-item-text ellipsis"}).text
+        old_date = open('last_date.txt', 'r').read()
+        new_date = conv_date(date.strip().split(' ')[-3:])
+        return new_date > old_date
 
 
 def get_maj_base_merimee():
