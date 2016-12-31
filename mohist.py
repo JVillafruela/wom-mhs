@@ -215,11 +215,12 @@ class Musee:
                     tag_E = "mhs:inscription_date={}".format(classement.split(":")[0].replace("/", "-"))
                     infos += "<li>" + tag_E + "</li>"
                 else:
+                    # NE plus afficher les classements multiples ! plus facile pour les copier/coller.
                     # print ("Classement : {}".format(classement))+"</li>"
-                    infos += "<li><b>Classements multiples</b> : {}</li>".format(classement)
+                    # infos += "<li><b>Classements multiples</b> : {}</li>".format(classement)
                     tag_D = ""
                     tag_E = ""
-                    infos += "<li><b>Import sans classement !</b> </li>"
+                    # infos += "<li><b>Import sans classement !</b> </li>"
                     ################
                     # lien wikipedia
                 if 'infos_manquantes' in self.collection[mh].description[mh]['wip'] and "Page monument absente" not in self.collection[mh].description[mh]['wip']['infos_manquantes']:
