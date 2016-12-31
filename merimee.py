@@ -62,7 +62,7 @@ def get_commune(code):
             tableau = page.find_all("td", attrs={"class": u"champ"})[2].text
             return tableau.split("; ")[-1]
     else:
-        print("ref:mhs inconnu : ", code)
+        # print("ref:mhs inconnu : ", code)
         logging.debug("ref:mhs inconnu : {}".format(code))
         return ""
 
@@ -96,7 +96,7 @@ def existe_nouvelle_version():
     url = "http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/"
     contenu = requests.get(url).text
     page = BeautifulSoup(contenu, 'html.parser')
-    if type(page.find("p", attrs={"class": "list-group-item-text ellipsis"})) is None:
+    if page.find("p", attrs={"class": "list-group-item-text ellipsis"}) is None:
         return False
     else:
         date = page.find("p", attrs={"class": "list-group-item-text ellipsis"}).text
@@ -112,7 +112,8 @@ def get_maj_base_merimee():
     url_locale = get_url()
 
     if existe_nouvelle_version():
-        print('Nouvelle version disponible ! Téléchargement... ')
+        # print('Nouvelle version disponible ! Téléchargement... ')
+        logging.info('Nouvelle version disponible ! Téléchargement...')
         url_merimee = "http://data.culture.fr/entrepot/MERIMEE/"
         r = requests.get(url_merimee + datafile, stream=True)
         with open(url_locale + datafile, 'wb') as fd:
@@ -120,7 +121,7 @@ def get_maj_base_merimee():
                 fd.write(chunk)
         open(url_locale + 'last_date.txt', 'w').write(new_date)
     else:
-        print('Base Mérimée : Version {}, à jour.'.format(new_date))
+        # print('Base Mérimée : Version {}, à jour.'.format(new_date))
         logging.info('log : Base Mérimée : Version {}, à jour.'.format(new_date))
 
 
@@ -190,11 +191,11 @@ if __name__ == "__main__":
     musee.maj_salle()
     print(musee)
 
-    nb = musee.get_nb_MH('mer')
-    print(nb)
+    # nb = musee.get_nb_MH('mer')
+    # print(nb)
 
-    # affichier le contenu d'un MH
+    # afficher le contenu d'un MH
     # ref = "PA00116375"
-    ref = "PA00116290"
+    ref = "PA00116292"
     get_mh(ref)
     print(musee.collection[ref])
