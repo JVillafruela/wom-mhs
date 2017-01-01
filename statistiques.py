@@ -80,7 +80,7 @@ class Statistiques:
         # pprint.pprint(self.stats)
         # pprint.pprint(self.data)
 
-        for date in self.data:
+        for date in list(self.data)[-5:]:
             print(" {} - Nb OSM: {}".format(date, self.data[date]['total'][1][6]))
         return "Nombre de jours de stats: {}".format(len(self.stats))
 
@@ -191,7 +191,7 @@ class Statistiques:
         serieDate = []
         seriePcOsm = []
         seriePcWp = []
-        for dat in self.data:
+        for dat in list(self.data)[-30:]:
             # print (dat)
             ''' liste des dates: réécrit le format date: de 20161025 en 25-10-2016'''
             grapheDate = "'{}-{}-{}'".format(dat[6:8], dat[4:6], dat[0:4])
@@ -210,7 +210,7 @@ class Statistiques:
         seriewp = []
 
         firstdate = [self.FirstDate()]
-        listdate = list(self.data.keys())
+        listdate = list(self.data.keys())[-30:]
         last = self.data[listdate[0]]
         for x in range(1, len(listdate)):
             # print (x, listdate[x], self.data[listdate[x]]['total'])
@@ -409,7 +409,7 @@ if __name__ == "__main__":
 
     stats = Statistiques()
     stats.fname = './stats.json'
-    # print (stats)
+    print(stats)
     # print (stats.data)
     # series = stats.get_series()
     # print (series)
