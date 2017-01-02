@@ -392,12 +392,6 @@ def genGraphes(serie1, serie2, serie3):
     <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     <br>
     <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-    <div class='message'>
-    <p>
-    <b>Attention:</b> La chute sur la courbe noire (intégration globale des monuments historiques dans Wikipédia) est due à un changement de mode de calcul le 27 novembre 2016.
-    A partir de cette date, les monuments référencés dans les pages départementales mais ayant l'étiquette "page monument inexistante" ne sont plus comptés.
-    </p>
-    </div>
     </body>
     </html>
     '''
