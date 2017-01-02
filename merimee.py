@@ -29,10 +29,11 @@
 
 '''
 from __future__ import unicode_literals
+from bs4 import BeautifulSoup
 import requests
 import json
 import logging
-from bs4 import BeautifulSoup
+
 import mohist
 import ini
 import param

@@ -37,11 +37,12 @@ from __future__ import unicode_literals
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 import overpy
-import ini
-import mohist
 import time
-import param
 import logging
+
+import ini
+import param
+import mohist
 
 
 cache_opts = {

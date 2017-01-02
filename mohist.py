@@ -23,13 +23,14 @@
     Organisation des infos MH une class Musee qui contient une collection de monuments (MoHist)
 '''
 import ini
+import re
+from collections import OrderedDict
+import pprint
+
+import bbox
 import merimee
 import overpass
 import wikipedia
-import pprint
-import bbox
-import re
-from collections import OrderedDict
 
 
 class Musee:

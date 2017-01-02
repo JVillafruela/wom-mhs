@@ -28,17 +28,18 @@ import os
 import shutil
 import logging
 import datetime
-import statistiques
 import begin
 import re
-import index
+
+import ini
+import param
+import mohist
 import merimee
 import overpass
 import wikipedia
-import ini
-import mohist
+import index
 import wkdcodes
-import param
+import statistiques
 
 
 def get_log_date():

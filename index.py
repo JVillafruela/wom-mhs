@@ -24,11 +24,12 @@
 
 '''
 import os
-import ini
 import time
-import param
 import os.path
 from collections import OrderedDict
+
+import param
+import ini
 
 
 def write_entete_index(file, title):

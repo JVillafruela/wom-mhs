@@ -30,18 +30,20 @@
 
     '''
 from __future__ import unicode_literals
+from beaker.cache import CacheManager
+from beaker.util import parse_cache_config_options
+from bs4 import BeautifulSoup
 import requests
 import bs4
 import re
-from bs4 import BeautifulSoup
-import ini
-import insee
-import mohist
-import param
 import logging
 import urllib.parse
-from beaker.cache import CacheManager
-from beaker.util import parse_cache_config_options
+
+import ini
+import param
+import insee
+import mohist
+
 
 url_base = "https://fr.wikipedia.org"
 #  compteur de monument sans code mhs
