@@ -97,6 +97,7 @@ def existe_nouvelle_version():
     url = "http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/"
     contenu = requests.get(url).text
     page = BeautifulSoup(contenu, 'html.parser')
+    print(page.find("p", attrs={"class": "list-group-item-text ellipsis"}))
     if page.find("p", attrs={"class": "list-group-item-text ellipsis"}) is None:
         return False
     else:
