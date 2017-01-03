@@ -122,8 +122,9 @@ def get_maj_base_merimee():
                 fd.write(chunk)
         open(url_locale + 'last_date.txt', 'w').write(new_date)
     else:
+        old_date = open('last_date.txt', 'r').read()
         # print('Base Mérimée : Version {}, à jour.'.format(new_date))
-        logging.info('log : Base Mérimée : Version {}, à jour.'.format(new_date))
+        logging.info('log : Base Mérimée : Version {}, à jour.'.format(old_date))
 
 
 def get_merimee(dep, musee):
