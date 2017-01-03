@@ -79,7 +79,7 @@ def get_url():
 def conv_date(d):
     '''
     en entrée une date dans une liste ['24', 'mai', '2016']
-    en sortie une date dans une chaine AAMMJJ '20160524' (permetre une comparaison)
+    en sortie une date dans une chaine AAAAMMJJ '20160524' (permetre une comparaison)
     '''
     mois = ["Janvier", u"Février", "Mars", "Avril", "Mai", "Juin", "Juillet", u"Août", "Septembre", "Octobre", "Novembre", u"Décembre"]
     return d[2] + str(mois.index(d[1].capitalize()) + 1).zfill(2) + d[0]
@@ -97,7 +97,8 @@ def existe_nouvelle_version():
     url = "http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/"
     contenu = requests.get(url).text
     page = BeautifulSoup(contenu, 'html.parser')
-    print(page.find("p", attrs={"class": "list-group-item-text ellipsis"}))
+    # print(page.find("p", attrs={"class": "list-group-item-text ellipsis"}).text)
+    logging.debug('log : Base mérimée Mise à jour :{}'.format(page.find("p", attrs={"class": "list-group-item-text ellipsis"})))
     if page.find("p", attrs={"class": "list-group-item-text ellipsis"}) is None:
         return False
     else:
