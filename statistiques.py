@@ -53,7 +53,8 @@ class Statistiques:
                          ,
                          'total':[[0,0,0,0],[0,0,0,0,0,0]]
                          },
-                  date3:{ 'departement': [[nbMer,nbOsm,NbWip,PageACreer],[NbMer,NbOsm,NbMerOsm,NbWip,NbMerWip,NbOsmwip,NbMerOsmWip]]}
+                  date3:{'departement':[[liste des monuments dans le musée],[liste des monuments dans les salles du musée]]},
+                  date4:{ 'departement': [[nbMer,nbOsm,nbWip,PageACreer],[NbMer,NbOsm,NbMerOsm,NbWip,NbMerWip,NbOsmwip,NbMerOsmWip]]}
 
                 }
 
@@ -131,8 +132,8 @@ class Statistiques:
         # pprint.pprint(self.stats)
         s = self.stats[date][dep]
         # ((NbMerOsmWip + NbMerOsm - NbOsm )/nbMer)*100
-        pCentOsm = round(((int(s[1][6]) + int(s[1][2] - int(s[1][2]))) / int(s[0][0])) * 100, 2)
-        # ((NbMerOsmWip + NbMerWip -NbWip - PageACreer )/nbMer)*100
+        pCentOsm = round(((int(s[1][6]) + int(s[1][2] - int(s[1][1]))) / int(s[0][0])) * 100, 2)
+        # ((NbMerOsmWip + NbMerWip - NbWip - PageACreer )/nbMer)*100
         pCentWp = round(((int(s[1][6]) + int(s[1][4] - int(s[1][3]) - int(s[0][3]))) / int(s[0][0])) * 100, 2)
         return pCentOsm, pCentWp
 
@@ -180,7 +181,7 @@ class Statistiques:
             # serieWp.append(str(self.data[dat]['total'][0][3]))
             ''' liste des monuments Merimée wikipédia'''
             serieMerwip.append(str(self.data[dat]['total'][1][4]))
-            ''' liste des monumenst présents dans les trois bases'''
+            ''' liste des monuments présents dans les trois bases'''
             serieMerosmwip.append(str(self.data[dat]['total'][1][6]))
             # print (dat,self.data[dat]['total'])
         return [serieDate, serieOsm, serieMerwip, serieMerosmwip]
@@ -232,12 +233,17 @@ class Statistiques:
                 seriewp.append(str(wp))
         return [seriedate, serieosm, seriewp]
 
+    def getTotalMerimee(self):
+        ''' renvoie le total des monuments présents dans la base mérimée ouverte '''
+        return self.stats[self.date]['total'][0][0]
 
-def genGraphes(serie1, serie2, serie3):
+
+def genGraphes(serie1, serie2, serie3, totalMerimee):
     ''' Génère la page html avec deux graphes de stats
             serie1 = graphe des départements
             serie2 = graphe de la progression globale
             serie3 = graphe des ajouts de monumenst par jour
+            totalMerimee = Nombre total de monuments dans la base ouverte Mérimée
     '''
     # Créer le fichier Wom/graphes.html
     if ini.prod:
@@ -393,9 +399,14 @@ def genGraphes(serie1, serie2, serie3):
     <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     <br>
     <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div class='message'>
+    <p>
+    <b>Attention:</b> Le nombre total de monuments historiques présents dans la base ouverte Mérimée est de {}. Cette valeur représente le 100% du graphe ci dessus.
+    </p>
+    </div>
     </body>
     </html>
-    '''
+    '''.format(totalMerimee)
     oF.write(content)
     oF.close()
 
@@ -409,12 +420,13 @@ if __name__ == "__main__":
     # series = stats.get_series()
     # print (series)
     #
-    # date = "20161119"
-    # dep ="70"
-    # print(stats.getStatsDep(date,dep))
-
+    ''' Obtenir le nombre total de monuments pour un jour'''
+    # date = "20161212"
+    # dep = "total"
+    # print(stats.getStatsDep(dep, date))
+    # print(stats.stats[date][dep][0][0])
     ''' générer les graphes de prod '''
-    genGraphes(stats.getSeriePourCent(stats.LastDate()), stats.getPcSeries(), stats.CalculeAugmentation())
+    genGraphes(stats.getSeriePourCent(stats.LastDate()), stats.getPcSeries(), stats.CalculeAugmentation(), stats.getTotalMerimee())
 
     '''Supprimer les enregistrements pour une date inférieure à debut '''
     # debut = "20161105"

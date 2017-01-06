@@ -391,7 +391,7 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
         # sauvegarde stats du jour
         st.saveStats()
         # générer la page html de stat
-        statistiques.genGraphes(st.getSeriePourCent(), st.getPcSeries(), st.CalculeAugmentation())
+        statistiques.genGraphes(st.getSeriePourCent(), st.getPcSeries(), st.CalculeAugmentation(), st.getTotalMerimee())
 
     # Afficher le contenu d'un monument
     if monument != 'all':
