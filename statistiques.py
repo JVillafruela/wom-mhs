@@ -131,10 +131,10 @@ class Statistiques:
             date = self.date
         # pprint.pprint(self.stats)
         s = self.stats[date][dep]
-        # ((NbMerOsmWip + NbMerOsm - NbOsm )/nbMer)*100
-        pCentOsm = round(((int(s[1][6]) + int(s[1][2] - int(s[1][1]))) / int(s[0][0])) * 100, 2)
-        # ((NbMerOsmWip + NbMerWip - NbWip - PageACreer )/nbMer)*100
-        pCentWp = round(((int(s[1][6]) + int(s[1][4] - int(s[1][3]) - int(s[0][3]))) / int(s[0][0])) * 100, 2)
+        # ((NbMerOsmWip + NbMerOsm )/nbMer)*100
+        pCentOsm = round(((int(s[1][6]) + int(s[1][2])) / int(s[0][0])) * 100, 2)
+        # ((NbMerOsmWip + NbMerWip - PageACreer )/nbMer)*100
+        pCentWp = round(((int(s[1][6]) + int(s[1][4] - int(s[0][3]))) / int(s[0][0])) * 100, 2)
         return pCentOsm, pCentWp
 
     def LastDate(self):
@@ -233,9 +233,11 @@ class Statistiques:
                 seriewp.append(str(wp))
         return [seriedate, serieosm, seriewp]
 
-    def getTotalMerimee(self):
+    def getTotalMerimee(self, date=None):
         ''' renvoie le total des monuments présents dans la base mérimée ouverte '''
-        return self.stats[self.date]['total'][0][0]
+        if date is None:
+            date = self.date
+        return self.stats[date]['total'][0][0]
 
 
 def genGraphes(serie1, serie2, serie3, totalMerimee):
@@ -421,12 +423,12 @@ if __name__ == "__main__":
     # print (series)
     #
     ''' Obtenir le nombre total de monuments pour un jour'''
-    # date = "20161212"
+    date = "20170106"
     # dep = "total"
     # print(stats.getStatsDep(dep, date))
     # print(stats.stats[date][dep][0][0])
     ''' générer les graphes de prod '''
-    genGraphes(stats.getSeriePourCent(stats.LastDate()), stats.getPcSeries(), stats.CalculeAugmentation(), stats.getTotalMerimee())
+    genGraphes(stats.getSeriePourCent(stats.LastDate()), stats.getPcSeries(), stats.CalculeAugmentation(), stats.getTotalMerimee(date))
 
     '''Supprimer les enregistrements pour une date inférieure à debut '''
     # debut = "20161105"
