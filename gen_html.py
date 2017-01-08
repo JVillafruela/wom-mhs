@@ -289,10 +289,12 @@ def gen_pages(dep, musee):
 
 
 @begin.start
-def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analyse d\'un seul monument'='all'):
+def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analyse d\'un seul monument'='all', wk: 'Importer les codes wikidata manquants dans JOSM'=False):
     '''
-        Obtenir la mise à jour d'un département ou d\'une liste de département (-d code_dep,code_dep,code_dep). Obtenir le dico d'un seul monument (-d code_dep -m code_Mérimée). Attention : pour avoir le dico d'un monument,
-        il faut donner le code de son département.
+        Obtenir la mise à jour d'un département ou d\'une liste de département (-d code_dep, code_dep, code_dep).\n
+        Obtenir le dico d'un seul monument (-d code_dep -m code_Mérimée).\n
+        Importer les codes Wikidata manquants dans JOSM (--wk)\n
+        Attention : pour avoir le dico d'un monument, il faut donner le code de son département.
     '''
     stats = {}
     wkdCodes = {}
@@ -355,6 +357,14 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
         museum.maj_Qcodes(wkdCodes)
         ''' Trier et compter '''
         museum.maj_salle()
+        ''' Rechercher les monuments de la salle merosmwip dont le code wk n'est pas intégré '''
+        if wk:
+            museum.searchQcodes()
+            exit(6)
+        else:
+            pass
+            # print('codes wikidata non demandés')
+
         # pour les salles mer et merwip générer les infos à faire apparaitre dans la popup
         # Infos à ajouter dans OSM
         for x in [1, 5]:

@@ -26,6 +26,7 @@ import ini
 import re
 from collections import OrderedDict
 import pprint
+import requests
 
 import bbox
 import merimee
@@ -106,6 +107,26 @@ class Musee:
         for codeMh in self.collection:
             if ("ERR" not in codeMh) and (codeMh in dic_Qcodes):
                 self.collection[codeMh].description[codeMh]['wkd'] = dic_Qcodes[codeMh]
+
+    def searchQcodes(self):
+        ''' Rechercher les Qcodes de la salle merosmwip (salle 7) et les importe automatqiement dans JOSM'''
+        print("Je cherche. Vous devez lancer JOSM avec le 'remote control'")
+        x = 0
+        if len(self.salles[7].s_collection) > 0:
+            for mh in self.salles[7].s_collection:
+                MH = self.collection[mh]
+                if len(MH.description[mh]['osm']['tags_manquants']) > 0:
+                    if "wikidata" in MH.description[mh]['osm']['tags_manquants'] and len(MH.description[mh]['wkd']) == 1:
+                        type_osm = MH.description[mh]['osm']['url'].split('/')[0]
+                        id_osm = MH.description[mh]['osm']['url'].split('/')[1]
+                        # print("wikidata={}".format(self.collection[mh].description[mh]['wkd'][0]))
+                        url_josm = 'http://localhost:8111/load_object?objects=' + type_osm[0] + id_osm
+                        url_wkd = '{}&addtags=wikidata={}'.format(url_josm, MH.description[mh]['wkd'][0])
+                        print(url_wkd)
+                        requests.get(url_wkd)
+                        if x == 0:
+                            input("Vérifier que la commande JOSM d'enregistrement automatique est validée. 'Enter' pour continuer")
+                            x += 1
 
     def maj_stats(self):
         ''' Compter les MH '''
