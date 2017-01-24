@@ -30,6 +30,7 @@ import logging
 import datetime
 import begin
 import re
+import pprint
 
 import ini
 import param
@@ -156,11 +157,13 @@ def get_table(salle, musee):
                         MH.description[mh]['osm']['tags_manquants'][-1] = ', '.join(MH.description[mh]['wkd'])
 
                 note_osm += ", ".join(MH.description[mh]['osm']['tags_manquants'])
-            elif MH.description[mh]['osm']['mhs_bis'] is not None:
-                note_osm += ' <a href="http://www.openstreetmap.org/browse/' + MH.description[mh]['osm']['mhs_bis'][0] + '" target="_blank" title="Monument en double dans OSM"> Double OSM </a>'
             else:
                 note_osm = ""
-            # print(note_osm)
+            if MH.description[mh]['osm']['mhs_bis'] is not None:
+                # Traitement des doubles
+                # pprint.pprint(MH.description[mh]['osm']['mhs_bis'])
+                note_osm += ' <a href="http://www.openstreetmap.org/browse/' + MH.description[mh]['osm']['mhs_bis'][0][0] + '" target="_blank" title="Monument en double dans OSM"> Double OSM </a>'
+            print(note_osm)
             # recherche des urls WP
             if 'wikipedia' in MH.description[mh]['osm']['tags_mhs']:
                 url_osmwp = 'href="https://fr.wikipedia.org/wiki/' + MH.description[mh]['osm']['tags_mhs']['wikipedia']
