@@ -107,6 +107,8 @@ def get_table(salle, musee):
     url_osm_org = url_osm_id = url_osmwp = ""
     url_josm = url_osm = url_wip = ""
     # for mh,MH in salle.s_collection.items():
+    # liste des ref:mhs avec objets multiples
+    double = []
     n = 0
     for mh in sorted(salle.s_collection):
         MH = musee.collection[mh]
@@ -162,8 +164,9 @@ def get_table(salle, musee):
             if MH.description[mh]['osm']['mhs_bis'] is not None:
                 # Traitement des doubles
                 # pprint.pprint(MH.description[mh]['osm']['mhs_bis'])
-                note_osm += ' <a href="http://www.openstreetmap.org/browse/' + MH.description[mh]['osm']['mhs_bis'][0][0] + '" target="_blank" title="Monument en double dans OSM"> Double OSM </a>'
-            print(note_osm)
+                # note_osm += ' <a href="http://www.openstreetmap.org/browse/' + MH.description[mh]['osm']['mhs_bis'][0][0] + '" target="_blank" title="Monument en double dans OSM"> Double OSM </a>'
+                double.append(mh)
+            # print(note_osm)
             # recherche des urls WP
             if 'wikipedia' in MH.description[mh]['osm']['tags_mhs']:
                 url_osmwp = 'href="https://fr.wikipedia.org/wiki/' + MH.description[mh]['osm']['tags_mhs']['wikipedia']
@@ -252,14 +255,14 @@ def get_table(salle, musee):
     </table>
     </div>
     '''
-    return table
+    return table, double
 
 
 def gen_pages(dep, musee):
     ''' Effacer les fichiers du répertoire du département (supprime les fichiers anciens inutiles)'''
     index.del_files(dep)
     '''Définir le bandeau '''
-    titre = "Etat comparé des monuments historiques {} dans les bases Mérimée, OSM et WikiPédia".format(dep['text'])
+    titre = "Etat comparé des monuments historiques {} ({}) dans les bases Mérimée, OSM et WikiPédia".format(dep['text'], str(dep['code']))
     bandeau = get_bandeau(dep, titre, musee)
     '''Définir le menu '''
     menu = get_menu(dep, musee)
@@ -283,8 +286,10 @@ def gen_pages(dep, musee):
             header = get_header().format(page.salle['titre'])
             oF.write(header)
             ''' le tableau '''
-            table = get_table(page, musee)
+            table, doubles = get_table(page, musee)
             oF.write(table)
+            if len(doubles) > 0:
+                print("mhs avec objets multiples : ", doubles)
         # # '''écrire le pied de page'''
             index.write_footer(oF)
         # # '''fermer le fichier'''
