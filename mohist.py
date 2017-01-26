@@ -109,7 +109,7 @@ class Musee:
                 self.collection[codeMh].description[codeMh]['wkd'] = dic_Qcodes[codeMh]
 
     def searchQcodes(self):
-        ''' Rechercher les Qcodes de la salle merosmwip (salle 7) et les importe automatqiement dans JOSM'''
+        ''' Rechercher les Qcodes de la salle merosmwip (salle 7) et les importe automatiquement dans JOSM'''
         print("Je cherche. Vous devez lancer JOSM avec le 'remote control'")
         x = 0
         if len(self.salles[7].s_collection) > 0:
@@ -379,12 +379,13 @@ class MoHist:
         if 'wikipedia' in self.description[self.mhs]['osm']['tags_mhs'] and self.description[self.mhs]['wip'] == {}:
             self.note += 4
 
+
 if __name__ == "__main__":
         musee = Musee()
 
         mhs = 'AP123456'
         m = musee.add_Mh(mhs)
-        m.add_infos_mer('01004', 'ambérieu en Bugey', '259 rue Praujan', 'Maison Natoche', 'classé : 1928')
+        m.add_infos_mer('01004', 'ambérieu en Bugey', '259 rue Praujan', 'Maison Natoche', 'classé : 1928', '12e siècle')
         # print(musee)
         musee.maj_salle()
         print(musee)
@@ -393,7 +394,7 @@ if __name__ == "__main__":
         m.add_infos_osm('way/124578', {'name': 'église de la gare', 'ref:mhs': 'AP456789', 'heritage': '3', 'wikipedia': 'fr:wiki/église'}, ['source', ])
 
         m = musee.add_Mh(mhs)
-        m.add_infos_osm('way/124578', {'name': 'gare', 'ref:mhs': 'AP123456', 'heritage': '3'}, ['wikipedia', ])
+        m.add_infos_osm('way/254895', {'name': 'gare', 'ref:mhs': 'AP123456', 'heritage': '3'}, ['wikipedia', ])
         print(musee)
         for ref in musee.collection:
             print(musee.collection[ref])

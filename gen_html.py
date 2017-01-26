@@ -41,6 +41,7 @@ import wikipedia
 import index
 import wkdcodes
 import statistiques
+import gen_doubles
 
 
 def get_log_date():
@@ -288,8 +289,13 @@ def gen_pages(dep, musee):
             ''' le tableau '''
             table, doubles = get_table(page, musee)
             oF.write(table)
-            if len(doubles) > 0:
+            # Traitement des objets multiples
+            if len(doubles) > 0 and page.salle['nom'] == "merosmwip":
+                name = str(dep['code']) + "_doubles.html"
                 print("mhs avec objets multiples : ", doubles)
+                gen_doubles.gen_page_double(dep, musee, doubles)
+                lien = "<a href='./{}' title='Monuments en double' target='blank'> Attention : monuments multiples dans OSM </a>".format(name)
+                oF.write(lien)
         # # '''écrire le pied de page'''
             index.write_footer(oF)
         # # '''fermer le fichier'''
@@ -415,6 +421,7 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     if monument != 'all':
         print(museum.collection[monument])
     exit()
+
 
 if __name__ == "__main__":
     main()

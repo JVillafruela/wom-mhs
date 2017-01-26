@@ -170,7 +170,7 @@ def write_entete(file, title):
 
 def write_footer(file):
     footer = '''<div id="footer"> Page proposée par <a href="http://wiki.openstreetmap.org/wiki/User:JeaRRo">JeaRRo</a>, contributeur OSM </div>
-        </body
+        </body>
     </html>
     '''
     file.write(footer)
@@ -245,6 +245,7 @@ def gen_page_index():
     write_bandeau_index(oF, titre)
     #    write_footer(oF)
     oF.close()
+
 
 if __name__ == "__main__":
 
