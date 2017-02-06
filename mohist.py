@@ -263,6 +263,8 @@ class Musee:
                     tag_B = ''
                 else:
                     tag_B = "name={}".format(name.replace('"', ''))
+                    # Majuscule accentué pour les églises
+                    tag_B = tag_B.replace('Eglise', 'Église')
                 infos += "<li>" + tag_B + "</li>"
                 ################
                 # print ("Source : Base Mérimée ouverte - avril 2016 ")
