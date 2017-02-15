@@ -47,8 +47,8 @@ import mohist
 
 cache_opts = {
     'cache.type': 'file',
-    'cache.data_dir': '/tmp/cache/data',
-    'cache.lock_dir': '/tmp/cache/lock'
+    'cache.data_dir': './cache/data',
+    'cache.lock_dir': './cache/lock'
 }
 
 cache = CacheManager(**parse_cache_config_options(cache_opts))
@@ -184,7 +184,7 @@ def get_osm(departement, musee):
         query += query_part1.format(level, d)
         query += query_end
         query = ' '.join(query.replace("\n", "").split())
-        print("Query : ", query)
+        # print("Query : ", query)
         logging.debug("log : Osm Query : {}".format(query))
         result = get_data(query)
         ''' tester si le résulat est OK (!=None)

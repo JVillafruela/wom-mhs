@@ -6,3 +6,5 @@ ini_*.py
 schedule.py
 log
 *.json
+*.osm
+cache
