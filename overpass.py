@@ -176,40 +176,42 @@ def get_osm(departement, musee):
     relation(area.boundaryarea)["ref:mhs"]);'''
     query_end = '''out meta;>;out meta;'''
     for d in departement:
+        query = ""
         if 'Miquelon' in d:
             level = '3'
         else:
             level = '6'
         query += query_part1.format(level, d)
-    query += query_end
-    query = ' '.join(query.replace("\n", "").split())
-    # print("Query : ", query)
-    logging.debug("log : Osm Query : {}".format(query))
-    result = get_data(query)
-    ''' tester si le résulat est OK (!=None)
-        sinon attendre puis refaire
-    '''
-    x = 0
-    while x < 3 and result is None:
-        time.sleep(60)  # 1 minute
-        # print('essais de {}'.format(x))
+        query += query_end
+        query = ' '.join(query.replace("\n", "").split())
+        print("Query : ", query)
+        logging.debug("log : Osm Query : {}".format(query))
         result = get_data(query)
-        x += 1
-    if result is None:
-        raise overpy.exception.OverPyException('Le serveur Overpass ne réponds pas.')
-    # print (result.ways)
-    ensemble = {'r': result.relations, 'w': result.ways, 'n': result.nodes}
-    dic_typ = {'r': 'relation', 'w': 'way', 'n': 'node'}
-    for key in ensemble:
-        # print(ensemble[key])
-        musee = get_elements(ensemble[key], dic_typ[key], musee)
-        # print (len(liste_elements[key]),' ',text[key]) #,liste_elements[key][0][0]
-        # ctr += len(liste_elements[key])
-    # dic_elements = OrderedDict(sorted(dic_elements.items(), key=lambda t: t[0]))
+        ''' tester si le résulat est OK (!=None)
+            sinon attendre puis refaire
+        '''
+        x = 0
+        while x < 3 and result is None:
+            time.sleep(60)  # 1 minute
+            # print('essais de {}'.format(x))
+            result = get_data(query)
+            x += 1
+        if result is None:
+            raise overpy.exception.OverPyException('Le serveur Overpass ne réponds pas.')
+        # print (result.ways)
+        ensemble = {'r': result.relations, 'w': result.ways, 'n': result.nodes}
+        dic_typ = {'r': 'relation', 'w': 'way', 'n': 'node'}
+        for key in ensemble:
+            # print(ensemble[key])
+            musee = get_elements(ensemble[key], dic_typ[key], musee)
+            # print (len(liste_elements[key]),' ',text[key]) #,liste_elements[key][0][0]
+            # ctr += len(liste_elements[key])
+        # dic_elements = OrderedDict(sorted(dic_elements.items(), key=lambda t: t[0]))
     return musee
 
+
 if __name__ == "__main__":
-    departement = '91'
+    departement = '69'
     # osmWip=[]
     musee = mohist.Musee()
     # print("avant =",mohist.MoHist.ctr_monument)
@@ -229,5 +231,5 @@ if __name__ == "__main__":
 
     # affichier le contenu d'un MH
     # mh = "PA00087929"
-    mh = 'PA00088024'
+    mh = 'PA00117748'
     print(musee.collection[mh])

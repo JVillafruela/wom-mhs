@@ -180,10 +180,11 @@ def get_mh(ref):
             trouve = True
     if not trouve:
         print("Le monument {} ne fait pas partie de la base mérimée.".format(ref))
+    return trouve
 
 
 if __name__ == "__main__":
-    departement = '01'
+    departement = '15'
     get_maj_base_merimee()
     musee = mohist.Musee()
     musee = get_merimee(param.dic_dep[departement]['code'], musee)
@@ -199,7 +200,8 @@ if __name__ == "__main__":
     # print(nb)
 
     # afficher le contenu d'un MH
-    # ref = "PA00116375"
-    ref = "PA00116292"
-    get_mh(ref)
-    print(musee.collection[ref])
+    # ref = "PA00116375" # Donjon du temple à chazeys-bons n'existe pass dans mérimée 01
+    # ref = "PA00116292"
+    ref = "PA00083624"
+    if get_mh(ref):
+        print(musee.collection[ref])
