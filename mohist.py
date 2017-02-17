@@ -174,10 +174,10 @@ class Musee:
         s = self.collection[mh].description[mh]['mer']['siecle']
         if 'e siècle' in s:
             # print(s[s.index('e siècle') - 2:s.index('e siècle')])
-            ot += "<li>start_date={}C</li>".format(s[s.index('e siècle') - 2:s.index('e siècle')])
+            ot += "<li>start_date=C{}</li>".format(s[s.index('e siècle') - 2:s.index('e siècle')])
         elif 'er siècle' in s:
             # print(s[s.index('er siècle') - 1: s.index('er siècle')])
-            ot += "<li>start_date={}C</li>".format(s[s.index('er siècle') - 1:s.index('er siècle')])
+            ot += "<li>start_date=C{}</li>".format(s[s.index('er siècle') - 1:s.index('er siècle')])
         return ot
 
     def gen_infos_osm(self, n):
