@@ -153,7 +153,7 @@ def get_table(salle, musee):
                 if "wikidata" in MH.description[mh]['osm']['tags_manquants'] and MH.description[mh]['wkd'] != "":
                     # print (MH.description[mh]['wkd'])
                     if len(MH.description[mh]['wkd']) == 1:
-                        url_wkd = '<a {}&addtags=wikidata={}" target="__blank" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm, MH.description[mh]['wkd'][0], MH.description[mh]['wkd'][0])
+                        url_wkd = '<a {}&addtags=wikidata={}" target="hide" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm, MH.description[mh]['wkd'][0], MH.description[mh]['wkd'][0])
                         MH.description[mh]['osm']['tags_manquants'][-1] = url_wkd
                     else:
                         # Multiples codes Wikidata
@@ -213,7 +213,7 @@ def get_table(salle, musee):
         # colonne OSM
         if 'osm' in salle.salle['nom']:
             table += '''<td class="lien"><a {}" target="_blank" title="Voir sur OpenStreetMap.org"> ORG </a> -
-            <a {}" target="_blank" title="Editer avec ID"> ID </a> - <a {}" target="_blank" title="Editer avec Josm"> Josm </a> </td>
+            <a {}" target="_blank" title="Editer avec ID"> ID </a> - <a {}" target="hide" title="Editer avec Josm"> Josm </a> </td>
             '''.format(url_osm_org, url_osm_id, url_josm)
 
         elif 'infos_osm' in MH.description[mh]:
