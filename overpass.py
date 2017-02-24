@@ -211,7 +211,7 @@ def get_osm(departement, musee):
 
 
 if __name__ == "__main__":
-    departement = '69'
+    departement = '90'
     # osmWip=[]
     musee = mohist.Musee()
     # print("avant =",mohist.MoHist.ctr_monument)
@@ -231,5 +231,5 @@ if __name__ == "__main__":
 
     # affichier le contenu d'un MH
     # mh = "PA00087929"
-    mh = 'PA00117748'
-    print(musee.collection[mh])
+    # mh = 'PA00117748'
+    # print(musee.collection[mh])

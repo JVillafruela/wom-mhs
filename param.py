@@ -146,7 +146,7 @@ dic_dep = {
     '87': {'code': '87', 'name': ['Haute-Vienne'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Haute-Vienne'], 'text': 'de la Haute-Vienne'},
     '88': {'code': '88', 'name': ['Vosges'], 'url_d': ['/wiki/Liste_des_monuments_historiques_des_Vosges'], 'text': 'des Vosges'},
     '89': {'code': '89', 'name': ['Yonne'], 'url_d': ["/wiki/Liste_des_monuments_historiques_de_l'Yonne_(A-M)", "/wiki/Liste_des_monuments_historiques_de_l'Yonne_(N-Z)", "/wiki/Liste_des_monuments_historiques_de_Sens", "/wiki/Liste_des_monuments_historiques_d'Auxerre", "/wiki/Liste_des_monuments_historiques_de_Tonnerre", "/wiki/Liste_des_monuments_historiques_de_Joigny"], 'text': "de l'Yonne"},
-    '90': {'code': '90', 'name': ['Territoire de Belfort'], 'url_d': ['/wiki/Liste_des_monuments_historiques_du_Territoire_de_Belfort'], 'text': 'du Territoire de Belfort'},
+    '90': {'code': '90', 'name': ['Territoire-de-Belfort'], 'url_d': ['/wiki/Liste_des_monuments_historiques_du_Territoire_de_Belfort'], 'text': 'du Territoire de Belfort'},
     '91': {'code': '91', 'name': ['Essonne'], 'url_d': ["/wiki/Liste_des_monuments_historiques_de_l'Essonne"], 'text': "de l'Essonne"},
     '92': {'code': '92', 'name': ['Hauts-de-Seine'], 'url_d': ['/wiki/Liste_des_monuments_historiques_des_Hauts-de-Seine'], 'text': 'des Hauts-de-Seine'},
     '93': {'code': '93', 'name': ['Seine-Saint-Denis'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Seine-Saint-Denis'], 'text': 'de la Seine-Saint-Denis'},
