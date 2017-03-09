@@ -22,7 +22,7 @@
 '''
     Extraire à partir du fichier txt des N° de commune INSEE, le code insee d'une commune
 
-    source : http://www.insee.fr/fr/methodes/nomenclatures/cog/telechargement/2016/txt/comsimp2016.zip
+    source : 03/2017 = https://www.insee.fr/fr/statistiques/fichier/2114819/comsimp2016-txt.zip
 
      FIXME => les noms ne doivent pas avoir d'espace => remplacement par "-"   ---(OK)
      FIXME => le fichier source est encodé : Europe occidentale (ISO-8859-1) ou
@@ -49,7 +49,7 @@ def get_insee(commune):
         commune = commune[3:]
     commune = commune.replace(" ", "-")
     csv.register_dialect('insee', Insee())
-    fname = "comsimp2015_utf8.txt"
+    fname = "comsimp2016_utf8.txt"
     file = open(fname, "r")
 
     try:

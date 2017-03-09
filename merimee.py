@@ -56,8 +56,12 @@ def get_commune(code):
         contenu = r.text
         page = BeautifulSoup(contenu, 'html.parser')
         error = (page.find("h2"))
+        # print(error, '\n')
         if error is not None and "Aucun" in str(error):
             # print ("ref:mhs inconnu : ", code)
+            return ""
+        elif 'Désolé :' in str(error):
+            # print('Erreur : la base Mérimée est momentanément inaccessible !')
             return ""
         else:
             tableau = page.find_all("td", attrs={"class": u"champ"})[2].text
@@ -184,7 +188,7 @@ def get_mh(ref):
 
 
 if __name__ == "__main__":
-    departement = '15'
+    departement = '02'
     get_maj_base_merimee()
     musee = mohist.Musee()
     musee = get_merimee(param.dic_dep[departement]['code'], musee)
@@ -202,6 +206,6 @@ if __name__ == "__main__":
     # afficher le contenu d'un MH
     # ref = "PA00116375" # Donjon du temple à chazeys-bons n'existe pass dans mérimée 01
     # ref = "PA00116292"
-    ref = "PA00083624"
-    if get_mh(ref):
-        print(musee.collection[ref])
+    # ref = "PA00083624"
+    # if get_mh(ref):
+    #     print(musee.collection[ref])
