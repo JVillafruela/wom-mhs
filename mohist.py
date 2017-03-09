@@ -32,6 +32,7 @@ import bbox
 import merimee
 import overpass
 import wikipedia
+import export
 
 
 class Musee:
@@ -174,10 +175,10 @@ class Musee:
         s = self.collection[mh].description[mh]['mer']['siecle']
         if 'e siècle' in s:
             # print(s[s.index('e siècle') - 2:s.index('e siècle')])
-            ot += "<li>start_date=C{}</li>".format(s[s.index('e siècle') - 2:s.index('e siècle')])
+            ot += "<li>start_date={}C</li>".format(s[s.index('e siècle') - 2:s.index('e siècle')])
         elif 'er siècle' in s:
             # print(s[s.index('er siècle') - 1: s.index('er siècle')])
-            ot += "<li>start_date=C{}</li>".format(s[s.index('er siècle') - 1:s.index('er siècle')])
+            ot += "<li>start_date={}C</li>".format(s[s.index('er siècle') - 1:s.index('er siècle')])
         return ot
 
     def gen_infos_osm(self, n):
@@ -193,7 +194,7 @@ class Musee:
                 ################
                 # trouvés les autres tags (détails )
                 tag_O = self.get_other_tags(mh)
-                # print(tag_O)
+                # print('tag_O :', tag_O)
                 # Enlever le tag 'building' pour la création d'un point dans Josm
                 if tag_O != "":
                     modif = re.sub(r'<li>building=([a-z]*)</li>', r'', tag_O)
@@ -272,7 +273,7 @@ class Musee:
                 infos += "<li>" + tag_F + "</li>"
                 infos += "<p>"
                 ################
-                # Géolocalisation et liens si elle exite
+                # Géolocalisation et liens si elle existe
                 if 'geoloc' in self.collection[mh].description[mh]['wip'] and self.collection[mh].description[mh]['wip']['geoloc'] != '':
                     # print ("Geolocalisation : {}".format(self.collection[mh].description[mh]['wip']['geoloc']))
                     lat = self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[0]
@@ -292,7 +293,10 @@ class Musee:
                             title="Selectionner et copier tous les tags ci-dessus (ctrl-C) puis dans Josm, sélectionner le bâtiment correspondant puis coller les tags (Ctrl-shift-V)?  ATTENTION : ne marche pas si \'Classements multiples\'"\
                             target="hide" '.format(left, right, top, bottom)
                     infos += '>Charger la zone dans JOSM</a></b></li>'
-                # print (infos)
+                    # print(self.collection[mh].description[mh]['wip']['geoloc'])
+                    # print (infos_tags)
+                    export.exporter('export.csv', self.collection[mh].description[mh]['wip']['geoloc'], infos_tags)
+
                 self.collection[mh].description[mh]['infos_osm'] = infos
                 # print()
 
