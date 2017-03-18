@@ -30,10 +30,10 @@ def write_head(filename):
     with open(filename, 'w', newline='') as csvfile:
         mhswriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         # mhswriter.writerow([
-        #    'latitude', 'longitude', 'historic', 'start_date', 'ref:mhs', 'wikidata', 'name', 'heritage:operator', 'heritage',
-        #    'mhs:inscription_date', 'source:heritage', 'wikipedia'])
+        #     'latitude', 'longitude', 'historic', 'start_date', 'ref:mhs', 'wikidata', 'name', 'heritage:operator', 'heritage',
+        #     'mhs:inscription_date', 'source:heritage', 'wikipedia'])
         mhswriter.writerow([
-            'latitude', 'longitude', 'historic', 'start_date', 'ref:mhs', 'wikidata', 'name',
+            'latitude', 'longitude', 'historic', 'start_date', 'ref:mhs', 'wikidata', 'name', 'heritage',
             'mhs:inscription_date', 'wikipedia'])
 
 
@@ -69,10 +69,10 @@ def exporter(filename, geoloc, infos):
 
     # heritage_operator = 'mhs'
 
-    # if 'heritage' in infos[5]:
-    #     heritage = infos[5].split('=')[1]
-    # else:
-    #     heritage = ''
+    if 'heritage' in infos[5]:
+        heritage = infos[5].split('=')[1]
+    else:
+        heritage = ''
 
     if 'mhs:inscription_date' in infos[6]:
         mhs_incription_date = infos[6].split('=')[1]
@@ -96,7 +96,7 @@ def exporter(filename, geoloc, infos):
         #     mhs_incription_date, source_heritage, wikipedia
         # ])
         mhswriter.writerow([
-            float(geoloc.split(',')[0]), float(geoloc.split(',')[1]), historic, start_date, refmhs, wikidata, name,
+            float(geoloc.split(',')[0]), float(geoloc.split(',')[1]), historic, start_date, refmhs, wikidata, name, heritage,
             mhs_incription_date, wikipedia
         ])
 

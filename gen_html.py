@@ -365,13 +365,12 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     '''Créer la liste des départements à mettre à jour'''
     if departement == 'all':
         listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
-    # listDep = ['88','25','48', '52']
-
     elif type(departement) == list:
         listDep = departement
     else:
         listDep = [departement]
-    listDep = listdepB
+    # listDep = ['88','25','48', '52']
+    listDep = listdepA
     # print (listDep)
     # print(len(listDep))
     '''Mettre à jour les pages des départements de la liste'''
