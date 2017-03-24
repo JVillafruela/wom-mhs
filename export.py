@@ -23,8 +23,10 @@
     Faire un export des tags OSM dans un fichier csv pour mapcontrib
 '''
 import csv
+
 import ini
 import param
+import bbox
 
 
 def write_head(filename):
@@ -111,25 +113,26 @@ def get_export_filename(dep_code):
 
 
 if __name__ == "__main__":
-    #
-    # filename = "export.csv"
-    # write_head(filename)
-    #
-    # geoloc = '45.90372322, 5.18000876'
-    # infos = [
-    #     'historic=citywalls%7Cstart_date=15C', 'ref:mhs=PA00116527', 'wikidata=Q3424623', 'name=Rempart attenant à un immeuble', 'heritage:operator=mhs', 'heritage=2',
-    #     'mhs:inscription_date=1921-11-24 ', 'source:heritage=data.gouv.fr, Ministère de la Culture - 2016', 'wikipedia=fr:Remparts de Pérouges']
-    # exporter(filename, geoloc, infos)
-    # # 45.90274191, 5.17916641
-    # #  ['historic=citywalls', 'ref:mhs=PA00116524', 'wikidata=Q3424623', 'name=Rempart attenant à un immeuble', 'heritage:operator=mhs', 'heritage=2', 'mhs:inscription_date=1921-11-24 ', 'source:heritage=data.gouv.fr, Ministère de la Culture - 2016', 'wikipedia=fr:Remparts de Pérouges']
-    # geoloc = '45.90274191, 5.17916641'
-    # infos = [
-    #     'historic=citywalls', 'ref:mhs=PA00116524', 'wikidata=Q3424623', 'name=Rempart attenant à un immeuble', 'heritage:operator=mhs', 'heritage=2',
-    #     'mhs:inscription_date=1921-11-24 ', 'source:heritage=data.gouv.fr, Ministère de la Culture - 2016', 'wikipedia=fr:Remparts de Pérouges']
-    # exporter(filename, geoloc, infos)
+    # Test export vers un fichier csv
+    filename = "export.csv"
+    write_head(filename)
+
+    geoloc = '45.90372322, 5.18000876'
+    l, r, t, b = bbox.getBB(float(geoloc.split(',')[0]), float(geoloc.split(',')[1]))
+    infos = [
+        'historic=citywalls%7Cstart_date=15C', 'ref:mhs=PA00116527', 'wikidata=Q3424623', 'name=Rempart attenant à un immeuble', 'heritage:operator=mhs', 'heritage=2',
+        'mhs:inscription_date=1921-11-24 ', 'source:heritage=data.gouv.fr, Ministère de la Culture - 2016', 'wikipedia=fr:Remparts de Pérouges']
+    exporter(filename, geoloc, infos, l, r, t, b)
+
+    geoloc = '45.90274191, 5.17916641'
+    l, r, t, b = bbox.getBB(float(geoloc.split(',')[0]), float(geoloc.split(',')[1]))
+    infos = [
+        'historic=citywalls', 'ref:mhs=PA00116524', 'wikidata=Q3424623', 'name=Rempart attenant à un immeuble', 'heritage:operator=mhs', 'heritage=2',
+        'mhs:inscription_date=1921-11-24 ', 'source:heritage=data.gouv.fr, Ministère de la Culture - 2016', 'wikipedia=fr:Remparts de Pérouges']
+    exporter(filename, geoloc, infos, l, r, t, b)
 
     # Test fonction get_export_filename(dep_code)
-    for dep in param.dic_dep:
-        code = param.dic_dep[dep]['code']
-        f = get_export_filename(code)
-        print(code, ' : ', f)
+    # for dep in param.dic_dep:
+    #     code = param.dic_dep[dep]['code']
+    #     f = get_export_filename(code)
+    #     print(code, ' : ', f)
