@@ -379,7 +379,7 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     for dep in listDep:
         ''' Trouver  le nom du fichier d'export '''
         exportFile = export.get_export_filename(param.dic_dep[dep]['code'])
-        print('exportFile : ', exportFile)
+        # print('exportFile : ', exportFile)
         print('------' + dep + '------')
         logging.info('log : ------ {} ------'.format(dep))
         ''' Acquérir les datas'''
