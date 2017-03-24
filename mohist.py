@@ -181,10 +181,11 @@ class Musee:
             ot += "<li>start_date=C{}</li>".format(s[s.index('er siècle') - 1:s.index('er siècle')])
         return ot
 
-    def gen_infos_osm(self, n):
+    def gen_infos_osm(self, n, exportFileName):
         '''
             Produire des infos d'aide (les tags) pour la création du MH dans OSM
             n est le rang de la salle dans la liste des salles (voir plus haut)
+            exportFileName est le nom du fichier d'export csv pour mapcontrib
         '''
         # print("Génération complémentaire pour : {}".format(self.salles[n].salle['nom']))
         if len(self.salles[n].s_collection) > 0:
@@ -279,23 +280,26 @@ class Musee:
                     lat = self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[0]
                     lon = self.collection[mh].description[mh]['wip']['geoloc'].split(', ')[1]
                     # print("Position estimée : http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}".format(lat,lon,lat,lon))
-                    infos += '<li><b><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Géocodage fourni par Wikipédia : à vérifier" target="__blank"'.format(lat, lon, lat, lon)
+                    infos += '<li><b><a href="http://www.openstreetmap.org/?mlat={}&mlon={}#map=19/{}/{}" title="Géocodage fourni par Wikipédia : \
+                        à vérifier" target="__blank"'.format(lat, lon, lat, lon)
                     infos += '>Position estimée</a></b></li>'
                     infos += "<p>"
                     infos_tags = [tag_P, tag_A, tag_Q, tag_B, tag_C, tag_D, tag_E, tag_F, tag_G]
                     tags = [t for t in infos_tags if t != ""]
-                    infos += '<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}" title="Création d\'un node dans JOSM (remoteControl) : Vérifier la position et les tags ! ATTENTION : un calque doit déjà être ouvert dans JOSM." target="hide" '.format(lon, lat, '%7C'.join(tags))
+                    infos += '<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}" title="Création d\'un node dans JOSM (remoteControl) : \
+                        Vérifier la position et les tags ! ATTENTION : un calque doit déjà être ouvert dans JOSM." target="hide" '.format(lon, lat, '%7C'.join(tags))
                     infos += '>Créer un point dans JOSM</a></b></li>'
                     # télécharger la zone du mh dans JOSM
                     # http://127.0.0.1:8111/load_and_zoom?left=8.19&right=8.20&top=48.605&bottom=48.590
                     left, right, top, bottom = bbox.getBB(float(lat), float(lon))
                     infos += '<li><b><a href="http://localhost:8111/load_and_zoom?left={}&right={}&top={}&bottom={}&zoom_mode=download" \
-                            title="Selectionner et copier tous les tags ci-dessus (ctrl-C) puis dans Josm, sélectionner le bâtiment correspondant puis coller les tags (Ctrl-shift-V)?  ATTENTION : ne marche pas si \'Classements multiples\'"\
+                            title="Selectionner et copier tous les tags ci-dessus (ctrl-C) puis dans Josm, sélectionner le bâtiment correspondant \
+                            puis coller les tags (Ctrl-shift-V)? "\
                             target="hide" '.format(left, right, top, bottom)
                     infos += '>Charger la zone dans JOSM</a></b></li>'
                     # print(self.collection[mh].description[mh]['wip']['geoloc'])
                     # print (infos_tags)
-                    export.exporter('export.csv', self.collection[mh].description[mh]['wip']['geoloc'], infos_tags)
+                    export.exporter(exportFileName, self.collection[mh].description[mh]['wip']['geoloc'], infos_tags, left, right, top, bottom)
 
                 self.collection[mh].description[mh]['infos_osm'] = infos
                 # print()
