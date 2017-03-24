@@ -31,6 +31,9 @@ url_prod = "/home/jearro/osm"
 # fichier statique : style.css
 # cssFile ="style.css"
 
+# Fichiers d'export pour mapcontrib
+exportfile = ['export_a.csv', 'export_b.csv']
+
 # les textes qui ne doivent pas apparaitre comme name= pour OSM
 no_name = ['Immeuble', 'Maison', 'Maisons', 'Eglise', 'Église', 'Château', 'Ecurie', 'Ecuries', 'Écurie', 'Écuries', 'Presbytère', 'Beffroi', 'Cimetière', 'Prieuré', 'Remparts', 'Hôtel']
 

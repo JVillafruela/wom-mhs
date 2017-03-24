@@ -42,6 +42,7 @@ import index
 import wkdcodes
 import statistiques
 import gen_doubles
+import export
 
 
 def get_log_date():
@@ -347,18 +348,38 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     st = statistiques.Statistiques()
     st.fname = './stats.json'
 
+    ''' Créer l'entête du fichier d'export csv des monuments non présents dans OSM'''
+    # exportfile = "export.csv"
+    # export.write_head(exportfile)
+    for fichier in ini.exportfile:
+        export.write_head(fichier)
+    # le contenu de ce fichier est créer dans mohist.py par la fonction gen_infos_osm()
+
+    # listdepA = [
+    #     '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
+    #     '2A', '2B', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39',
+    #     '40', '41', '42', '43', '44', '45', '46', '47']
+    # listdepB = [
+    #     '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67',
+    #     '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87',
+    #     '88', '89', '90', '91', '92', '93', '94', '95']
+
     '''Créer la liste des départements à mettre à jour'''
     if departement == 'all':
         listDep = OrderedDict(sorted(param.dic_dep.items(), key=lambda t: t[0]))
-    # listDep = ['88','25','48', '52']
     elif type(departement) == list:
         listDep = departement
     else:
         listDep = [departement]
+    # listDep = ['88','25','48', '52']
+    # listDep = listdepB
     # print (listDep)
     # print(len(listDep))
     '''Mettre à jour les pages des départements de la liste'''
     for dep in listDep:
+        ''' Trouver  le nom du fichier d'export '''
+        exportFile = export.get_export_filename(param.dic_dep[dep]['code'])
+        # print('exportFile : ', exportFile)
         print('------' + dep + '------')
         logging.info('log : ------ {} ------'.format(dep))
         ''' Acquérir les datas'''
@@ -382,7 +403,7 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
         # pour les salles mer et merwip générer les infos à faire apparaitre dans la popup
         # Infos à ajouter dans OSM
         for x in [1, 5]:
-            museum.gen_infos_osm(x)
+            museum.gen_infos_osm(x, exportFile)
         museum.maj_stats()
 
         pagesToCreate = museum.get_nb_pageToCreate()
