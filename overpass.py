@@ -141,6 +141,7 @@ def get_elements(data, tt, musee):
             # cas des monuments sur plusieurs communes
             if ';' in tags_mhs["ref:mhs"]:
                 print(tags_mhs["ref:mhs"])
+                logging.info("Tags ref:mhs multiples : {}".format(tags_mhs["ref:mhs"]))
                 list_mhs = [tags_mhs["ref:mhs"].split(';')[0].strip(), tags_mhs["ref:mhs"].split(';')[1].strip()]
             else:
                 list_mhs = [tags_mhs["ref:mhs"].strip()]

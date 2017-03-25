@@ -294,6 +294,7 @@ def gen_pages(dep, musee):
             if len(doubles) > 0 and page.salle['nom'] == "merosmwip":
                 name = str(dep['code']) + "_doubles.html"
                 print("mhs avec objets multiples : ", doubles)
+                logging.info("Mhs avec objets multiples : {}".format(doubles))
                 gen_doubles.gen_page_double(dep, musee, doubles)
                 lien = "<a href='./{}' title='Monuments en double' target='blank'> Attention : monuments multiples dans OSM </a>".format(name)
                 oF.write(lien)

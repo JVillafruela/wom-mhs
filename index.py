@@ -219,6 +219,7 @@ def gen_page_index():
         et une petite présentation du projet.
         le fichier index.html est créer à la racine d'un répertoire /Wom
         /Wom
+            /mp (répertoire des exports pour mapcontrib)
             /js
             /css
                 /images
