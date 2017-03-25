@@ -352,7 +352,7 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     # exportfile = "export.csv"
     # export.write_head(exportfile)
     for fichier in ini.exportfile:
-        export.write_head(fichier)
+        export.write_head(base_url + '/mp/' + fichier)
     # le contenu de ce fichier est créer dans mohist.py par la fonction gen_infos_osm()
 
     # listdepA = [
@@ -377,8 +377,8 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     # print(len(listDep))
     '''Mettre à jour les pages des départements de la liste'''
     for dep in listDep:
-        ''' Trouver  le nom du fichier d'export '''
-        exportFile = export.get_export_filename(param.dic_dep[dep]['code'])
+        ''' Trouver le nom du fichier d'export '''
+        exportFile = base_url + '/mp/' + export.get_export_filename(param.dic_dep[dep]['code'])
         # print('exportFile : ', exportFile)
         print('------' + dep + '------')
         logging.info('log : ------ {} ------'.format(dep))

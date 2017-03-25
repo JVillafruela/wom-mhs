@@ -251,6 +251,6 @@ if __name__ == "__main__":
 
     ''' générer la page index'''
     gen_page_index()
-    '''  Netoyer le répertoire d'un département'''
+    '''  Nettoyer le répertoire d'un département'''
     # d = '01'
     # del_files(param.dic_dep[d])
