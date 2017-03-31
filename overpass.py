@@ -63,7 +63,7 @@ def get_data(query):
     urlFR = u"http://api.openstreetmap.fr/oapi/interpreter"
     api = overpy.Overpass()
     # FIXME pour le département de l'Aisne l'url FR ne réponds un result vide !?
-    # api.url = urlFR
+    api.url = urlFR
     try:
         result = api.query(query)
         # raise overpy.exception.OverpassTooManyRequests()

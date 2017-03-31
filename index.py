@@ -89,7 +89,13 @@ def write_bandeau_index(file, title):
     <hr style="width:100%; color:grey; background-color:grey; height:3px;" />
     '''
     contenu += '''
-    <p><a href='D/graphes.html' target='_blank' title="Statistiques de Wom"> Quelques statistiques d'intégration des monuments historiques.</p>
+    <p><a href='D/graphes.html' target='_blank' title="Statistiques de Wom"> Quelques statistiques d'intégration des monuments historiques.</a></p>
+    '''
+    contenu += '''
+    <p>
+    <h5 align=center> Les monuments historiques sur une carte Mapcontrib</h5></p>
+    <iframe src="https://www.mapcontrib.xyz/t/2e6012-Monuments_historiques" width="100%" height="500" frameBorder="0"></iframe>
+    <p> <a href="https://www.mapcontrib.xyz/t/2e6012-Monuments_historiques">La carte en pleine page</a></p>
     '''
     file.write(contenu)
 
