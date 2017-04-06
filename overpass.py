@@ -66,6 +66,9 @@ def get_data(query):
     api.url = urlFR
     try:
         result = api.query(query)
+    except overpy.exception.OverpassUnknownHTTPStatusCode:
+        print('UnknownHTTPStatusCode : HTTPS status Code = 500 !')
+        result = None
         # raise overpy.exception.OverpassTooManyRequests()
     except overpy.exception.OverpassTooManyRequests:
         print('TooManyRequests : Trop de requêtes pour le serveur Overpass.eu. Patienter et ré-essayer plus tard.')
