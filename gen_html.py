@@ -148,13 +148,20 @@ def get_table(salle, musee):
                 id_osm = MH.description[mh]['osm']['url'].split('/')[1]
                 url_osm_id = 'href="http://www.openstreetmap.org/edit?editor=id&' + type_osm + '=' + id_osm
                 url_josm = 'href="http://localhost:8111/load_object?objects=' + type_osm[0] + id_osm
-            # les tags manquants dans OSM
+            # ###### les tags manquants dans OSM
             if len(MH.description[mh]['osm']['tags_manquants']) > 0:
+                # Remplacer le tag manquant "wikipedia"par le lien wikipedia si présent
+                if "wikipedia" in MH.description[mh]['osm']['tags_manquants'] and MH.description[mh]['wip']['tag_wk'] != "":
+                    url_add_wp = '<a {}&addtags=wikipedia=fr:{}" target="_hide" title="Ajout tag wikipedia avec Josm (Remote control)"> wikipedia </a>'.format(url_josm, MH.description[mh]['wip']['tag_wk'])
+                    pos = MH.description[mh]['osm']['tags_manquants'].index("wikipedia")
+                    MH.description[mh]['osm']['tags_manquants'][pos] = url_add_wp
+                    # print(MH.description[mh]['wip']['tag_wk'])
+                    # print(MH.description[mh]['osm']['tags_manquants'])
                 # Remplacer dans les tags manquants le terme wikidata (si présent) par un lien url_josm avec ajout du qCode
                 if "wikidata" in MH.description[mh]['osm']['tags_manquants'] and MH.description[mh]['wkd'] != "":
                     # print (MH.description[mh]['wkd'])
                     if len(MH.description[mh]['wkd']) == 1:
-                        url_wkd = '<a {}&addtags=wikidata={}" target="hide" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm, MH.description[mh]['wkd'][0], MH.description[mh]['wkd'][0])
+                        url_wkd = '<a {}&addtags=wikidata={}" target="_hide" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm, MH.description[mh]['wkd'][0], MH.description[mh]['wkd'][0])
                         MH.description[mh]['osm']['tags_manquants'][-1] = url_wkd
                     else:
                         # Multiples codes Wikidata
