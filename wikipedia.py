@@ -195,7 +195,7 @@ def extrait_infos(datas):
     # print(geo)
 
     #  Code_Mhs - datas[4]
-    rep = datas[4].find('cite', {'style': 'font-style: normal'})
+    rep = datas[4].find('cite', {'style': 'font-style: normal;'})
     #  print(rep)
     if isinstance(rep, bs4.element.Tag):
         code_mhs = rep.get_text().strip()
