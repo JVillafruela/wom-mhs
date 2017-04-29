@@ -203,9 +203,11 @@ def get_osm(departement, musee):
         if result is None:
             raise overpy.exception.OverPyException('Le serveur Overpass ne réponds pas.')
         # print (result.ways)
+        # ajout des clés dans une liste pour avoir un ordre d'analyse du résult -> doubles toujours dans le même ordre
+        keys = ['r', 'w', 'n']
         ensemble = {'r': result.relations, 'w': result.ways, 'n': result.nodes}
         dic_typ = {'r': 'relation', 'w': 'way', 'n': 'node'}
-        for key in ensemble:
+        for key in keys:
             # print(ensemble[key])
             musee = get_elements(ensemble[key], dic_typ[key], musee)
             # print (len(liste_elements[key]),' ',text[key]) #,liste_elements[key][0][0]
