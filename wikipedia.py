@@ -257,13 +257,18 @@ def ajoute_infos(infos, musee):
 
 
 def analyse(data, url, musee, commune=None):
-    #  print("Commune = ", commune)
+    # print("Commune = ", commune)
     # print("Url = ", urllib.parse.unquote(url))
     logging.debug("log : Url : {}".format(urllib.parse.unquote(url)))
-    '''Attention : pour le finistère il y a plusieurs tableau !! '''
-    # print(len(data.find_all("table", "wikitable sortable",style = re.compile('^width:100%;'))))
+
     table = data.find_all("table", "wikitable sortable", style=re.compile('^width:100%;'))
-    for tableau in table:
+    # print("Nombres de tables : {}".format(len(table)))
+    # print("Destructions : {}".format(len(data.find_all(id="Destructions"))))
+    # print("Monuments radiés : {}".format(len(data.find_all(id="Monuments_radi.C3.A9s"))))
+    # print("Anciens monuments historiques : {}".format(len(data.find_all(id="Anciens_monuments_historiques"))))
+    nb_t = len(table) - len(data.find_all(id="Destructions")) - len(data.find_all(id="Monuments_radi.C3.A9s")) - len(data.find_all(id="Anciens_monuments_historiques"))
+    # print("Tables utiles : {}".format(nb_t))
+    for tableau in table[0:nb_t]:
         for i, tr in enumerate(tableau):
             # print (i, type(tr), tr)
 
@@ -333,7 +338,7 @@ if __name__ == "__main__":
     nb = musee.get_nb_MH('wip')
     print(nb)
 
-    print(ctr_no_mhs)
+    print("Monuments sans code PA : {}".format(ctr_no_mhs))
     #  print ("il y a {} Monuments du département {} dans Wikipédia.".format(len(dic_wp),ini.dep[departement]['text']))
     #  print ("Monuments du département {} sans code MH : {}".format(ini.dep[departement][('text')],Nb_noMHS))
 

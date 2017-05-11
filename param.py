@@ -42,7 +42,10 @@ dic_dep = {
     '11': {'code': '11', 'name': ['Aude'], 'url_d': ["/wiki/Liste_des_monuments_historiques_de_l'Aude"], 'text': "de l'Aude"},
     '12': {'code': '12', 'name': ['Aveyron'], 'url_d': ["/wiki/Liste_des_monuments_historiques_de_l'Aveyron"], 'text': "de l'Aveyron"},
     '13': {'code': '13', 'name': ['Bouches-du-Rhône'], 'url_d': ['/wiki/Liste_des_monuments_historiques_des_Bouches-du-Rhône'], 'text': 'des Bouches-du-Rhône'},
-    '14': {'code': '14', 'name': ['Calvados'], 'url_d': ["/wiki/Liste_des_monuments_historiques_du_Calvados_(A-F)", "/wiki/Liste_des_monuments_historiques_du_Calvados_(G-O)"], 'text': 'du Calvados'},
+    '14': {'code': '14', 'name': ['Calvados'], 'url_d': [
+        "/wiki/Liste_des_monuments_historiques_du_Calvados_(A-F)",
+        "/wiki/Liste_des_monuments_historiques_du_Calvados_(G-O)",
+        "/wiki/Liste_des_monuments_historiques_du_Calvados_(P-Z)"], 'text': 'du Calvados'},
     '15': {'code': '15', 'name': ['Cantal'], 'url_d': ['/wiki/Liste_des_monuments_historiques_du_Cantal'], 'text': 'du Cantal'},
     '16': {'code': '16', 'name': ['Charente'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Charente'], 'text': 'de la Charente'},
     '17': {'code': '17', 'name': ['Charente-Maritime'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Charente-Maritime_(A-N)', '/wiki/Liste_des_monuments_historiques_de_la_Charente-Maritime_(O-Z)'], 'text': 'de la Charente-Maritime'},
