@@ -153,7 +153,7 @@ def get_table(salle, musee):
                 # Remplacer le tag manquant "wikipedia"par le lien wikipedia si présent
                 if 'tag_wk' in MH.description[mh]['wip']:
                     if "wikipedia" in MH.description[mh]['osm']['tags_manquants'] and MH.description[mh]['wip']['tag_wk'] != "":
-                        url_add_wp = '<a {}&addtags=wikipedia=fr:{}" target="_hide" title="Ajout tag wikipedia avec Josm (Remote control)"> wikipedia </a>'.format(url_josm, MH.description[mh]['wip']['tag_wk'])
+                        url_add_wp = '<a {}&addtags=wikipedia=fr:{}" target="hide" title="Ajout tag wikipedia avec Josm (Remote control)"> wikipedia </a>'.format(url_josm, MH.description[mh]['wip']['tag_wk'])
                         pos = MH.description[mh]['osm']['tags_manquants'].index("wikipedia")
                         MH.description[mh]['osm']['tags_manquants'][pos] = url_add_wp
                         # print(MH.description[mh]['wip']['tag_wk'])
@@ -162,7 +162,7 @@ def get_table(salle, musee):
                 if "wikidata" in MH.description[mh]['osm']['tags_manquants'] and MH.description[mh]['wkd'] != "":
                     # print (MH.description[mh]['wkd'])
                     if len(MH.description[mh]['wkd']) == 1:
-                        url_wkd = '<a {}&addtags=wikidata={}" target="_hide" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm, MH.description[mh]['wkd'][0], MH.description[mh]['wkd'][0])
+                        url_wkd = '<a {}&addtags=wikidata={}" target="hide" title="Ajout code wikidata avec Josm (Remote control)"> {} </a>'.format(url_josm, MH.description[mh]['wkd'][0], MH.description[mh]['wkd'][0])
                         MH.description[mh]['osm']['tags_manquants'][-1] = url_wkd
                     else:
                         # Multiples codes Wikidata
@@ -226,11 +226,10 @@ def get_table(salle, musee):
             '''.format(url_osm_org, url_osm_id, url_josm)
 
         elif 'infos_osm' in MH.description[mh]:
-            table += '''<td id="info_bloc{}" class="infoBloc" > Tags pour OSM'''.format(n)
+            table += '''<td id="info_bloc{}" class="infoBloc" data-clipboard-target="#data{}"> Tags pour OSM'''.format(n, n)
             table += '''   <div id="bloc{}" class="dialogBloc">
-                                <iframe name="hide" style="display: None;"></iframe>
-                            <ul>{}</ul>
-                        </div>'''.format(n, MH.description[mh]['infos_osm'])
+                            <ul><div id="data{}">{}</ul>
+                        </div>'''.format(n, n, MH.description[mh]['infos_osm'])
             table += '''</td> '''
             # print(MH.description[mh]['infos_osm'])
             n += 1
@@ -263,6 +262,7 @@ def get_table(salle, musee):
         table += '''</tr>'''
     table += ''' </tbody>
     </table>
+    <iframe name="hide" style="display: None;"></iframe>
     </div>
     '''
     return table, double

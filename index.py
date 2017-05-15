@@ -141,7 +141,7 @@ def write_entete(file, title):
                     opacity: 0.5,
                 },
             });
-            return false;
+            return true;
         });
 
             $("#table_data").DataTable({
@@ -175,7 +175,16 @@ def write_entete(file, title):
 
 
 def write_footer(file):
-    footer = '''<div id="footer"> Page proposée par <a href="http://wiki.openstreetmap.org/wiki/User:JeaRRo">JeaRRo</a>, contributeur OSM </div>
+    footer = ''' <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.0/clipboard.min.js"></script>
+    <script>
+    var clipboard = new Clipboard('.infoBloc');
+    clipboard.on('success', function(e) {
+       console.log(e);});
+    clipboard.on('error', function(e) {
+        console.log(e);});
+    </script>
+    '''
+    footer += '''<div id="footer"> Page proposée par <a href="http://wiki.openstreetmap.org/wiki/User:JeaRRo">JeaRRo</a>, contributeur OSM </div>
         </body>
     </html>
     '''

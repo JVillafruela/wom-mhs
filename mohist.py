@@ -272,7 +272,7 @@ class Musee:
                 # print ("Source : Base Mérimée ouverte - avril 2016 ")
                 tag_F = "source:heritage=data.gouv.fr, Ministère de la Culture - 2016"
                 infos += "<li>" + tag_F + "</li>"
-                infos += "<p>"
+                infos += "</div><p>"
                 ################
                 # Géolocalisation et liens si elle existe
                 if 'geoloc' in self.collection[mh].description[mh]['wip'] and self.collection[mh].description[mh]['wip']['geoloc'] != '':
@@ -286,16 +286,15 @@ class Musee:
                     infos += "<p>"
                     infos_tags = [tag_P, tag_A, tag_Q, tag_B, tag_C, tag_D, tag_E, tag_F, tag_G]
                     tags = [t for t in infos_tags if t != ""]
-                    infos += '<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}" title="Création d\'un node dans JOSM (remoteControl) : \
-                        Vérifier la position et les tags ! ATTENTION : un calque doit déjà être ouvert dans JOSM." target="hide" '.format(lon, lat, '%7C'.join(tags))
+                    infos += '''<li><b><a href="http://localhost:8111/add_node?lon={}&lat={}&addtags={}" title="Création d'un node dans JOSM (remoteControl) : Vérifier la position et les tags ! ATTENTION : un calque doit déjà être ouvert dans JOSM."
+                        target="hide" '''.format(lon, lat, '%7C'.join(tags))
                     infos += '>Créer un point dans JOSM</a></b></li>'
                     # télécharger la zone du mh dans JOSM
                     # http://127.0.0.1:8111/load_and_zoom?left=8.19&right=8.20&top=48.605&bottom=48.590
                     left, right, top, bottom = bbox.getBB(float(lat), float(lon))
-                    infos += '<li><b><a href="http://localhost:8111/load_and_zoom?left={}&right={}&top={}&bottom={}&zoom_mode=download" \
-                            title="Selectionner et copier tous les tags ci-dessus (ctrl-C) puis dans Josm, sélectionner le bâtiment correspondant \
-                            puis coller les tags (Ctrl-shift-V)? "\
-                            target="hide" '.format(left, right, top, bottom)
+                    infos += '''<li><b><a href="http://localhost:8111/load_and_zoom?left={}&right={}&top={}&bottom={}&zoom_mode=download"
+                            title="Les tags ci-dessus ont été copiés dans le presse-papier. Cliquer sur le lien (remoteControl), puis dans JOSM, sélectionner le bâtiment correspondant et coller les tags (Ctrl-shift-V)?"
+                            target = "hide"'''.format(left, right, top, bottom)
                     infos += '>Charger la zone dans JOSM</a></b></li>'
                     # print(self.collection[mh].description[mh]['wip']['geoloc'])
                     # print (infos_tags)
