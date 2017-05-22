@@ -185,7 +185,7 @@ def get_data(MH):
         url_josm = 'href="http://localhost:8111/load_object?objects=' + type_osm[0] + id_osm
         # print(url_josm)
         table += '''<td class="lien"><a {}" target="_blank" title="Voir sur OpenStreetMap.org"> ORG </a> -
-                <a {}" target="_blank" title="Editer avec ID"> ID </a> - <a {}" target="_blank" title="Editer avec Josm"> Josm </a> </td>
+                <a {}" target="_blank" title="Editer avec ID"> ID </a> - <a {}" target="hide" title="Editer avec Josm"> Josm </a> </td>
                 '''.format(url_org, url_id, url_josm)
         table += ''' <td> --------------- </td>'''
         table += '\n</tr>\n'
@@ -212,7 +212,7 @@ def gen_page_double(departement, musee, liste_doubles):
         # print(musee.collection[ref])
         data = get_data(musee.collection[ref])
         oF.write(data)
-    oF.write('\n</tbody> \n </table> \n</div>')
+    oF.write('\n</tbody> \n </table> \n <iframe name="hide" style="display: None;"></iframe> \n </div>')
     # écrire le pied de page
     # index.write_footer(oF)
     footer = '''\n<div id="footer"> Page proposée par <a href="http://wiki.openstreetmap.org/wiki/User:JeaRRo">JeaRRo</a>, contributeur OSM </div>
