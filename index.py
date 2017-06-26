@@ -26,10 +26,6 @@
 import os
 import time
 import os.path
-from collections import OrderedDict
-
-import param
-import ini
 
 
 def write_entete_index(file, title):
@@ -200,13 +196,9 @@ def creer_fichier(name, d=None):
         s_rep = "D/" + str(d['code']) + "_pages"
     else:
         s_rep = ""
-    if ini.prod:
-        rep = ini.url_prod + "/Wom/" + s_rep
-    else:
-        rep = ini.url_dev + "/Wom/" + s_rep
-    # FIXME !! Le répertoire racine /Wom n'est pas créé et ne doit pas être effacé
+    rep = os.getcwd().split('/Mhs')[0] + '/Wom/' + s_rep
     if not os.path.exists(rep):
-        os.mkdir(rep)
+        os.makedirs(rep)
     if os.path.isdir(rep):
         return open(rep + '/' + name, "w")
 
@@ -215,10 +207,11 @@ def del_files(d):
     ''' Effacer les fichiers du répertoire du département (supprime les fichiers anciens inutiles)'''
     # print (d)
     s_rep = "D/" + str(d['code']) + "_pages"
-    if ini.prod:
-        rep = ini.url_prod + "/Wom/" + s_rep
-    else:
-        rep = ini.url_dev + "/Wom/" + s_rep
+    rep = os.getcwd().split('/Mhs')[0] + '/Wom' + s_rep
+    # if ini.prod:
+    #     rep = ini.url_prod + "/Wom/" + s_rep
+    # else:
+    #     rep = ini.url_dev + "/Wom/" + s_rep
     if os.path.exists(rep):
         filelist = [f for f in os.listdir(rep) if f.endswith(".html")]
         for f in filelist:

@@ -31,9 +31,6 @@ from collections import OrderedDict
 import json
 import os
 import datetime
-import pprint
-
-import ini
 
 
 class Statistiques:
@@ -211,7 +208,7 @@ class Statistiques:
         serieosm = []
         seriewp = []
 
-        firstdate = [self.FirstDate()]
+        # firstdate = [self.FirstDate()]
         listdate = list(self.data.keys())[-30:]
         last = self.data[listdate[0]]
         for x in range(1, len(listdate)):
@@ -248,10 +245,7 @@ def genGraphes(serie1, serie2, serie3, totalMerimee):
             totalMerimee = Nombre total de monuments dans la base ouverte Mérimée
     '''
     # Créer le fichier Wom/graphes.html
-    if ini.prod:
-        filename = ini.url_prod + "/Wom/D/graphes.html"
-    else:
-        filename = ini.url_dev + "/Wom/D/graphes.html"
+    filename = os.getcwd().split('/Mhs')[0] + "/Wom/D/graphes.html"
     # print(filename)
     oF = open(filename, "w")
     # écrire l'entête

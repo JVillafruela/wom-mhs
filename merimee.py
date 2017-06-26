@@ -33,9 +33,9 @@ from bs4 import BeautifulSoup
 import requests
 import json
 import logging
+import os
 
 import mohist
-import ini
 import param
 
 new_date = ''
@@ -70,14 +70,6 @@ def get_commune(code):
         # print("ref:mhs inconnu : ", code)
         logging.debug("ref:mhs inconnu : {}".format(code))
         return ""
-
-
-def get_url():
-    if ini.prod:
-        url = ini.url_prod + '/Mhs/'
-    else:
-        url = ini.url_dev + '/Mhs/'
-    return url
 
 
 def conv_date(d):
@@ -116,7 +108,7 @@ def get_maj_base_merimee():
     '''
         Tester si une nouvelle version est disponible : si oui la télécharge
     '''
-    url_locale = get_url()
+    url_locale = os.getcwd() + '/'
 
     if existe_nouvelle_version():
         # print('Nouvelle version disponible ! Téléchargement... ')
@@ -153,7 +145,7 @@ def get_merimee(dep, musee):
          Renvoie un musee contenant des monuments par reférence mhs contenant la clé 'mer' avec la note 1
      '''
     global datafile
-    url_locale = get_url()
+    url_locale = os.getcwd() + '/'
 
     with open(url_locale + datafile) as data_file:
         data = json.load(data_file)
@@ -173,7 +165,7 @@ def get_mh(ref):
     ''' rechercher un mh par son code mérimée dans la base ouverte '''
 
     global datafile
-    url_locale = get_url()
+    url_locale = os.getcwd() + '/'
 
     with open(url_locale + datafile) as data_file:
         data = json.load(data_file)

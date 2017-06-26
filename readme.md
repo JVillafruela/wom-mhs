@@ -12,16 +12,19 @@ Install
 ------
     $ virtualenv mhs_env --no-site-packages -p /usr/bin/python3
     $ source ./mhs_env/bin/activate
+    $ git clone https://framagit.org/JeaRRo/Mhs.git
+    $ cd Mhs
     $ pip install -r requirements.txt
+
 
 Modules upgrade
 ------
-pip install --upgrade -r requirements.txt
+    $ pip install --upgrade -r requirements.txt
 
 Use
 ------
 	$ python3 gen_html.py
 
-ToDo
-------
- 
+  Pour les codes wikidata, il faut d'abord lancer JOSM (remoteControl) et aussi travailler par département :
+
+    $ python3 gen_html.py -d 03 --wk

@@ -326,18 +326,23 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     if ',' in departement:
         departement = departement.split(',')
     if monument != 'all' and departement == 'all':
-        print('ERREUR : vous devez préciser un code de département.')
+        print('ERREUR : Vous devez préciser un code de département.')
         exit(3)
     if monument != 'all' and not re.match('^PA[0-9]{8}', monument):
         print('ERREUR : Code monument non conforme. ')
         exit(4)
-    ''' Définir les variables d'entrée'''
-    if ini.prod:
-        base_url = ini.url_prod + "/Wom"
-        log_url = ini.url_prod + "/Mhs/log"
-    else:
-        base_url = ini.url_dev + "/Wom"
-        log_url = ini.url_dev + "/Mhs/log"
+
+    ''' Définir les répertoires de travail et les créer s'ils n'existent pas'''
+    base = os.getcwd().split('/Mhs')[0]
+    if not os.path.exists(base + "/Wom"):
+        os.mkdir(base + '/Wom')
+    base_url = base + "/Wom"
+    if not os.path.exists(base + "/Mhs/log"):
+        os.mkdir(base + '/Mhs/log')
+    log_url = base + "/Mhs/log"
+    if not os.path.exists(base + "/Wom/mp"):
+        os.mkdir(base + '/Wom/mp')
+    export_url = base + '/Wom/mp'
 
     ''' Mise en place du fichier de log  '''
     fname = log_url + "/wom_" + get_log_date() + ".log"
@@ -361,7 +366,7 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     # exportfile = "export.csv"
     # export.write_head(exportfile)
     for fichier in ini.exportfile:
-        export.write_head(base_url + '/mp/' + fichier)
+        export.write_head(export_url + '/' + fichier)
     # le contenu de ce fichier est créer dans mohist.py par la fonction gen_infos_osm()
 
     # listdepA = [
@@ -387,7 +392,7 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     '''Mettre à jour les pages des départements de la liste'''
     for dep in listDep:
         ''' Trouver le nom du fichier d'export '''
-        exportFile = base_url + '/mp/' + export.get_export_filename(param.dic_dep[dep]['code'])
+        exportFile = export_url + '/' + export.get_export_filename(param.dic_dep[dep]['code'])
         # print('exportFile : ', exportFile)
         print('------' + dep + '------')
         logging.info('log : ------ {} ------'.format(dep))
