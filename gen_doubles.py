@@ -27,10 +27,6 @@
     en sortie : une page html avec un tableau des liens pour pouvoir faire les corrections
 
 '''
-import os
-import pprint
-
-import ini
 import index
 
 
@@ -149,7 +145,7 @@ def get_data(MH):
     table += ''' <td class="lien"><a href="{}{}" target="_blank" title="La fiche dans la base Mérimée">{}</a></td>'''.format(l0, mh, mh)
     # liens OSM
     table += '''<td class="lien"><a {}" target="_blank" title="Voir sur OpenStreetMap.org"> ORG </a> -
-            <a {}" target="_blank" title="Editer avec ID"> ID </a> - <a {}" target="_blank" title="Editer avec Josm"> Josm </a> </td>
+            <a {}" target="_blank" title="Editer avec ID"> ID </a> - <a {}" target="hide" title="Editer avec Josm"> Josm </a> </td>
             '''.format(url_osm_org, url_osm_id, url_josm)
     # lien Wikipédia
     if url_wip and url_osmwp:
@@ -220,10 +216,3 @@ def gen_page_double(departement, musee, liste_doubles):
     </html>
     '''
     oF.write(footer)
-
-
-if __name__ == "__main__":
-    departement = dep
-    musee = {}
-    liste_doubles = []
-    print(liste_doubles)

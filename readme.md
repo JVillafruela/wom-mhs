@@ -12,8 +12,12 @@ Install
 ------
     $ virtualenv mhs_env --no-site-packages -p /usr/bin/python3
     $ source ./mhs_env/bin/activate
+    $ mkdir Wom
     $ git clone https://framagit.org/JeaRRo/Mhs.git
     $ cd Mhs
+    $ cp -r css ../Wom/css
+    $ cp -r images ../Wom/images
+    $ cp -r js ..Wom/js
     $ pip install -r requirements.txt
 
 
