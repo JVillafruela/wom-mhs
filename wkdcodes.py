@@ -32,8 +32,6 @@ from __future__ import unicode_literals
 import requests
 import json
 import os
-import ini
-import mohist
 import logging
 from collections import OrderedDict
 
@@ -73,6 +71,10 @@ def get_Q_codes():
             # print(codeMh, '->', Q_Mh)
             if codeMh in wCodes:
                 wCodes[codeMh].append(Q_Mh)
+                # print(type(wCodes[codeMh]))
+                # print(wCodes[codeMh])
+                wCodes[codeMh] = sorted(wCodes[codeMh])
+                # print(wCodes[codeMh])
             else:
                 wCodes[codeMh] = [Q_Mh]
 
@@ -86,6 +88,7 @@ def get_Q_codes():
             OwCodes = charger_Q_codes(filename)
             logging.info(" {} Codes Wikidata chargés.".format(len(OwCodes)))
     return OwCodes
+
 
 if __name__ == "__main__":
 
