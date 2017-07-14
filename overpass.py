@@ -40,7 +40,6 @@ import overpy
 import time
 import logging
 
-import ini
 import param
 import mohist
 
@@ -60,7 +59,7 @@ def get_data(query):
         Requete sur "http://overpass-api.de/api/interpreter" (url par default)
     '''
     # Obtenir la selection géographique sur oapi serveur français
-    urlFR = u"http://api.openstreetmap.fr/oapi/interpreter"
+    # urlFR = u"http://api.openstreetmap.fr/oapi/interpreter"
     api = overpy.Overpass()
     # FIXME pour le département de l'Aisne l'url FR ne réponds un result vide !?
     # api.url = urlFR
@@ -172,7 +171,6 @@ def get_osm(departement, musee):
         Obtenir les objets OSM contenant le tag 'ref:mhs'
         pour un département = '01' par exemple
     '''
-    dic_elements = {}
     query = "[timeout:900];"
     query_part1 = '''area[admin_level={}]["name"="{}"]->.boundaryarea;
     ( node(area.boundaryarea)["ref:mhs"];
@@ -213,11 +211,32 @@ def get_osm(departement, musee):
             # print (len(liste_elements[key]),' ',text[key]) #,liste_elements[key][0][0]
             # ctr += len(liste_elements[key])
         # dic_elements = OrderedDict(sorted(dic_elements.items(), key=lambda t: t[0]))
+
+        if 'Loire-Atlantique' in d:
+            # ###  Pour la loire-atlantique ajouter une zone de recherche sur l'océan (trouver les phares!)
+
+            bbox = "47.081344869872,-2.8955841064453,47.502358951969,-2.1711730957031"
+            query = '''[out:json][timeout:25];(node["ref:mhs"]["man_made"="lighthouse"]({});
+                way["ref:mhs"]["man_made"="lighthouse"]({});
+                relation["ref:mhs"]["man_made"="lighthouse"]({}););out;>;out skel qt;'''.format(bbox, bbox, bbox)
+            result = get_data(query)
+            x = 0
+            while x < 3 and result is None:
+                time.sleep(60)  # 1 minute
+                # print('essais de {}'.format(x))
+                result = get_data(query)
+                x += 1
+            if result is None:
+                raise overpy.exception.OverPyException('Le serveur Overpass ne réponds pas.')
+            ensemble = {'r': result.relations, 'w': result.ways, 'n': result.nodes}
+            for key in keys:
+                # print(ensemble[key])
+                musee = get_elements(ensemble[key], dic_typ[key], musee)
     return musee
 
 
 if __name__ == "__main__":
-    departement = '90'
+    departement = '44'
     # osmWip=[]
     musee = mohist.Musee()
     # print("avant =",mohist.MoHist.ctr_monument)
@@ -236,6 +255,6 @@ if __name__ == "__main__":
     print(nb)
 
     # affichier le contenu d'un MH
-    # mh = "PA00087929"
+    mh = "PA44000050"
     # mh = 'PA00117748'
-    # print(musee.collection[mh])
+    print(musee.collection[mh])
