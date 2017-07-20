@@ -50,25 +50,30 @@ def get_commune(code):
     '''
     url = "http://www.culture.gouv.fr/public/mistral/mersri_fr?ACTION=CHERCHER&FIELD_1=REF&VALUE_1={}".format(code)
     # print(url)
-    r = requests.get(url)
-    # print(r.status_code)
-    if r.status_code == 200:
-        contenu = r.text
-        page = BeautifulSoup(contenu, 'html.parser')
-        error = (page.find("h2"))
-        # print(error, '\n')
-        if error is not None and "Aucun" in str(error):
-            # print ("ref:mhs inconnu : ", code)
-            return ""
-        elif 'Désolé :' in str(error):
-            # print('Erreur : la base Mérimée est momentanément inaccessible !')
-            return ""
+    try:
+        r = requests.get(url)
+        # print(r.status_code)
+        if r.status_code == 200:
+            contenu = r.text
+            page = BeautifulSoup(contenu, 'html.parser')
+            error = (page.find("h2"))
+            # print(error, '\n')
+            if error is not None and "Aucun" in str(error):
+                # print ("ref:mhs inconnu : ", code)
+                return ""
+            elif 'Désolé :' in str(error):
+                # print('Erreur : la base Mérimée est momentanément inaccessible !')
+                return ""
+            else:
+                tableau = page.find_all("td", attrs={"class": u"champ"})[2].text
+                return tableau.split("; ")[-1]
         else:
-            tableau = page.find_all("td", attrs={"class": u"champ"})[2].text
-            return tableau.split("; ")[-1]
-    else:
-        # print("ref:mhs inconnu : ", code)
-        logging.debug("ref:mhs inconnu : {}".format(code))
+            # print("ref:mhs inconnu : ", code)
+            logging.debug("ref:mhs inconnu : {}".format(code))
+            return ""
+    except requests.exceptions.RequestException as e:  # This is the correct syntax
+        print(e)
+        logging.debug("Base Mérimée inaccessible : {}".format(e))
         return ""
 
 
