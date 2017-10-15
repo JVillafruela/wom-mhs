@@ -26,12 +26,9 @@
 def getBB(lat, lon):
     deltaLat = 0.00043
     deltaLon = 0.000725
-    if lat < 0:
-        top = lat - deltaLat
-        bottom = lat + deltaLat
-    else:
-        top = lat + deltaLat
-        bottom = lat - deltaLat
+
+    top = lat + deltaLat
+    bottom = lat - deltaLat
 
     left = lon - deltaLon
     right = lon + deltaLon
