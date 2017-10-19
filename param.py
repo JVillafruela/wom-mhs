@@ -155,7 +155,7 @@ dic_dep = {
     '93': {'code': '93', 'name': ['Seine-Saint-Denis'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Seine-Saint-Denis'], 'text': 'de la Seine-Saint-Denis'},
     '94': {'code': '94', 'name': ['Val-de-Marne'], 'url_d': ['/wiki/Liste_des_monuments_historiques_du_Val-de-Marne'], 'text': 'du Val-de-Marne'},
     '95': {'code': '95', 'name': ["Val-d'Oise"], 'url_d': ["/wiki/Liste_des_monuments_historiques_du_Val-d'Oise"], 'text': "du Val-d'Oise"},
-    '971': {'code': '971', 'name': ['Guadeloupe'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Guadeloupe'], 'text': 'de la Guadeloupe'},
+    '971': {'code': '971', 'name': ['Guadeloupe'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Guadeloupe', '/wiki/Liste_des_monuments_historiques_de_Saint-Barthélemy'], 'text': 'de la Guadeloupe'},
     '972': {'code': '972', 'name': ['Martinique'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Martinique', '/wiki/Liste_des_monuments_historiques_de_Fort-de-France', '/wiki/Liste_des_monuments_historiques_de_Saint-Pierre_(Martinique)'], 'text': 'de la Martinique'},
     '973': {'code': '973', 'name': ['Guyane'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_la_Guyane', '/wiki/Liste_des_monuments_historiques_de_Cayenne'], 'text': 'de la Guyane'},
     '974': {'code': '974', 'name': ['La Réunion'], 'url_d': ['/wiki/Liste_des_monuments_historiques_de_La_Réunion'], 'text': 'de La Réunion'},
