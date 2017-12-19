@@ -41,9 +41,11 @@ import urllib.parse
 
 import ini
 import param
-import insee
 import mohist
 
+session = requests.Session()
+# session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0'})
+session.headers.update({'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/63.0.3239.84 Chrome/63.0.3239.84 Safari/537.36'})
 
 url_base = "https://fr.wikipedia.org"
 #  compteur de monument sans code mhs
@@ -62,7 +64,8 @@ cache = CacheManager(**parse_cache_config_options(cache_opts))
 def makeQuery(url):
     try:
         #  rep = requests.get(url)
-        return requests.get(url)
+        # return requests.get(url)
+        return session.get(url)
     except requests.exceptions.ConnectionError as e:
         message = 'Connection to {0} failed. \n {1}'
         # print (message.format(url, e.args[0].args[1].args[1]))
@@ -313,7 +316,7 @@ def get_wikipedia(url_list, musee):
 
 if __name__ == "__main__":
     # import pprint
-    departement = '975'
+    departement = '06'
     #  dic_wp = {}
     #  Nb_noMHS=0
     musee = mohist.Musee()
