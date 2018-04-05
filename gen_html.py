@@ -391,6 +391,9 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     # print(len(listDep))
     '''Mettre à jour les pages des départements de la liste'''
     for dep in listDep:
+        if dep not in param.dic_dep:
+            print('Code département inconnu, Revoir votre frappe !')
+            exit(0)
         ''' Trouver le nom du fichier d'export '''
         exportFile = export_url + '/' + export.get_export_filename(param.dic_dep[dep]['code'])
         # print('exportFile : ', exportFile)
