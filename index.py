@@ -69,7 +69,7 @@ def write_bandeau_index(file, title):
         </p>
 
 
-    <p>Ces pages sont du HTML statique avec un peu de jQuery. Elles sont générées automatiquement chaque nuit par un script Python sur une machine réveillée "wakeonlan" par un Nas, puis poussées sur <a href="https://github.com/JeaRRo/Wom" target ="_blank"> GitHub</a>.
+    <p>Ces pages sont du HTML statique avec un peu de jQuery. Elles sont générées automatiquement chaque nuit par un script Python sur une machine virtuelle, puis poussées sur <a href="https://github.com/JeaRRo/Wom" target ="_blank"> GitHub</a>.
      Le code des scripts est sur Framagit.org : <a href="https://framagit.org/JeaRRo/Mhs" target="_blank"> Mhs.git </a>.<br>
 
     <p> Dernière construction des pages, le :<b> {}</b></p>

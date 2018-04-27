@@ -29,9 +29,6 @@ import pprint
 import requests
 
 import bbox
-import merimee
-import overpass
-import wikipedia
 import export
 
 

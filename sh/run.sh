@@ -49,10 +49,14 @@ python3 gen_html.py > /dev/null 2>&1
 # gitter les pages html sur github.com (génération web automatique)
 if [ $? -eq 0 ]; then
 	cd ../Wom
-	git add -A
+	git add -A >> ../Mhs/log/wom_$(date +%Y%m%d).log 2>&1
 	message="Pages web générées le $jour à $heure"
-	git commit -am "$message"
-	git push
+	git commit -am "$message" >> ../Mhs/log/wom_$(date +%Y%m%d).log 2>&1
+	git push >> ../Mhs/log/wom_$(date +%Y%m%d).log 2>&1
+# envoyer le courrier de log
+  cd ../Mhs
+  cat log/wom_$(date +%Y%m%d).log  | mail -s "Les logs de WOM  du $(date +%d/%m/%Y)" LoginAtGmail@gmail.com
+
 
 # # finir
 	deactivate

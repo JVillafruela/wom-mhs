@@ -83,7 +83,7 @@ def conv_date(d):
     en sortie une date dans une chaine AAAAMMJJ '20160524' (permetre une comparaison)
     '''
     mois = ["Janvier", u"Février", "Mars", "Avril", "Mai", "Juin", "Juillet", u"Août", "Septembre", "Octobre", "Novembre", u"Décembre"]
-    return d[2] + str(mois.index(d[1].capitalize()) + 1).zfill(2) + d[0]
+    return d[2] + str(mois.index(d[1].capitalize()) + 1).zfill(2) + d[0].zfill(2)
 
 
 def existe_nouvelle_version():
