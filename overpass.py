@@ -59,7 +59,7 @@ def get_data(query):
         Requete sur "http://overpass-api.de/api/interpreter" (url par default)
     '''
     # Obtenir la selection géographique sur oapi serveur français
-    # urlFR = u"http://api.openstreetmap.fr/oapi/interpreter"
+    # urlFR = u"http://api.openstreetmap.fr/oapi/interpreter"
     api = overpy.Overpass()
     # FIXME pour le département de l'Aisne l'url FR ne réponds un result vide !?
     # api.url = urlFR
@@ -173,9 +173,9 @@ def get_osm(departement, musee):
     '''
     query = "[timeout:900];"
     query_part1 = '''area[admin_level={}]["name"="{}"]->.boundaryarea;
-    ( node(area.boundaryarea)["ref:mhs"];
+    (node(area.boundaryarea)["ref:mhs"];
     way(area.boundaryarea)["ref:mhs"];
-    relation(area.boundaryarea)["ref:mhs"]);'''
+    relation(area.boundaryarea)["ref:mhs"];);'''
     query_end = '''out meta;>;out meta;'''
     for d in departement:
         query = ""
