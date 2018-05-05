@@ -129,8 +129,8 @@ def get_table(salle, musee):
                 if commune == '':
                     print("Le ref:mh {} est inconnu dans Mérimée ouverte : Patrimoine Architectural".format(mh))
                     print('http://www.openstreetmap.org/browse/' + MH.description[mh]['osm']['url'])
-                    logging.debug("log : Le ref:mh {} est inconnu dans Mérimée ouverte : Patrimoine Architectural".format(mh))
-                    logging.debug("log : Voir url : http://www.openstreetmap.org/browse/{}".format(MH.description[mh]['osm']['url']))
+                    logging.error("log : Le ref:mh {} est inconnu dans Mérimée ouverte : Patrimoine Architectural".format(mh))
+                    logging.error("log : Voir url : http://www.openstreetmap.org/browse/{}".format(MH.description[mh]['osm']['url']))
             else:
                 commune = ''
             if 'name' in MH.description[mh]['osm']['tags_mhs']:
@@ -281,7 +281,7 @@ def gen_pages(dep, musee):
             page_name = str(dep['code']) + '_' + page.salle['nom'] + '.html'
             # print("Construction de la page  {}.".format(page_name))
             print(page)
-            logging.info("log : {}".format(page))
+            logging.debug(" {}".format(page))
             oF = index.creer_fichier(page_name, dep)
             titre = " Wom : Mérimée, OpenStreetMap, Wikipédia"
             index.write_entete(oF, titre)
@@ -302,7 +302,7 @@ def gen_pages(dep, musee):
             if len(doubles) > 0 and page.salle['nom'] == "merosmwip":
                 name = str(dep['code']) + "_doubles.html"
                 print("mhs avec objets multiples : ", doubles)
-                logging.info("Mhs avec objets multiples : {}".format(doubles))
+                logging.debug("Mhs avec objets multiples : {}".format(doubles))
                 gen_doubles.gen_page_double(dep, musee, doubles)
                 lien = "<a href='./{}' title='Monuments en double' target='blank'> Attention : monuments multiples dans OSM </a>".format(name)
                 oF.write(lien)
@@ -345,9 +345,9 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     export_url = base + '/Wom/mp'
 
     ''' Mise en place du fichier de log  '''
-    fname = log_url + "/wom_" + get_log_date() + ".log"
+    fname = "/var/log/wom/" + get_log_date() + ".log"
     # print (fname)
-    logging.basicConfig(filename=fname, format='%(asctime)s %(levelname)s: %(message)s', level=logging.DEBUG, datefmt='%m/%d/%Y %H:%M')
+    logging.basicConfig(filename=fname, format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO, datefmt='%m/%d/%Y %H:%M')
 
     ''' Rechercher les Qcodes sur wikidata'''
     wkdCodes = wkdcodes.get_Q_codes()
@@ -398,7 +398,7 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
         exportFile = export_url + '/' + export.get_export_filename(param.dic_dep[dep]['code'])
         # print('exportFile : ', exportFile)
         print('------' + dep + '------')
-        logging.info('log : ------ {} ------'.format(dep))
+        logging.info(' ------ {} ------'.format(dep))
         ''' Acquérir les datas'''
         # print('----- Acquisition des datas ------')
         museum = mohist.Musee()
@@ -431,17 +431,17 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
 
         # print('----- Statistiques globales ------')
         print("Merimée :", museum.stats['mer'])
-        logging.info("log : Merimée : {}".format(museum.stats['mer']))
+        logging.info("Merimée : {}".format(museum.stats['mer']))
         print("OSM :", museum.stats['osm'])
-        logging.info("log : OSM : {}".format(museum.stats['osm']))
+        logging.info("OSM : {}".format(museum.stats['osm']))
         print("Wikipedia :", museum.stats['wip'])
-        logging.info("log : Wikipedia : {}".format(museum.stats['wip']))
+        logging.info("Wikipedia : {}".format(int(museum.stats['wip']) - int(pagesToCreate)))
         print("     ---- ")
-        logging.info("log : ----------------")
+        logging.info(" ----------------")
         # print(museum)
 
         print(" A ajouter dans Wp : {} pages".format(pagesToCreate))
-        logging.info("log : A ajouter dans Wp : {} pages".format(pagesToCreate))
+        logging.debug("A ajouter dans Wp : {} pages".format(pagesToCreate))
         ''' Générer le Html si on ne demande pas le dico d'un monument'''
         if monument == 'all':
             gen_pages(param.dic_dep[dep], museum)

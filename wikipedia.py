@@ -91,7 +91,7 @@ def makeQuery(url):
         message = 'Connection to {0} failed. \n {1}'
         # print (message.format(url, e.args[0].args[1].args[1]))
         print(message.format(url, e))
-        # logging.debug(message.format(url, e.args[0].args[1].args[1]))
+        # logging.error(message.format(url, e.args[0].args[1].args[1]))
         # sys.exit(0)
         return url
 
@@ -319,7 +319,7 @@ def analyse(data, url, musee, commune=None):
                     if dat != url_gc:
                         analyse(dat, url_gc, musee, commune)
                     else:
-                        logging.debug("log : Url non accessible : {}".format(url_gc))
+                        logging.error("log : Url non accessible : {}".format(url_gc))
 
     return musee
 
@@ -331,7 +331,7 @@ def get_wikipedia(url_list, musee):
         if main_page != url_base + url:
             musee = analyse(main_page, url_base + url, musee)
         else:
-            logging.debug("log : Url non accessible : {}".format(url_base + url))
+            logging.error("log : Url non accessible : {}".format(url_base + url))
     return musee
 
 

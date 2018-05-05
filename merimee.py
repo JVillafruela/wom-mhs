@@ -73,7 +73,7 @@ def get_commune(code):
             return ""
     except requests.exceptions.RequestException as e:  # This is the correct syntax
         print(e)
-        logging.debug("Base Mérimée inaccessible : {}".format(e))
+        logging.error("Base Mérimée inaccessible : {}".format(e))
         return ""
 
 
@@ -99,7 +99,7 @@ def existe_nouvelle_version():
     contenu = requests.get(url).text
     page = BeautifulSoup(contenu, 'html.parser')
     # print(page.find("p", attrs={"class": "list-group-item-text ellipsis"}).text)
-    logging.debug('log : Base mérimée Mise à jour :{}'.format(page.find("p", attrs={"class": "list-group-item-text ellipsis"})))
+    logging.debug('Base mérimée Mise à jour :{}'.format(page.find("p", attrs={"class": "list-group-item-text ellipsis"})))
     if page.find("p", attrs={"class": "list-group-item-text ellipsis"}) is None:
         return False
     else:
@@ -127,7 +127,7 @@ def get_maj_base_merimee():
     else:
         old_date = open('last_date.txt', 'r').read()
         # print('Base Mérimée : Version {}, à jour.'.format(new_date))
-        logging.info('log : Base Mérimée : Version {}, à jour.'.format(old_date))
+        logging.info('Base Mérimée : Version {}, à jour.'.format(old_date))
 
 
 def get_merimee(dep, musee):

@@ -83,10 +83,10 @@ def get_Q_codes():
         logging.info(" {} Codes Wikidata téléchargés.".format(len(OwCodes)))
     else:
         print("Réponse du serveur non valide : Code réponse = ", r.status_code)
-        logging.debug("Réponse du serveur non valide : Code réponse = {}".format(r.status_code))
+        logging.error("Réponse du serveur non valide : Code réponse = {}".format(r.status_code))
         if os.path.isfile(filename):
             OwCodes = charger_Q_codes(filename)
-            logging.info(" {} Codes Wikidata chargés.".format(len(OwCodes)))
+            logging.info(" {} Codes Wikidata chargés localement.".format(len(OwCodes)))
     return OwCodes
 
 
