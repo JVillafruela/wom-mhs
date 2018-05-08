@@ -26,6 +26,7 @@
 import os
 import time
 import os.path
+import param
 
 
 def write_entete_index(file, title):
@@ -207,7 +208,7 @@ def del_files(d):
     ''' Effacer les fichiers du répertoire du département (supprime les fichiers anciens inutiles)'''
     # print (d)
     s_rep = "D/" + str(d['code']) + "_pages"
-    rep = os.getcwd().split('/Mhs')[0] + '/Wom' + s_rep
+    rep = os.getcwd().split('/Mhs')[0] + '/Wom/' + s_rep
     # if ini.prod:
     #     rep = ini.url_prod + "/Wom/" + s_rep
     # else:
