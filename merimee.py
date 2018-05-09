@@ -82,52 +82,48 @@ def conv_date(d):
     en entrée une date dans une liste ['24', 'mai', '2016']
     en sortie une date dans une chaine AAAAMMJJ '20160524' (permetre une comparaison)
     '''
-    mois = ["Janvier", u"Février", "Mars", "Avril", "Mai", "Juin", "Juillet", u"Août", "Septembre", "Octobre", "Novembre", u"Décembre"]
-    return d[2] + str(mois.index(d[1].capitalize()) + 1).zfill(2) + d[0].zfill(2)
+    month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    # mois = ["Janvier", u"Février", "Mars", "Avril", "Mai", "Juin", "Juillet", u"Août", "Septembre", "Octobre", "Novembre", u"Décembre"]
+    # return d[2] + str(mois.index(d[1].capitalize()) + 1).zfill(2) + d[0].zfill(2)
+    return d[2] + str(month.index(d[1]) + 1).zfill(2) + d[0].zfill(2)
+
+
+def get_date():
+    ''' Télécharger la date "last-modified" du fichier merimee-MH.json
+        Renvoie la date sous la forme YYYYMMJJ '''
+    url = "http://data.culture.fr/entrepot/MERIMEE/merimee-MH.json"
+    r = requests.head(url)
+    date = r.headers['Last-Modified']
+    return conv_date(date.strip().split(" ")[1:4])
 
 
 def existe_nouvelle_version():
-    '''
-        La base Mérimée est récupérable sur data.gouv.fr sur la page
-        http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/
-        rechercher la date de la version du dataset.json
-        et le comparer à la dernière version enregistrée
-        télécharger : http://data.culture.fr/entrepot/MERIMEE/
-    '''
-    global new_date
-    url = "http://www.data.gouv.fr/fr/datasets/monuments-historiques-liste-des-immeubles-proteges-au-titre-des-monuments-historiques/"
-    contenu = requests.get(url).text
-    page = BeautifulSoup(contenu, 'html.parser')
-    # print(page.find("p", attrs={"class": "list-group-item-text ellipsis"}).text)
-    logging.debug('Base mérimée Mise à jour :{}'.format(page.find("p", attrs={"class": "list-group-item-text ellipsis"})))
-    if page.find("p", attrs={"class": "list-group-item-text ellipsis"}) is None:
-        return False
-    else:
-        date = page.find("p", attrs={"class": "list-group-item-text ellipsis"}).text
+    if os.path.isfile("last_date.txt"):
+        # print("il est là")
         old_date = open('last_date.txt', 'r').read()
-        new_date = conv_date(date.strip().split(' ')[-3:])
-        return new_date > old_date
+        new_date = get_date()
+        if new_date > old_date:
+            open('last_date.txt', 'w').write(new_date)
+            return True
+        else:
+            return False
+    else:
+        # print("pas de fichier")
+        ''' Télécharger la date et l'écrire dans le fichier '''
+        new_date = get_date()
+        open('last_date.txt', 'w').write(new_date)
+        return True
 
 
-def get_maj_base_merimee():
-    '''
-        Tester si une nouvelle version est disponible : si oui la télécharge
-    '''
-    url_locale = os.getcwd() + '/'
-
+def Mise_A_Jour():
     if existe_nouvelle_version():
-        # print('Nouvelle version disponible ! Téléchargement... ')
-        logging.info('Nouvelle version disponible ! Téléchargement...')
-        url_merimee = "http://data.culture.fr/entrepot/MERIMEE/"
-        r = requests.get(url_merimee + datafile, stream=True)
-        with open(url_locale + datafile, 'wb') as fd:
+        ''' Téléchargement de la nouvele version '''
+        url = "http://data.culture.fr/entrepot/MERIMEE/merimee-MH.json"
+        r = requests.get(url, stream=True)
+        with open("merimee-MH.json", 'wb') as fd:
             for chunk in r.iter_content(4096):
                 fd.write(chunk)
-        open(url_locale + 'last_date.txt', 'w').write(new_date)
-    else:
-        old_date = open('last_date.txt', 'r').read()
-        # print('Base Mérimée : Version {}, à jour.'.format(new_date))
-        logging.info('Base Mérimée : Version {}, à jour.'.format(old_date))
+        fd.close()
 
 
 def get_merimee(dep, musee):
@@ -186,7 +182,7 @@ def get_mh(ref):
 
 if __name__ == "__main__":
     departement = '02'
-    get_maj_base_merimee()
+    Mise_A_Jour()
     musee = mohist.Musee()
     musee = get_merimee(param.dic_dep[departement]['code'], musee)
     # for mh,MH in musee.collection.items():
