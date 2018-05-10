@@ -353,7 +353,7 @@ def main(departement: 'Analyse d\'un seul département'='all', monument: 'Analys
     wkdCodes = wkdcodes.get_Q_codes()
 
     ''' Rechercher une maj de la base Mérimée'''
-    merimee.get_maj_base_merimee()
+    merimee.Mise_A_Jour()
 
     ''' Générer la page index'''
     index.gen_page_index()
