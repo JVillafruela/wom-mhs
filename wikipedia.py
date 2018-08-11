@@ -146,7 +146,8 @@ def extrait_infos(datas):
     global ctr_no_mhs
     infos_manquantes = []
     toCreateWp = False
-    #  nom - datas[0]
+    # print(datas)
+    # nom - datas[0]
     # print(datas[0].find('a', href=re.compile('^# cite_note')))
     if isinstance(datas[0].find('a'), bs4.element.Tag) and datas[0].find('a', href=re.compile('^#cite_note')) is None:
         nom = datas[0].find('a').text
@@ -278,6 +279,7 @@ def analyse(data, url, musee, commune=None):
     logging.debug("log : Url : {}".format(urllib.parse.unquote(url)))
 
     table = data.find_all("table", "wikitable sortable", style=re.compile('^width:100%;'))
+
     # print("Nombres de tables : {}".format(len(table)))
     # print("Destructions : {}".format(len(data.find_all(id="Destructions"))))
     # print("Monuments radiés : {}".format(len(data.find_all(id="Monuments_radi.C3.A9s"))))
@@ -285,6 +287,9 @@ def analyse(data, url, musee, commune=None):
     nb_t = len(table) - len(data.find_all(id="Destructions")) - len(data.find_all(id="Monuments_radi.C3.A9s")) - len(data.find_all(id="Anciens_monuments_historiques"))
     # print("Tables utiles : {}".format(nb_t))
     for tableau in table[0:nb_t]:
+        # print(tableau)
+
+        tableau = tableau.find('tbody')
         for i, tr in enumerate(tableau):
             # print (i, type(tr), tr)
 
@@ -302,6 +307,7 @@ def analyse(data, url, musee, commune=None):
                     if len(td) == 7:
                         commune = extrait_commune(url)
                     datas = normalise(td, commune)
+                    # print('datas : ', datas)
                     #  obtenir les infos utilisables dans le musée
                     infos = extrait_infos(datas)
                     # Ajout de l'url et de l'identifiant dans les infos
@@ -337,7 +343,7 @@ def get_wikipedia(url_list, musee):
 
 if __name__ == "__main__":
     # import pprint
-    departement = '26'
+    departement = '27'
     #  dic_wp = {}
     #  Nb_noMHS=0
     musee = mohist.Musee()
